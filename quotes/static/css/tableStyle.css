@@ -1,0 +1,39 @@
+
+
+
+
+table {
+    border-collapse: collapse;
+  }
+  
+  table, th, td {
+    border: 1px solid rgb(221, 221, 221);
+    padding: 0.7rem;
+  }
+
+
+/* Dark header*/  
+.theadDark {
+    background-color: rgba(50, 50, 50, 0.9);
+    color: white;
+    text-align: center;
+}
+
+
+/* Light body*/  
+.tbodyLight {
+ 
+}
+
+.tbodyLight tr:nth-child(even) {
+    background-color: rgba(240, 240, 240, 0.7);
+}
+
+.tbodyLight tr:hover {
+    background-color: rgb(202, 202, 255);
+}
+
+.tbodyLight td:first-child {
+    font-weight: bold;
+}
+

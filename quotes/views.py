@@ -58,3 +58,8 @@ def delete(request, stockId):
     messages.success(request, ("Stock ticker has been deleted"))
     return redirect(addStock)
 
+
+
+
+def dashboard(request):
+    return render(request, 'dashboard/dashboardPage.html', {})

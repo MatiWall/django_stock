@@ -10,7 +10,10 @@
         <link rel="stylesheet" type="text/css" href="{% static 'css/footer.css' %}?version=1">
         <link rel="stylesheet" type="text/css" href="{% static 'css/body.css' %}?version=1">
         <link rel="stylesheet" type="text/css" href="{% static 'css/home/webscrabing.css' %}?version=1">
-
+        <link rel="stylesheet" type="text/css" href="{% static 'css/popup/popupStyle.css' %}?version=1">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/buttons.css' %}?version=1">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/tableStyle.css' %}?version=1">
+        
 
 
     </head>
@@ -26,12 +29,14 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'home' %}">Home</a>
                     </li>
-              
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'about' %}">About</a>
+                        <a class="nav-link" href="{% url 'dashboardPage' %}">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'addStock' %}">Add Stock</a>
+                        <a class="nav-link" href="{% url 'addStock' %}">Portfolio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'about' %}">About</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'login' %}">Login</a>

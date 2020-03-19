@@ -1,0 +1,58 @@
+
+/* Variabels*/
+:root {
+    --buttonWidht: 6rem;
+    --buttonHight: 2.5rem;
+
+  }
+  
+/* Buttons*/
+.button {
+    background-color: rgba(128, 128, 128, 0.8);
+    color: white;
+    border: none;
+    cursor: pointer;
+    width: var(--buttonWidht);
+    height: var(--buttonHight);
+
+    border-radius: 7px;
+  }
+
+  .button:hover {
+    background-color: rgba(128, 128, 128, 1);
+  }
+
+
+
+.buttonNeutral {
+    color: black;
+    background-color: white;
+    cursor: pointer;
+
+    border-radius: 7px;
+    border: 1px;
+    border-color: grey;
+    border-style: solid;
+
+    width: var(--buttonWidht);
+    height: var(--buttonHight);
+  }
+
+  .buttonNeutral:hover {
+    background-color: rgba(128, 128, 128, 0.5);
+  }
+
+  .buttonPositionLeft {
+    position: absolute;
+    left: 40%;
+    bottom: 10rem;
+  }
+
+  .buttonPositionRight {
+    position: absolute;
+    right: 40%;
+    bottom: 10rem;
+  }
+
+
+
