@@ -1,0 +1,58 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+<br/>
+
+<form class="form-inline" action="{% url 'addStock' %}" method="POST">
+    {% csrf_token %}
+    <input id="nav-search-input"  type="search" placeholder="Input Ticker" name="ticker">
+    <button class="nav-button" type="submit">Add Stock</button>
+</form>
+
+<div id="addStockTable"></div>
+
+<table class="table table-striped table-bordered table-hover">
+
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Company Name</th>
+        <th scope="col">Stock Price</th>
+        <th scope="col">Previous Close</th>
+        <th scope="col">Market Cap</th>
+        <th scope="col">YTD Change</th>
+        <th scope="col">52wk High</th>
+        <th scope="col">52wk Low</th>
+        <th scope="col">Delete Stock</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% if tickers %}
+
+        {% for ticker in tickers %}
+            <tr>
+                <th scope="row">{{ticker}}</th>
+                <td>{{api.AAPL.quote.latestPrice }}</td>
+                <td>{{api.AAPL.quote.previousClose}}</td>
+                <td>{{api.AAPL.quote.marketCap}}</td>
+                <td>{{api.AAPL.quote.ytdChange}}</td>
+                <td>{{api.AAPL.quote.week52High}}</td>
+                <td>{{api.AAPL.quote.week52Low }} </td>
+            </tr>
+        
+        {% endfor %}
+
+        {% endif %}
+
+       
+    </tbody>
+  </table>
+  
+  {{ api|json_script:"quotes" }}
+<br/> <br/>
+
+<h1>Currently you are harddcoding the AAPL when you extract data</h1>
+{{api}}
+
+{% endblock %}
