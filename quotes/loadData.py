@@ -19,7 +19,9 @@ def loadData(ticker):
 
 
 def tickerToString(tickers_db):
-    #tickers = [str(ticker) for ticker in tickers_db]
+    '''
+    makes it possible to get data in batches from api
+    '''
       
     tickers = ""
 

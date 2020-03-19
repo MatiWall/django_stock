@@ -6,6 +6,11 @@ from .forms import stockForm
 from.loadData import loadData
 # Create your views here.
 
+
+def login(request):
+    return render(request, 'registration/login.html', {})
+
+
 def home(request):
     import requests
     import json

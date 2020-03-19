@@ -34,6 +34,9 @@
                         <a class="nav-link" href="{% url 'addStock' %}">Add Stock</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    </li>
+                    <li class="nav-item">
                         <form class="form-inline" action="{% url 'home' %}" method="POST">
                             {% csrf_token %}
                             <input id="nav-search-input"  type="search" placeholder="Get Stock Quote" name="ticker">
