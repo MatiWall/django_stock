@@ -5,8 +5,11 @@
 
 <br/>
 
+<script type="text/javascript">
+$('#dataValuesPicklist').load("components/picklists/dualPickList.html"); 
 
 
+</script>
 <div id="addStockTable"></div>
 {{ api|json_script:"quotes" }}
 <br/> <br/>
@@ -31,9 +34,14 @@
             <button class="nav-button" type="submit">Add Stock</button>
           </form>
         </div>
+        
         <div class="divColumn2">
           test
+          
+          <div id="dataValuesPicklist"></div>
+      
         </div>
+        
       </div>
     
     <button type="button" class="buttonNeutral buttonPositionRight" onclick="addStockCloseForm()">Submit</button>
@@ -42,6 +50,8 @@
   </div>
 </div>
 
+
+<a href="https://iexcloud.io">Data provided by IEX Cloud</a>,
 <br/>
 <br/>
 <br/>
@@ -57,6 +67,9 @@
         document.getElementById("addStockFormPopup").style.display = "none";
       }
 
+    
+  
 
 </script>
+
 {% endblock %}

@@ -17,7 +17,8 @@ def home(request):
 
     if request.method == "POST":
         ticker = request.POST['ticker']
-        api = loadData(ticker)
+        type = ['quote']
+        api = loadData(ticker,type)
             
         return render(request, 'home.html', {'api': api})
     else:
@@ -47,7 +48,7 @@ def addStock(request):
     else:
         tickers_db = stockTickers.objects.all()
        
-        api = loadData(tickers_db)
+        api = loadData(tickers_db, ['quote'])
         
         return render(request, 'addStock.html', {'tickers': tickers_db,'api' : api})
 
@@ -62,4 +63,6 @@ def delete(request, stockId):
 
 
 def dashboard(request):
+
+
     return render(request, 'dashboard/dashboardPage.html', {})

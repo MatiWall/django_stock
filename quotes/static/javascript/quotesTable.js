@@ -63,8 +63,9 @@ function createQuoteTable(keys, types, values, divId) {
 
     var table_body = '<table>';
 
-    for(var i = 0; i< items.length; i++){
-     table_body += '<tr> <td><input type="checkbox" /></td> <td>' +items[i]+'</td></tr>'
+    for(var i = 0; i< 5; i++){
+     table_body += '<tr> <td><input type="checkbox" /></td> <td>' +i
+     +'</td></tr>'
     }
     table_body+='</table>';
     $(containerId).html(table_body);
