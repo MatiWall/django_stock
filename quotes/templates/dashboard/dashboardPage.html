@@ -5,43 +5,99 @@
 
 <h1>This will hopfully become a dashboard</h1>
 <p>Use gridstack.js</p>
-      
-<div>
-    <div class="dashboardHeader">
-        <button onclick="addComponent()">
-            Add Component
-        </button>
-        <button onclick="removeComponent()">
-            remove
-        </button>
 
-    </div>
-
-    <div class="dashboardCanvas">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gridstack@1.1.1/dist/gridstack.min.css" />
-        <script src="https://cdn.jsdelivr.net/npm/gridstack@1.1.1/dist/gridstack.all.js"></script>
-
-        <div class="grid-stack">
-            <div class="grid-stack-item dashboardComponents" data-gs-x="0" data-gs-y="0" data-gs-width="4" data-gs-height="2">
-                <div class="grid-stack-item-content">
-                    <div> <div><h3>Title</h3></div></div>
-                </div>
+<div style="width: 100%;">
+    <div class="dashboardHeader ">
+        <div class="editMode">
+            <label class="editModeTitle">Edit Mode: </label>
+            <div class="toggleDiv">
+                <input class="tgl tgl-light" id="edit_tgl" type="checkbox" />
+                <label class="tgl-btn" for="edit_tgl"></label>
             </div>
         </div>
+        <button class="buttonNeutral buttonSizeWide " onclick="addComponent()">
+            Add Component
+        </button>
+    </div>
+</div>
+
+<div class="dashboardCanvas">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gridstack@1.1.1/dist/gridstack.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gridstack@1.1.1/dist/gridstack.all.js"></script>
+
+    <div class="grid-stack">
 
     </div>
+
+</div>
 <script type="text/javascript">
+    
     var grid = GridStack.init();
 
     function addComponent() {
-        grid.addWidget('<div id="test" class="grid-stack-item dashboardComponents"><div class="grid-stack-item-content">Item 1</div></div>', {width: 2});
-        console.log('test');
+
+        dashboardComponent = '<div class="grid-stack-item dashboardComponents">' +
+            '<div id="test" class="grid-stack-item-content"><button class="deleteButton" onclick="grid.removeWidget(this.parentNode.parentNode)"> x </button>' + 
+            '</div>';
+
+        grid.addWidget(dashboardComponent, { width: 2 });
     }
 
-    function removeComponent() {
-        grid.removeWidget($("#test"));
-    }
-    </script>
+  
+
+
+
+    /* Edit Mode */
+    /*
+    $('#edit_tgl').on('click', function() {
+		if( $('#edit_tgl').is(':checked') ) {
+			$('.clear_grid').attr('disabled', false);
+			$('.outer_widget').css('pointer-events', 'auto');
+			$('#addWidget').show();
+			$(document).on({
+				mouseenter: function() {
+					if( $(this).parent('#grid_stack_holder').length ) {
+						$(this).children('.remove_outer').hide();
+						$('.outer_widget').children('.ui-resizable-handle').hide();
+						grid.resizable('.outer_widget', false);
+					} else if ( $(this).parent('#grid_stack_cont').length ) {
+						$(this).children('.remove_outer').show();
+						$(this).children('.ui-resizable-handle').show();
+						grid.resizable('.outer_widget', true);
+					}
+				},
+				mouseleave: function() {
+					if( $(this).parent('#grid_stack_holder').length ) {
+					} else if ( $(this).parent('#grid_stack_cont').length ) {
+						$(this).children('.remove_outer').hide();
+					}
+					$(this).children('.remove_outer').hide();
+					$(this).children('.add_inner').hide();
+				}
+			}, '.outer_widget');
+
+			grid.enable();
+			grid.movable('.outer_widget', true);
+			grid.resizable('.outer_widget', true);
+		} else {
+			$('.clear_grid').attr('disabled', true);
+			$('.outer_widget').css('pointer-events', 'none');
+			$('.outer_widget').children('.remove_outer').hide();
+			$('#addWidget').hide();
+			$('.outer_widget').children('.remove_outer').hide();
+			$('.outer_widget').children('.ui-resizable-handle').hide();
+			grid.disable();
+			grid.movable('.outer_widget', false);
+			grid.resizable('.outer_widget', false);
+			$(document).off('mouseenter mouseleave', '.outer_widget');
+			$(document).off('mouseenter mouseleave', '.inner_widget');
+		}
+	});
+    */
+
+
+
+</script>
 
 
 </div>
