@@ -15,8 +15,50 @@
         <button class="buttonNeutral buttonSizeWide " onclick="addComponent()">
             Add Component
         </button>
+        <modal-standard title="Add Component">
+            <!-- <modal-layout-standard>
+
+            <div slot="type"> 
+                <button id="dashboardTypesQuote">Quote</button>
+                <button id="dashboardTypesChart">Time-Series</button>
+
+
+            </div>
+            <div slot="settings"> this is a test in choices </div>
+            <div slot="preview"> this is a test in preview</div>
+            
+
+            </modal-layout-standard>
+-->
+
+            <div class="grid-container">
+                <div class="dashboardPrevied">Preview</div>
+                <div class="dashboardType">
+                    <fieldset id="dashboardComponentChoseType">
+                        <legend>Display As</legend>
+                      
+                        <input type="radio" name="type" value="dashboardComponentTypeQuote" id="dashboardComponentTypeQuote">
+                        <label for="dashboardComponentTypeQuote">Quote</label>
+                      
+                        <input type="radio" name="type" value="green" id="colour_green">
+                        <label for="colour_green">Green</label>
+                      
+                        <input type="radio" name="type" value="blue" id="colour_blue">
+                        <label for="colour_blue">Red</label>
+                      
+                      </fieldset>
+                </div>
+                <div class="DashboardTickers" >
+                    <input type="text" placeholder="Input iicker(s)" style="max-width: 85%;"> </input>
+                </div>
+                <div class="dashboardSettings">Settings
+                
+                </div>
+            </div>
+        </modal-standard>
     </div>
 </div>
+
 
 <div class="dashboardCanvas">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gridstack@1.1.1/dist/gridstack.min.css" />
@@ -30,6 +72,10 @@
     </div>
 
 </div>
+
+
+
+
 <script type="text/javascript">
 
     var grid = GridStack.init();
@@ -39,15 +85,11 @@
         var dataInputId = Math.random().toString(36).substr(2, 9); // Generate a unigue id (maybe overkill)
 
         dashboardComponent = '<div class="grid-stack-item dashboardComponents">' +
-            '<div class="grid-stack-item-content"><button class="deleteButton" onclick="grid.removeWidget(this.parentNode.parentNode)"> x </button> <br/>' +
-            '<div id=' + dataInputId + '></div>' +
+            '<div id=' + dataInputId + ' class="grid-stack-item-content"><button id="" class="deleteButton" onclick="grid.removeWidget(this.parentNode.parentNode)"> &times; </button>' +
             '</div>';
 
-        grid.addWidget(dashboardComponent, { width: 4, height: 4 });
+        grid.addWidget(dashboardComponent, { width: 4, height: 5 });
 
-        var contentInnerWidth = $('#' + dataInputId).innerWidth();
-        var contentInnerHeight = $('#' + dataInputId).innerHeight();
-        console.log(contentInnerWidth);
 
         var trace1 = {
             x: [1, 2, 3, 4],
@@ -67,71 +109,39 @@
         var layout = {
             title: 'test',
             margin: {
-                t: 20, //top margin
+                t: 30, //top margin
                 l: 20, //left margin
                 r: 20, //right margin
                 b: 20 //bottom margin
-            }
+            },
+            autosize: true,
         };
 
-        Plotly.newPlot(dataInputId, data, config);
+        Plotly.newPlot(dataInputId, data, layout, config);
     }
 
 
 
 
-
     /* Edit Mode */
-    /*
-    $('#edit_tgl').on('click', function() {
-		if( $('#edit_tgl').is(':checked') ) {
-			$('.clear_grid').attr('disabled', false);
-			$('.outer_widget').css('pointer-events', 'auto');
-			$('#addWidget').show();
-			$(document).on({
-				mouseenter: function() {
-					if( $(this).parent('#grid_stack_holder').length ) {
-						$(this).children('.remove_outer').hide();
-						$('.outer_widget').children('.ui-resizable-handle').hide();
-						grid.resizable('.outer_widget', false);
-					} else if ( $(this).parent('#grid_stack_cont').length ) {
-						$(this).children('.remove_outer').show();
-						$(this).children('.ui-resizable-handle').show();
-						grid.resizable('.outer_widget', true);
-					}
-				},
-				mouseleave: function() {
-					if( $(this).parent('#grid_stack_holder').length ) {
-					} else if ( $(this).parent('#grid_stack_cont').length ) {
-						$(this).children('.remove_outer').hide();
-					}
-					$(this).children('.remove_outer').hide();
-					$(this).children('.add_inner').hide();
-				}
-			}, '.outer_widget');
 
-			grid.enable();
-			grid.movable('.outer_widget', true);
-			grid.resizable('.outer_widget', true);
-		} else {
-			$('.clear_grid').attr('disabled', true);
-			$('.outer_widget').css('pointer-events', 'none');
-			$('.outer_widget').children('.remove_outer').hide();
-			$('#addWidget').hide();
-			$('.outer_widget').children('.remove_outer').hide();
-			$('.outer_widget').children('.ui-resizable-handle').hide();
-			grid.disable();
-			grid.movable('.outer_widget', false);
-			grid.resizable('.outer_widget', false);
-			$(document).off('mouseenter mouseleave', '.outer_widget');
-			$(document).off('mouseenter mouseleave', '.inner_widget');
-		}
-	});
-    */
+    $('#edit_tgl').on('click', function () {
+        if ($('#edit_tgl').is(':checked')) {
+            console.log('checked');
+            console.log(this.parentNode);
+            // $("form").addClass("hideButton")
+
+        } else {
+            console.log('Not checked');
+        }
+    });
+
 
 
 
 </script>
+
+
 
 
 </div>

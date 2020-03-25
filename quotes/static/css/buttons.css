@@ -160,3 +160,10 @@
 .deleteButton:hover {
   background-color: lightgrey;
 }
+
+
+
+.hideButton {
+  opacity: 0;
+  z-index: -99999;
+}
