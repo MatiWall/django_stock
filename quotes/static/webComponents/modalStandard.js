@@ -58,7 +58,7 @@ class modal extends HTMLElement {
             padding: 2px 16px;
             background-color: lightgrey;
             color: white;
-            height: 10%;
+            height: 65px;
             border-bottom: solid black 2px;
             }
             .modal-body {

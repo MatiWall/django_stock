@@ -11,7 +11,7 @@
     'footer header header header header header';
   grid-gap: 10px;
   grid-template-rows: 2fr  1fr 5fr;
-  grid-template-columns: 1fr 6fr;
+  grid-template-columns: 1fr 3fr;
 
   background-color: #2196F3;
   padding: 10px;

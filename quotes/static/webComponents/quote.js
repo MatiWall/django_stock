@@ -6,6 +6,8 @@ const button = `
 
 const template = `
 
+    This is a test
+
 ` // Stops here 
 
 class quote extends HTMLElement {
