@@ -73,10 +73,12 @@ var template = `
         height: 15rem;
         background-color: #fff;
         overflow: auto;
+      
 
     }
 
 
+   
 
     .picklistItem {
         all: unset;
@@ -131,7 +133,7 @@ var template = `
         <div class="dualPicklistAvalibleHeader">Avalible</div>
         <div class="dualPicklistAavalible">
             <div id="dualPicklistAvalibleOptions" class="dualPicklistOptions">
-                <ol id="picklistOptionsAvalible">
+                <ol id="picklistOptionsAvalible" class="picklistTable">
                 </ol>
             </div>
         </div>
@@ -141,7 +143,7 @@ var template = `
                 <arrow class="right"> </arrow>
             </button>
 
-            <button class="buttonPicklistPosition" type="button">
+            <button id="moveChosenToAvalible" class="buttonPicklistPosition" type="button">
                 <arrow class="left"> </arrow>
             </button>
 
@@ -150,16 +152,16 @@ var template = `
         <div class="dualPicklistChosenHeader">Chosen </div>
         <div class="dualPicklistChosen">
             <div id="dualPicklistChosenOptions" class="dualPicklistOptions">
-            <ol id="picklistOptionsChosen">
+            <ol id="picklistOptionsChosen" class="picklistTable">
             </ol>
             </div>
         </div>
 
         <div class="dualPicklistReorder ">
-            <button class="buttonPicklistPosition" type="button">
+            <button id="moveItemUp" class="buttonPicklistPosition" type="button">
                 <arrow class="up"> </arrow>
             </button>
-            <button class="buttonPicklistPosition" type="button">
+            <button id="moveItemDown" class="buttonPicklistPosition" type="button">
                 <arrow class="down "> </arrow>
             </button>
         </div>
@@ -202,6 +204,10 @@ function createList(element, data, include) {
 
 }
 
+function moveElement() {
+
+}
+
 
 
 
@@ -215,11 +221,11 @@ class dualPicklist extends HTMLElement {
         this.attachShadow({ mode: 'open' });
         this.shadowRoot.innerHTML = template;
 
-        this.optionsList = ['item 1', 'item 2', 'item 3', 'item 4', 'item 5'];
+        this.optionsList = ['item 1', 'item 2', 'item 3', 'item 4', 'item 5', 'item 6', 'item 7', 'item 8', 'item 9'];
         this._picklistAvalible = createObjectFromList(this.optionsList);
-        this._selectedAvalible ;
-        this._selectedChosen ;
-        this.picklistChosen ;
+        this._selectedAvalible;
+        this._selectedChosen;
+        this.picklistChosen;
 
 
         var element = this.shadowRoot.getElementById('picklistOptionsAvalible');
@@ -229,10 +235,6 @@ class dualPicklist extends HTMLElement {
 
 
     connectedCallback() {
-        // this.shadowRoot.querySelector("button").addEventListener('click', this._showSettings.bind(this));
-        //this.shadowRoot.querySelector("button").append(this.getAttribute("title"));
-
-
         const elementOptionsAcalible = this.shadowRoot.getElementById("picklistOptionsAvalible");
         if (elementOptionsAcalible) {
 
@@ -240,21 +242,19 @@ class dualPicklist extends HTMLElement {
             elementOptionsAcalible.addEventListener("click", e => {
                 if (e.target && e.target.nodeName == "LI") {
 
-                    console.log(e.target.id + " was clicked");
-
-                    if (e.target.hasAttribute("selectedAvalible")) {
-                        e.target.removeAttribute('selectedAvalible', '');
+                    if (e.target.hasAttribute('selected')) {
+                        e.target.removeAttribute('selected', 'Avalible');
                         e.target.classList.remove('selectedPicklistItem');
                     } else {
-                        e.target.setAttribute('selectedAvalible', '');
+                        e.target.setAttribute('selected', 'Avalible');
                         e.target.classList.add('selectedPicklistItem');
                     }
 
 
                 }
 
-                this._selectedAvalible = this.shadowRoot.querySelectorAll('[selectedAvalible]');
-    
+                this._selectedAvalible = this.shadowRoot.querySelectorAll('[selected="Avalible"]');
+
             });
         }
 
@@ -263,52 +263,89 @@ class dualPicklist extends HTMLElement {
             elementOptionsChosen.addEventListener("click", e => {
                 if (e.target && e.target.nodeName == "LI") {
 
-                    console.log(e.target.id + " was clicked");
-
-                    if (e.target.hasAttribute("selectedChosen")) {
-                        e.target.removeAttribute('selectedChosen', '');
+                    if (e.target.hasAttribute("selected")) {
+                        e.target.removeAttribute('selected', 'Chosen');
                         e.target.classList.remove('selectedPicklistItem');
                     } else {
-                        e.target.setAttribute('selectedChosen', '');
+                        e.target.setAttribute('selected', 'Chosen');
                         e.target.classList.add('selectedPicklistItem');
                     }
 
                 }
 
-            this._selectedChosen = this.shadowRoot.querySelectorAll('[selectedChosen]');       
-                console.log(selectedAvalible);
+                this._selectedChosen = this.shadowRoot.querySelectorAll('[selected="Chosen"]');
             });
 
         }
 
 
 
-     this.shadowRoot.getElementById("moveAvalibleToChosen").addEventListener("click", e => {
-        //console.log(e.target,this.nodeName);
-        this._selectedAvalible.forEach((item, index) => {
-            console.log(item);
-            //elementOptionsChosen.appendChild(item.removeAttribute("selectedAvalible"));
+        this.shadowRoot.getElementById("moveAvalibleToChosen").addEventListener("click", e => {
 
-       
+            this._selectedAvalible.forEach((item, index) => {
+                item.removeAttribute('selected');
+                item.classList.remove('selectedPicklistItem')
+                elementOptionsChosen.appendChild(item);
+
+
+            });
+
         });
-       
-    });
 
+
+        this.shadowRoot.getElementById("moveChosenToAvalible").addEventListener("click", e => {
+
+            this._selectedChosen.forEach((item, index) => {
+                item.removeAttribute('selected');
+                item.classList.remove('selectedPicklistItem')
+                elementOptionsAcalible.appendChild(item);
+
+
+            });
+
+        });
+
+
+        this.shadowRoot.getElementById("moveItemUp").addEventListener("click", e => {
+
+            var list = this.shadowRoot.getElementById("picklistOptionsChosen");
+            var items = list.getElementsByTagName("LI");
+            for (var i = 1; i < items.length; i++) {
+
+                if (items[i].hasAttribute('selected')) {
+                    items[i].parentNode.insertBefore(items[i], items[i - 1]);
+                }
+
+            }
+
+        });
+
+
+        this.shadowRoot.getElementById("moveItemDown").addEventListener("click", e => {
+
+            var list = this.shadowRoot.getElementById("picklistOptionsChosen");
+            var items = list.getElementsByTagName("LI");
+            for (var i = (items.length - 2); i >= 0; i--) {
+
+                if (items[i].hasAttribute('selected')) {
+                    items[i].parentNode.insertBefore(items[i + 1], items[i]);
+                }
+
+            }
+
+        });
 
 
     }
 
 
-
-
-
-
-
-
-
-
     disconnectedCallback() {
         this.shadowRoot.getElementById("picklistOptionsAvalible").removeEventListener('click');
+        this.shadowRoot.getElementById("picklistOptionsChosen").removeEventListener('click');
+        this.shadowRoot.getElementById("moveAvalibleToChosen").removeEventListener("click");
+        this.shadowRoot.getElementById("moveChosenToAvalible").removeEventListener("click");
+        this.shadowRoot.getElementById("moveItemDown").removeEventListener("click");
+        this.shadowRoot.getElementById("moveItemUp").removeEventListener("click");
     }
 
 }
