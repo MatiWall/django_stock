@@ -72,17 +72,26 @@ var template = `
         padding: .25rem 0;
         height: 15rem;
         background-color: #fff;
-        overflow: auto;
+        overflow-y: auto;
       
 
     }
 
 
+    ol {
+        width: 100%; 
+        list-style-type: none; 
+        display: flex; 
+        flex-direction: column;
+        padding: 0;
+    }
    
 
     .picklistItem {
         all: unset;
         cursor: pointer;
+        display: block;
+        width: 100%;
     }
 
     .picklistItem:hover {
@@ -91,6 +100,11 @@ var template = `
 
     .selectedPicklistItem {
         border: solid;
+        border-width: 1px;
+        border-radius: 3px;
+        border-color: lightgrey;
+        
+        background-color: rgba(200,200,200, 0.4);
     }
 
 
@@ -204,11 +218,50 @@ function createList(element, data, include) {
 
 }
 
-function moveElement() {
 
+function attributeTrackerScoped( elementOptions, type) {
+
+    if (elementOptions) {
+        elementOptions.addEventListener("click", e => {
+
+            if (e.target && e.target.nodeName == "LI") {
+
+                if (e.target.hasAttribute('selected')) {
+                    e.target.removeAttribute('selected', type);
+                    e.target.classList.remove('selectedPicklistItem');
+                } else {
+                    e.target.setAttribute('selected', type);
+                    e.target.classList.add('selectedPicklistItem');
+                }
+
+
+            }
+
+            this['_selected' + type] = this.shadowRoot.querySelectorAll(`[selected=${type}]`);
+
+        });
+
+    }
 }
 
 
+function moveItemsScoped(elementOptions, moveFrom, moveTo) {
+
+    this.shadowRoot.getElementById(`move${moveFrom}To${moveTo}`).addEventListener("click", e => {
+
+        this[`_selected${moveFrom}`].forEach((item, index) => {
+            item.removeAttribute('selected');
+            item.classList.remove('selectedPicklistItem')
+            elementOptions.appendChild(item);
+
+
+        });
+
+    });
+
+
+
+}
 
 
 
@@ -221,89 +274,48 @@ class dualPicklist extends HTMLElement {
         this.attachShadow({ mode: 'open' });
         this.shadowRoot.innerHTML = template;
 
-        this.optionsList = ['item 1', 'item 2', 'item 3', 'item 4', 'item 5', 'item 6', 'item 7', 'item 8', 'item 9'];
-        this._picklistAvalible = createObjectFromList(this.optionsList);
+        //this._optionsList = ['item 1', 'item 2', 'item 3', 'item 4', 'item 5', 'item 6', 'item 7', 'item 8', 'item 9'];
+
         this._selectedAvalible;
         this._selectedChosen;
         this.picklistChosen;
 
 
-        var element = this.shadowRoot.getElementById('picklistOptionsAvalible');
-        createList(element, this._picklistAvalible, "Avalible");
+        this._element = this.shadowRoot.getElementById('picklistOptionsAvalible');
+        
 
     }
 
+    get items() {
+        return this._optionsList;
+    }
+
+    set items(values) {
+        console.log("is run");
+        this._picklistAvalible = createObjectFromList(values);
+        createList(this._element, this._picklistAvalible, "Avalible");
+    }
+
+    get chosenItems () {
+        return this.picklistChosen;
+    }
 
     connectedCallback() {
-        const elementOptionsAcalible = this.shadowRoot.getElementById("picklistOptionsAvalible");
-        if (elementOptionsAcalible) {
 
-
-            elementOptionsAcalible.addEventListener("click", e => {
-                if (e.target && e.target.nodeName == "LI") {
-
-                    if (e.target.hasAttribute('selected')) {
-                        e.target.removeAttribute('selected', 'Avalible');
-                        e.target.classList.remove('selectedPicklistItem');
-                    } else {
-                        e.target.setAttribute('selected', 'Avalible');
-                        e.target.classList.add('selectedPicklistItem');
-                    }
-
-
-                }
-
-                this._selectedAvalible = this.shadowRoot.querySelectorAll('[selected="Avalible"]');
-
-            });
-        }
+        
+        let attributeTracker = attributeTrackerScoped.bind(this);
+        
+        const elementOptionsAvalible = this.shadowRoot.getElementById("picklistOptionsAvalible");
+        attributeTracker( elementOptionsAvalible , "Avalible");
+        
 
         const elementOptionsChosen = this.shadowRoot.getElementById("picklistOptionsChosen");
-        if (elementOptionsChosen) {
-            elementOptionsChosen.addEventListener("click", e => {
-                if (e.target && e.target.nodeName == "LI") {
+        attributeTracker( elementOptionsChosen , "Chosen");
 
-                    if (e.target.hasAttribute("selected")) {
-                        e.target.removeAttribute('selected', 'Chosen');
-                        e.target.classList.remove('selectedPicklistItem');
-                    } else {
-                        e.target.setAttribute('selected', 'Chosen');
-                        e.target.classList.add('selectedPicklistItem');
-                    }
-
-                }
-
-                this._selectedChosen = this.shadowRoot.querySelectorAll('[selected="Chosen"]');
-            });
-
-        }
-
-
-
-        this.shadowRoot.getElementById("moveAvalibleToChosen").addEventListener("click", e => {
-
-            this._selectedAvalible.forEach((item, index) => {
-                item.removeAttribute('selected');
-                item.classList.remove('selectedPicklistItem')
-                elementOptionsChosen.appendChild(item);
-
-
-            });
-
-        });
-
-
-        this.shadowRoot.getElementById("moveChosenToAvalible").addEventListener("click", e => {
-
-            this._selectedChosen.forEach((item, index) => {
-                item.removeAttribute('selected');
-                item.classList.remove('selectedPicklistItem')
-                elementOptionsAcalible.appendChild(item);
-
-
-            });
-
-        });
+        
+        let moveItems = moveItemsScoped.bind(this);
+        moveItems(elementOptionsChosen, "Avalible", "Chosen");
+        moveItems(elementOptionsAvalible, "Chosen", "Avalible");
 
 
         this.shadowRoot.getElementById("moveItemUp").addEventListener("click", e => {

@@ -26,18 +26,11 @@ buttons.forEach((btn) => {
 });
 
 
-/*
-tickerInput.addEventListener("keyup",  (event) => {
-    if (event.keyCode === 13) { // Ticker read when pressing enter
-        event.preventDefault();
-        var ticker = tickerInput.value;
+var list = document.querySelector("dual-picklist");
+list.items = ['1', '2', '3', '4', '5', '6'];
+console.log(list.chosenItems);
 
-    }
 
-    console.log(ticker);
-
-});
-*/
 
 
 
