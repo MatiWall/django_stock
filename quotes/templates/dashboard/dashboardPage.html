@@ -16,32 +16,22 @@
             Add Component
         </button>
         <modal-standard title="Add Component">
-    
+
             <div class="grid-container">
                 <div class="dashboardPrevied">Preview</div>
-                <div class="dashboardType">
-                    <fieldset id="dashboardComponentChoseType">
-                        <legend>Display As</legend>
-                      
-                        <input type="radio" name="type" value="dashboardComponentTypeQuote" id="dashboardComponentTypeQuote">
-                        <label for="dashboardComponentTypeQuote">Quote</label>
-                      
-                        <input type="radio" name="type" value="green" id="colour_green">
-                        <label for="colour_green">Green</label>
-                      
-                        <input type="radio" name="type" value="blue" id="colour_blue">
-                        <label for="colour_blue">Red</label>
+                <div id="dashboardComponentType" class="dashboardType">
+                   
+                    <c-fieldset id="dashboardTypeFieldset" title="Choose Type">
+                    </c-fieldset>
+                    
 
-                        <input id="dashboardComponentTickers" type="text" placeholder="Input iicker(s)" style="max-width: 85%;"> </input>
-               
-                      
-                      </fieldset>
                 </div>
-             <!-- <div class="DashboardTickers" >
+
+                <div class="DashboardTickers" >
                     <input id="dashboardComponentTickers" type="text" placeholder="Input iicker(s)" style="max-width: 85%;"> </input>
-                </div>-->  
+                </div>
                 <div class="dashboardSettings">
-                    <dual-picklist ></dual-picklist>
+                    <dual-picklist id="settingsDualPicklist" title="Choose Items"></dual-picklist>
                 </div>
             </div>
         </modal-standard>

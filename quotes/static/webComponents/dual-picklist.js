@@ -142,7 +142,7 @@ var template = `
 </style>
 
 <div class="container">
-    <h3 class="textHeadingSmall">Choose Values</h3>
+    <h3 id="title" class="textHeadingSmall"></h3>
     <div class="dualPickListContainer">
         <div class="dualPicklistAvalibleHeader">Avalible</div>
         <div class="dualPicklistAavalible">
@@ -274,8 +274,6 @@ class dualPicklist extends HTMLElement {
         this.attachShadow({ mode: 'open' });
         this.shadowRoot.innerHTML = template;
 
-        //this._optionsList = ['item 1', 'item 2', 'item 3', 'item 4', 'item 5', 'item 6', 'item 7', 'item 8', 'item 9'];
-
         this._selectedAvalible;
         this._selectedChosen;
         this.picklistChosen;
@@ -291,7 +289,6 @@ class dualPicklist extends HTMLElement {
     }
 
     set items(values) {
-        console.log("is run");
         this._picklistAvalible = createObjectFromList(values);
         createList(this._element, this._picklistAvalible, "Avalible");
     }
@@ -346,6 +343,10 @@ class dualPicklist extends HTMLElement {
             }
 
         });
+
+
+        // Set title
+        this.shadowRoot.querySelector('#title').innerHTML = this.getAttribute('title');
 
 
     }
