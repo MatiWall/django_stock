@@ -7,11 +7,9 @@ var typesFieldset = document.getElementById("dashboardTypeFieldset");
 typesFieldset.types = ['Quote', 'Historical', 'Intra Day', 'OHCL', 'Largest Trades', 'Previous Days Price', 'Volume by Venue', 'Company Profiles'];
 
 typesFieldset.addEventListener('change', (e) => { // chart type change
-    setTimeout(() => {
-        console.log('heys');
-        //loadSettings();
-    }, 1000);
 
+        loadSettings();
+ 
 });
 
 
@@ -46,11 +44,6 @@ function loadSettings() {
         picklist.setAttribute('title', 'Choose Values');
         panel.appendChild(picklist);
         picklist.items = ['1', '2', '3', '4', '5', '6', '7'];
-
-        console.log('testtt');
-
-        // Options to picklist
-
 
         console.log(picklist.items);
     }

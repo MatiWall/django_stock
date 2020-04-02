@@ -51,8 +51,8 @@
     <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
 
 
-    <div class="grid-stack">
-
+    <div class="grid-stack">        
+       
 
     </div>
 
@@ -73,9 +73,8 @@
             '<div id=' + dataInputId + ' class="grid-stack-item-content"><button id="" class="deleteButton" onclick="grid.removeWidget(this.parentNode.parentNode)"> &times; </button>' +
             '</div>';
 
+        
         grid.addWidget(dashboardComponent, { width: 4, height: 5 });
-
-
         var trace1 = {
             x: [1, 2, 3, 4],
             y: [10, 15, 13, 17],
@@ -101,8 +100,20 @@
             },
             autosize: true,
         };
+        
+        var chart = document.createElement('plotly-chart');
+        chart.layout = layout;
+        chart.config = config;
+        chart.data = data;
+        
+        console.log(chart);
 
-        Plotly.newPlot(dataInputId, data, layout, config);
+
+        document.getElementById(dataInputId).appendChild(chart);
+
+        
+    
+        //Plotly.newPlot(dataInputId, data, layout, config);
     }
 
 
