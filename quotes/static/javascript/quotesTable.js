@@ -70,7 +70,6 @@ function createQuoteTable(keys, types, values, divId) {
     table_body+='</table>';
     $(containerId).html(table_body);
 
-     console.log('test');
 
 }
 

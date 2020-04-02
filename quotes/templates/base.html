@@ -6,6 +6,18 @@
     <title>
         Stock Portfolio
     </title>
+
+
+
+    <!-- Web Components-->
+    <script type='text/javascript' src="{% static 'webComponents/modalStandard.js' %}"></script>
+    <script type='text/javascript' src="{% static 'webComponents/modalLayoutStandard.js' %}"></script>
+    <script type='text/javascript' src="{% static 'webComponents/dashboardTypeFieldset.js' %}"></script>
+    <script type='text/javascript' src="{% static 'webComponents/dual-picklist.js' %}"></script> 
+
+
+
+    
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{% static 'css/navbar.css' %}?version=1">
@@ -20,6 +32,8 @@
 
 
 
+
+
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
@@ -29,6 +43,13 @@
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
     <script src="{% static 'javascript/quotesTable.js' %}"></script>
+
+
+    <!--Cookies-->
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+
+
+
 
 
 </head>
@@ -106,16 +127,8 @@
     </footer>
 
 
-    <!-- Web Components-->
-    <script src="{% static 'webComponents/modalStandard.js' %}"></script>
-    <script src="{% static 'webComponents/modalLayoutStandard.js' %}"></script>
-    <script src="{% static 'webComponents/dual-picklist.js' %}"></script>
-    <script src="{% static 'webComponents/dashboardTypeFieldset.js' %}"></script>
-    
-    
     <!-- Helpers-->
     <script src="{% static 'dashboard/javascript/dashboardController.js' %}"></script>
-
 
 
 

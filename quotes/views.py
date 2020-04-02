@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.http import HttpResponse
 
 from .models import stockTickers
 from .forms import stockForm
@@ -63,6 +64,22 @@ def delete(request, stockId):
 
 
 def dashboard(request):
-
-
     return render(request, 'dashboard/dashboardPage.html', {})
+
+
+def fetchDashboardData(request):
+   # import requests
+    import json
+
+    if request.is_ajax():
+        print(request.POST)
+        data = json.loads(request.body)
+
+
+
+
+        jsonData = json.dumps({'this' : 'Worked', 'Yes' : 'It fucking worked'})
+    return HttpResponse(jsonData, status=200)
+
+
+

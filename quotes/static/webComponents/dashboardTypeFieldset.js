@@ -1,62 +1,67 @@
-var template = `
-
-<style>
 
 
-legend {
-    width: auto;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-legend ~ input[type=radio] {
-    position: absolute;
-    left: -10000px;
-  }
-  
-
-label {
-    border: solid;
-    border-width: 1px;
-    border-radius: 3px;
-    border-color: lightgrey;
-    background-color: white;
-}
-  
-label:hover {
-    cursor: pointer;
-    background-color: lightgrey;
-}
-
-
-input[type=radio]:checked + label {
-    background-color: rgba(200,200,200, 0.4);
-  }
-
-</style>
-
-
-<fieldset id="dashboardComponentChoseType">
-    <legend></legend>
-   
-</fieldset>
-
-` // Template literal stops here
-
-
-
-
-class fieldset extends HTMLElement {
+class myFieldset extends HTMLElement {
     constructor() {
         super();
 
 
 
         this.attachShadow({ mode: 'open' });
-        this.shadowRoot.innerHTML = template;
+        this.shadowRoot.innerHTML = `
+
+        <style>
+        
+        
+        legend {
+            width: auto;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        legend ~ input[type=radio] {
+            position: absolute;
+            left: -10000px;
+          }
+          
+        
+        label {
+            border: solid;
+            border-width: 1px;
+            border-radius: 3px;
+            border-color: lightgrey;
+            background-color: white;
+        }
+          
+        label:hover {
+            cursor: pointer;
+            background-color: lightgrey;
+        }
+        
+        
+        input[type=radio]:checked + label {
+            background-color: rgba(200,200,200, 0.4);
+          }
+        
+        </style>
+        
+        
+        <fieldset id="dashboardComponentChoseType">
+            <legend></legend>
+           
+        </fieldset>
+        
+        `;
 
         this._types = [];
         this._selected = "";
+
+
+
+        this.changeEvent = new CustomEvent("change", {
+            bubbles: true,
+            cancelable: false,
+            composed: true
+          });
 
     }
 
@@ -99,7 +104,6 @@ class fieldset extends HTMLElement {
 
 
     _createList()  { 
-        console.log("test");
         let type ;
         var list = `<legend> </legend>`
         for( var i = 0; i<this._types.length; i++) {
@@ -111,14 +115,16 @@ class fieldset extends HTMLElement {
 
         this.shadowRoot.querySelector('fieldset').innerHTML = list; 
         this.shadowRoot.querySelector('legend').innerHTML = this.getAttribute('title');
+        this.shadowRoot.querySelector('input').setAttribute('checked', "checked");
 
 
     }
     
     _ifSelected = (event) => {
-        console.log(event.target.value);
-        this._selected = event.target.value;
-        };
+        this._selected = event.target.value; 
+        this.shadowRoot.querySelector('fieldset').setAttribute('selected',`${this._selected}`); 
+        this.dispatchEvent(this.changeEvent);
+    };
 
 }
-customElements.define('c-fieldset', fieldset);
+customElements.define('c-fieldset', myFieldset);

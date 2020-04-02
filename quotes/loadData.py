@@ -19,6 +19,25 @@ def loadData(tickersList, typesList):
     return api
 
 
+def loadDashboardData(ticker, types, isSandbox = True):
+
+    if isSandbox:
+        baseURL = 'https://sandbox.iexapis.com/stable/' 
+
+    else:
+        baseURL = 'https://cloud.iexapis.com/stable/'  
+
+
+    
+
+
+
+
+
+
+
+
+
 def listToString(itemsList):
     '''
     makes it possible to get data in batches from api
@@ -33,3 +52,7 @@ def listToString(itemsList):
     
     print(items)
     return items
+
+
+
+

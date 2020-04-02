@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 
+
+
+
+
 {% block content %}
 
 
@@ -20,18 +24,19 @@
             <div class="grid-container">
                 <div class="dashboardPrevied">Preview</div>
                 <div id="dashboardComponentType" class="dashboardType">
-                   
+
                     <c-fieldset id="dashboardTypeFieldset" title="Choose Type">
                     </c-fieldset>
-                    
+
 
                 </div>
 
-                <div class="DashboardTickers" >
-                    <input id="dashboardComponentTickers" type="text" placeholder="Input iicker(s)" style="max-width: 85%;"> </input>
+                <div class="DashboardTickers">
+                    <input id="dashboardComponentTickers" type="text" placeholder="Input Ticker(s)"
+                        style="max-width: 85%;"> </input>
                 </div>
-                <div class="dashboardSettings">
-                    <dual-picklist id="settingsDualPicklist" title="Choose Items"></dual-picklist>
+                <div id="dashboardSettings" class="dashboardSettings">
+                   
                 </div>
             </div>
         </modal-standard>
@@ -48,9 +53,12 @@
 
     <div class="grid-stack">
 
+
     </div>
 
 </div>
+
+
 
 
 <script type="text/javascript">
@@ -121,6 +129,10 @@
 
 
 
-</div>
+
 <a href="https://iexcloud.io">IEX Cloud</a>
+
+
+
+
 {% endblock %}

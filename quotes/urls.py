@@ -7,5 +7,6 @@ urlpatterns = [
     path('about/', views.about, name = "about"),
     path('addStock/', views.addStock, name = "addStock"),
     path('delete/<stockId>', views.delete, name="delete"),
-     path('dashboard/', views.dashboard, name = "dashboardPage"),
+    path('dashboard/', views.dashboard, name = "dashboardPage"),
+    path('dashboard/getData/', views.fetchDashboardData, name = 'getDashboardData'),
 ]
