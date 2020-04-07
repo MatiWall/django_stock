@@ -29,21 +29,22 @@ function addComponent() {
 
 
 let editModeButton = document.getElementById('edit_tgl');
+editModeButton.checked = false;
 
-editModeButton .addEventListener('click', (e) => {
+editModeButton.addEventListener('click', (e) => {
     let dashboardContainer = document.getElementById('dashboardContainer'); 
 
     if (e.target.checked) {
 
         grid.movable('.grid-stack-item', true);
         grid.resizable('.grid-stack-item', true);
-        updateDashboardVisibility(dashboardContainer, 'visible'); 
+        updateDashboardVisibility(dashboardContainer, 'block'); 
 
     } else {
 
         grid.movable('.grid-stack-item', false);
         grid.resizable('.grid-stack-item', false);
-        updateDashboardVisibility(dashboardContainer, 'hidden');
+        updateDashboardVisibility(dashboardContainer, 'none');
 
     }
 
@@ -53,11 +54,12 @@ editModeButton .addEventListener('click', (e) => {
 function updateDashboardVisibility(dashboardContainer, visibility) {
     let widgetButtonNodes = dashboardContainer.querySelectorAll('.widgetButton');
     for(var i = 0; i<widgetButtonNodes.length; i++) {
-        widgetButtonNodes[i].style.visibility = visibility;
+        widgetButtonNodes[i].style.display = visibility;
+
     }
 
     
-    dashboardContainer.querySelector('#dashboardEditModal').shadowRoot.querySelector('button').style.visibility = visibility; // Visibility of "Add Component" button
+    dashboardContainer.querySelector('#dashboardEditModal').shadowRoot.querySelector('button').style.display = visibility; // Visibility of "Add Component" button
     
 
 }
@@ -74,8 +76,9 @@ grid.on('change', function(event, items) {
 
 grid.on('gsresizestop', function(event, element) { // Resize highchart charts when widget is resized.
     let chartComponent = element.querySelector('highchart-timeseries');
-    chartComponent.chart.setSize(element.clientWidth, element.clientHeight, true);
+    chartComponent.chart.setSize(element.offsetWidth-20, element.scrollHeight-5, true);
   });
+
 
 
 

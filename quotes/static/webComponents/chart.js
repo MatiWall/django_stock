@@ -13,13 +13,13 @@ class timeSeriesChart extends HTMLElement {
     
         <link rel="stylesheet" type="text/css" href="https://code.highcharts.com/css/stocktools/gui.css">
         <link rel="stylesheet" type="text/css" href="https://code.highcharts.com/css/annotations/popup.css">
-        <div id="container" class="all: none;"> This is a test </div>`;
+        <div id="container"> </div>`;
 
         this._data = [];
         this._title = "this is my title";
 
     }
-    
+
 
 
 
@@ -43,6 +43,7 @@ class timeSeriesChart extends HTMLElement {
                 height: '20%',
                 offset: 0
             }],
+         
             tooltip: {
                 shape: 'square',
                 headerShape: 'callout',
@@ -51,7 +52,7 @@ class timeSeriesChart extends HTMLElement {
                 positioner: function (width, height, point) {
                     var chart = this.chart,
                         position;
-    
+
                     if (point.isHeader) {
                         position = {
                             x: Math.max(
@@ -71,7 +72,7 @@ class timeSeriesChart extends HTMLElement {
                             y: point.series.yAxis.top - chart.plotTop
                         };
                     }
-    
+
                     return position;
                 }
             },
@@ -94,8 +95,8 @@ class timeSeriesChart extends HTMLElement {
                 }]
             }
         });
-  
-   
+
+
 
     }
 
@@ -110,7 +111,7 @@ class timeSeriesChart extends HTMLElement {
 
 
 
-   
+
 
 
 }
