@@ -19,16 +19,6 @@ def loadData(tickersList, typesList):
     return api
 
 
-def loadDashboardData(ticker, types, isSandbox = True):
-
-    if isSandbox:
-        baseURL = 'https://sandbox.iexapis.com/stable/' 
-
-    else:
-        baseURL = 'https://cloud.iexapis.com/stable/'  
-
-
-    
 
 
 

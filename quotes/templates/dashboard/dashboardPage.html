@@ -36,7 +36,7 @@
                         style="max-width: 85%;"> </input>
                 </div>
                 <div id="dashboardSettings" class="dashboardSettings">
-                   
+
                 </div>
             </div>
         </modal-standard>
@@ -48,94 +48,29 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gridstack@1.1.1/dist/gridstack.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/gridstack@1.1.1/dist/gridstack.all.js"></script>
 
-    <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+    <!--<script src="https://code.highcharts.com/highcharts.js"></script> -->
+
+    <script src="https://code.highcharts.com/stock/highstock.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/data.js"></script>
+    <script src="https://code.highcharts.com/stock/indicators/indicators-all.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/drag-panes.js"></script>
+    <script src="https://code.highcharts.com/modules/annotations-advanced.js"></script>
+    <script src="https://code.highcharts.com/modules/price-indicator.js"></script>
+    <script src="https://code.highcharts.com/modules/full-screen.js"></script>
+    <script src="https://code.highcharts.com/modules/stock-tools.js"></script>
+    <!--
+    <link rel="stylesheet" type="text/css" href="https://code.highcharts.com/css/stocktools/gui.css">
+    <link rel="stylesheet" type="text/css" href="https://code.highcharts.com/css/annotations/popup.css">
+  -->
 
 
-    <div class="grid-stack">        
-       
+    <div id="dashboardCanvasGridStack" class="grid-stack">
+
 
     </div>
 
 </div>
 
-
-
-
-<script type="text/javascript">
-
-    var grid = GridStack.init();
-
-    function addComponent() {
-
-        var dataInputId = Math.random().toString(36).substr(2, 9); // Generate a unigue id (maybe overkill)
-
-        dashboardComponent = '<div class="grid-stack-item dashboardComponents">' +
-            '<div id=' + dataInputId + ' class="grid-stack-item-content"><button id="" class="deleteButton" onclick="grid.removeWidget(this.parentNode.parentNode)"> &times; </button>' +
-            '</div>';
-
-        
-        grid.addWidget(dashboardComponent, { width: 4, height: 5 });
-        var trace1 = {
-            x: [1, 2, 3, 4],
-            y: [10, 15, 13, 17],
-            type: 'scatter'
-        };
-
-        var trace2 = {
-            x: [1, 2, 3, 4],
-            y: [16, 5, 11, 9],
-            type: 'scatter'
-        };
-
-        var config = { responsive: true }
-        var data = [trace1, trace2];
-
-        var layout = {
-            title: 'test',
-            margin: {
-                t: 30, //top margin
-                l: 20, //left margin
-                r: 20, //right margin
-                b: 20 //bottom margin
-            },
-            autosize: true,
-        };
-        
-        var chart = document.createElement('plotly-chart');
-        chart.layout = layout;
-        chart.config = config;
-        chart.data = data;
-        
-        console.log(chart);
-
-
-        document.getElementById(dataInputId).appendChild(chart);
-
-        
-    
-        //Plotly.newPlot(dataInputId, data, layout, config);
-    }
-
-
-
-
-    /* Edit Mode */
-
-    $('#edit_tgl').on('click', function () {
-        if ($('#edit_tgl').is(':checked')) {
-            console.log('checked');
-            console.log(this.parentNode);
-            // $("form").addClass("hideButton")
-
-        } else {
-            console.log('Not checked');
-        }
-    });
-
-
-
-
-</script>
 
 
 
