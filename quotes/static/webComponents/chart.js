@@ -95,44 +95,19 @@ class timeSeriesChart extends HTMLElement {
             }
         });
   
-    
-        
-        /*Highcharts.stockChart(element, {
-
-            rangeSelector: {
-                selected: 1
-            },
-
-            title: {
-                text: this._title,
-            },
-
-            series: [{
-                type: 'candlestick',
-                name: 'AAPL Stock Price',
-                data: data,
-                dataGrouping: {
-                    units: [
-                        [
-                            'day', // unit name
-                            [1] // allowed multiples
-                        ], [
-                            'month',
-                            [1, 2, 3, 4, 6]
-                        ]
-                    ]
-                }
-            }]
-
-        });*/
-
-
+   
 
     }
 
 
     get title() { return this._title; }
     set title(value) { this_title = value }
+
+    get chart() {
+        return this._chart;
+    }
+
+
 
 
    

@@ -10,8 +10,11 @@ function addComponent() {
     dashboardComponent = `
             <div class="grid-stack-item dashboardComponents" data-gs-disable-drag="true">
                 <div id=${dataInputId} class="grid-stack-item-content">
-                    <button class="deleteButton" onclick="grid.removeWidget(this.parentNode.parentNode)"> &times; </button>
-                    <button class="editButton"> Edit </button>
+                    <div class="widgetButton">
+                        <button class="deleteButton" onclick="grid.removeWidget(this.parentNode.parentNode.parentNode)"> &times; </button>
+                        <button class="editButton button buttonNeutral"> Edit </button> </br>
+                    </div>
+                    
                 </div>
             </div>`;
 
@@ -25,39 +28,60 @@ function addComponent() {
 
 
 
+let editModeButton = document.getElementById('edit_tgl');
 
-
-document.getElementById('edit_tgl').addEventListener('click', (e) => {
-    let dashboardCanvas = document.getElementById('dashboardCanvasGridStack'); 
+editModeButton .addEventListener('click', (e) => {
+    let dashboardContainer = document.getElementById('dashboardContainer'); 
 
     if (e.target.checked) {
 
-        grid.movable('.grid-stack-item', false);
-        grid.resizable('.grid-stack-item', false);
-        updateWidgetVisibility(dashboardCanvas, 'hidden'); 
+        grid.movable('.grid-stack-item', true);
+        grid.resizable('.grid-stack-item', true);
+        updateDashboardVisibility(dashboardContainer, 'visible'); 
 
     } else {
 
-        grid.movable('.grid-stack-item', true);
-        grid.resizable('.grid-stack-item', true);
-        updateWidgetVisibility(dashboardCanvas, 'visible');
+        grid.movable('.grid-stack-item', false);
+        grid.resizable('.grid-stack-item', false);
+        updateDashboardVisibility(dashboardContainer, 'hidden');
 
     }
 
 })
 
-function updateWidgetVisibility(canvas, visibility) {
-    let deleteButtonNodes = canvas.querySelectorAll('.deleteButton');
-    let editButtonNodes = canvas.querySelectorAll('.editButton');
 
-    for(var i = 0; i<deleteButtonNodes.length; i++) {
-        deleteButtonNodes[i].style.visibility = visibility;
-        editButtonNodes[i].style.visibility = visibility;
+function updateDashboardVisibility(dashboardContainer, visibility) {
+    let widgetButtonNodes = dashboardContainer.querySelectorAll('.widgetButton');
+    for(var i = 0; i<widgetButtonNodes.length; i++) {
+        widgetButtonNodes[i].style.visibility = visibility;
     }
 
     
+    dashboardContainer.querySelector('#dashboardEditModal').shadowRoot.querySelector('button').style.visibility = visibility; // Visibility of "Add Component" button
+    
 
 }
+
+
+
+// Widgets Events
+
+/*
+grid.on('change', function(event, items) {
+    
+  });
+*/
+
+grid.on('gsresizestop', function(event, element) { // Resize highchart charts when widget is resized.
+    let chartComponent = element.querySelector('highchart-timeseries');
+    chartComponent.chart.setSize(element.clientWidth, element.clientHeight, true);
+  });
+
+
+
+
+
+
 
 
 // Add/Edit Dashboard Widget

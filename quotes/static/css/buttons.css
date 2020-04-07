@@ -90,6 +90,9 @@
   }
   
 
+  .buttonRight {
+    float: right;
+  }
 
 
   
@@ -155,6 +158,11 @@
   color: black;
   background: none;
   border: none;
+  border-radius: var(--borderRadius);
+  border: var(--borderWidth);
+  border-color: var(--borderColor);
+  border-style: solid;
+  margin-left: 5px;
 }
 
 .deleteButton:hover {
