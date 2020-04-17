@@ -244,17 +244,21 @@ class dualPicklist extends HTMLElement {
 
     connectedCallback() {
        
+        this._elementOptionsChosen = this.shadowRoot.getElementById("picklistOptionsChosen");
+        this._elementOptionsChosen.addEventListener("click", (e) => { this._attributeTrackerResponce(e, "Chosen") } );
+
+        this.shadowRoot.getElementById(`moveAvalibleToChosen`).addEventListener("click", this._moveAvalibleToChosen.bind(this));
+    
+
+
         
-        
+
+        this._elementOptionsAvalible = this.shadowRoot.getElementById("picklistOptionsAvalible");
+        this._elementOptionsAvalible.addEventListener("click", (e) => {this._attributeTrackerResponce(e, "Avalible") } );
+        this.shadowRoot.getElementById(`moveChosenToAvalible`).addEventListener("click", this._moveChosenToAvalible.bind(this));
+    
        
-        const elementOptionsAvalible = this.shadowRoot.getElementById("picklistOptionsAvalible");
-        this._attributeTracker(elementOptionsAvalible, "Avalible");
 
-        const elementOptionsChosen = this.shadowRoot.getElementById("picklistOptionsChosen");
-        this._attributeTracker(elementOptionsChosen, "Chosen");
-
-        this._moveItemsScoped(elementOptionsChosen, "Avalible", "Chosen");
-        this._moveItemsScoped(elementOptionsAvalible, "Chosen", "Avalible");
 
 
         this.shadowRoot.getElementById("moveItemUp").addEventListener("click", this._responeceMoveItemUp.bind(this));
@@ -271,10 +275,10 @@ class dualPicklist extends HTMLElement {
 
 
     disconnectedCallback() {
-        this.shadowRoot.getElementById("picklistOptionsAvalible").removeEventListener('click',  this._attributeTrackerResponce);
-        this.shadowRoot.getElementById("picklistOptionsChosen").removeEventListener('click',  this._attributeTrackerResponce);
-        this.shadowRoot.getElementById("moveAvalibleToChosen").removeEventListener("click", );
-        this.shadowRoot.getElementById("moveChosenToAvalible").removeEventListener("click", );
+        this.shadowRoot.getElementById("picklistOptionsAvalible").removeEventListener('click',  (e) => {this._attributeTrackerResponce(e, "Avalible") } );
+        this.shadowRoot.getElementById("picklistOptionsChosen").removeEventListener('click',  (e) => { this._attributeTrackerResponce(e, "Chosen") });
+        this.shadowRoot.getElementById("moveAvalibleToChosen").removeEventListener("click", this._moveAvalibleToChosen);
+        this.shadowRoot.getElementById("moveChosenToAvalible").removeEventListener("click", this._moveChosenToAvalible );
         this.shadowRoot.getElementById("moveItemDown").removeEventListener("click", this._responceMoveItemDown);
         this.shadowRoot.getElementById("moveItemUp").removeEventListener("click", this._responeceMoveItemUp);
     }
@@ -294,22 +298,22 @@ class dualPicklist extends HTMLElement {
     }
 
 
-    _moveItemsScoped(elementOptions, moveFrom, moveTo) {
 
-        this.shadowRoot.getElementById(`move${moveFrom}To${moveTo}`).addEventListener("click", e => {
-    
-            this[`_selected${moveFrom}`].forEach((item, index) => {
-                item.removeAttribute('selected');
-                item.classList.remove('selectedPicklistItem');
-                elementOptions.appendChild(item);
-    
-    
-            });
-    
+
+
+    _moveChosenToAvalible() { 
+        this.shadowRoot.querySelectorAll(`[selected=Chosen]`).forEach((item, index) => {
+        item.removeAttribute('selected');
+        item.classList.remove('selectedPicklistItem');
+        this._elementOptionsAvalible.appendChild(item);
+    });}
+
+    _moveAvalibleToChosen() {
+        this.shadowRoot.querySelectorAll(`[selected=Avalible]`).forEach((item, index) => {
+            item.removeAttribute('selected');
+            item.classList.remove('selectedPicklistItem');
+            this._elementOptionsChosen.appendChild(item);
         });
-    
-    
-    
     }
 
 
@@ -338,14 +342,6 @@ class dualPicklist extends HTMLElement {
     }
 
 
-
-    _attributeTracker(elementOptions, type) {
-        if (elementOptions) {
-            elementOptions.addEventListener("click", (e) => {
-                this._attributeTrackerResponce(e, type) } );
-    
-        }
-    }
   
 
     _attributeTrackerResponce(e, type) {
@@ -358,12 +354,7 @@ class dualPicklist extends HTMLElement {
                     e.target.setAttribute('selected', type);
                     e.target.classList.add('selectedPicklistItem');
                 }
-
-
             }
-
-            this['_selected' + type] = this.shadowRoot.querySelectorAll(`[selected=${type}]`);
-
         }
 
 
