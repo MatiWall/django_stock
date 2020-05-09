@@ -45,6 +45,23 @@ def about(request):
 def dashboard(request):
     return render(request, 'dashboard/dashboardPage.html', {})
 
+def saveDashboard(request):
+    from .models import dashboardGrid
+    import json
+    message = 'Fail'
+    if request.is_ajax():
+        print('this ran')
+        data = json.loads(request.body)
+        print(data )
+        #grid = dashboardGrid.objects.create()
+        message = 'success'
+
+
+
+    return HttpResponse(message)
+
+
+
 
 def fetchDashboardData(request):
    # import requests

@@ -24,5 +24,21 @@ function saveGridstackData() {
     console.log(itemData);
     console.log(Date.now());
 
+    fetch('/dashboard/saveDashboard/', {
+        method : 'put',
+        credentials : 'same-origin',
+        headers: {
+            "X-CSRFToken": Cookies.get("csrftoken"),
+            "Accept": "application/json",
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify({a:1, b:2})
+    }).then( (res)=> {console.log(res)})
+    .catch( (res)=> {console.log(res)})
 
+
+}
+
+function loadGridstackData() {
+    console.log('Load button pressed');
 }

@@ -1,5 +1,6 @@
 import django
 from django.db import models
+from django.contrib.postgres.fields import JSONField
 from datetime import datetime
 # Create your models here.
 
@@ -16,3 +17,10 @@ class Company(models.Model):
 
     class Meta:
         ordering = ['name']
+
+
+class dashboardGrid(models.Model):
+    id = models.DateTimeField(auto_now=True, primary_key=True)
+    gridLayout = JSONField()
+    name = models.CharField(max_length = 100, unique = True)
+
