@@ -21,9 +21,6 @@ table {
 
 
 /* Light body*/  
-.tbodyLight {
- 
-}
 
 .tbodyLight tr:nth-child(even) {
     background-color: rgba(240, 240, 240, 0.7);

@@ -77,10 +77,10 @@ grid.on('change', function(event, items) {
 
 grid.on('gsresizestop', function(event, element) { // Resize highchart charts when widget is resized.
     let chartComponent = element.querySelector('.dashboardComponentContainer');
-    console.log(chartComponent);
+   // console.log(chartComponent);
     let chart = Highcharts.charts[chartComponent.getAttribute('data-highcharts-chart')];
 
-    console.log(chart);
+    //console.log(chart);
 
     chart.setSize(element.offsetWidth-20, element.scrollHeight-5, true);
   });

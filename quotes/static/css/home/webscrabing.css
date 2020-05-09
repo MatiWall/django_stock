@@ -1,7 +1,47 @@
 
+
 #webscrabingContainer {
-    background-color: grey;
-    height: 50vh;
-    margin: 0;
-    padding: 0;
+    height : 40vh;
+    
+}
+
+
+.dataframe {
+    font-size: small;
+    display: inline-block;
+    height: 100%;
+    overflow: scroll;
+}
+
+.dataframe tr:nth-child(even){
+    background-color: rgb( 220, 220, 220);
+}
+
+.dataframe tbody tr:hover {
+    background-color: rgb(190, 190, 190);
+}
+
+
+.dataframe > thead {
+    background-color : black;
+    color : white;
+}
+
+
+
+.homeRow {
+    content: "";
+    display: table;
+    clear: both;
+    margin: auto;
+}
+
+.homeColumnLeft {
+    float: left;
+    width: 30%;
+}
+
+.homeColumnRight {
+    float: right;
+    width: 60%;
 }

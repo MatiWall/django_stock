@@ -4,6 +4,7 @@ from django.http import HttpResponse
 
 
 from.loadData import loadData
+from .webscraping import yhaooWebscraping
 # Create your views here.
 
 
@@ -12,7 +13,23 @@ def login(request):
 
 
 def home(request):
-    return render(request, 'home.html', {})
+
+    currencyUrl = 'https://finance.yahoo.com/currencies?.tsrc=fin-srch'
+    currency = yhaooWebscraping(currencyUrl)
+    currencyData = currency.get_html()
+
+
+    cryptoUrl = 'https://finance.yahoo.com/cryptocurrencies?.tsrc=fin-srch'
+    crypto = yhaooWebscraping(cryptoUrl)
+    cryptoData = crypto.get_html()
+
+    commodityUrl = 'https://finance.yahoo.com/commodities?.tsrc=fin-srch'
+    commodity = yhaooWebscraping(commodityUrl)
+    commodityData = commodity.get_html()
+
+
+
+    return render(request, 'home.html', {'currency' : currencyData ,'crypto' : cryptoData, 'commodity' : commodityData})
    
 
 

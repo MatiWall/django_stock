@@ -5,46 +5,34 @@
 
 <div id="webscrabingContainer">
     <h1>Webscrabing of important website</h1>
-</div>
 
-<script type="text/javascript">
-      
-    var div = document.getElementById('webscrabingContainer');
+    <div class='row'>
+        <h3>
+            Currencies
+        </h3>
+        </div class='homeColumnLeft'>
+        <div class='homeColumnRight'>
+            {{currency| safe}}
+        </div>
+    </div>
    
-    console.log('BEFORE'); 
-    var picklist = new dualPicklist
-    div.appendChild(picklist);
-    console.log('AFTER'); 
-    console.log(picklist);
+
+    <div>
+        {{crypto | safe}}
+    </div>
+
+    <div>
+        {{commodity | safe}}
+    </div>
+    
+    
 
 
-</script>
-
-
-<div>
-    <br /> <br />
-
-    {% if ticker %}
-    {{ticker}}
-    {% endif %}
-
-    {% if api %}
-    {% if api == "Error" %}
-    problem with ticker, try again.
-    {% else %}
-
-    <h1>{{api.companyName}}</h1> <br />
-    Price: ${{api.latestPrice}} <br />
-    Previous Close: {{api.previousClose}}<br />
-    Market Cap: {{api.marketCap}} <br />
-    YTD Change: {{api.ytdChange}} <br />
-    52 Wk Low: {{api.week52High}} <br />
-    52 Wk Low: {{api.week52Low }} <br />
-
-    {% endif %}
-
-    {% endif %}
 </div>
+
+
+
+
 
 
 
