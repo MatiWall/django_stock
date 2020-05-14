@@ -8,4 +8,5 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name = "dashboardPage"),
     path('dashboard/getData/', views.fetchDashboardData, name = 'getDashboardData'),
     path('dashboard/saveDashboard/', views.saveDashboard, name = 'saveDashboard'),
+    path('dashboard/loadDashboard/', views.loadDashboard, name = 'loadDashboard'),
 ]

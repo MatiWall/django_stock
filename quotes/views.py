@@ -1,10 +1,14 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
+
+from django.db import connection,transaction
+
+from .models import dashboardGrid
 
 
 from.loadData import loadData
-from .webscraping import yhaooWebscraping
+from .webscraping import yhaooWebscraping, stockScreener
 # Create your views here.
 
 
@@ -29,6 +33,12 @@ def home(request):
 
 
 
+    tsla = stockScreener(['TSLA'])
+    tsla.scrapeStocks()
+    
+
+
+
     return render(request, 'home.html', {'currency' : currencyData ,'crypto' : cryptoData, 'commodity' : commodityData})
    
 
@@ -46,19 +56,39 @@ def dashboard(request):
     return render(request, 'dashboard/dashboardPage.html', {})
 
 def saveDashboard(request):
-    from .models import dashboardGrid
     import json
-    message = 'Fail'
-    if request.is_ajax():
-        print('this ran')
-        data = json.loads(request.body)
-        print(data )
-        #grid = dashboardGrid.objects.create()
-        message = 'success'
+
+    if request.is_ajax() and request.method == 'PUT':
+        data = json.loads(request.body) 
+
+        cursor = connection.cursor()
+            
+        query = ''' INSERT INTO quotes_dashboardGrid
+                    (grid_layout, name) VALUES
+                    (%s, %s)
+
+            '''
+        cursor.execute(query, [ json.dumps(data) ,'Name Test4'])
+    else:
+        print('Error method not avalible: ' + request.method)
 
 
+    return HttpResponse()
 
-    return HttpResponse(message)
+def loadDashboard(request):
+    import json
+
+
+    if  request.method == 'GET': #and request.method == 'GET':
+        cursor = connection.cursor()           
+        query = ''' SELECT name FROM quotes_dashboardGrid'''
+        cursor.execute(query)
+        rows = dictfetchall(cursor)
+        response = {'names' : rows}
+    
+    return JsonResponse(response)
+
+
 
 
 
@@ -67,7 +97,7 @@ def fetchDashboardData(request):
    # import requests
     import json
 
-    if request.is_ajax():
+    if  request.is_ajax():
         print(request.POST)
         data = json.loads(request.body)
 
@@ -79,3 +109,14 @@ def fetchDashboardData(request):
 
 
 
+
+
+def dictfetchall(cursor):
+    "Return all rows from a cursor as a dict"
+    columns = [col[0] for col in cursor.description]
+
+    data = [row[0] for row in cursor.fetchall() ]
+    print(data)
+
+    return data
+    

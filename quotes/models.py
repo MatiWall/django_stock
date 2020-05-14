@@ -6,7 +6,7 @@ from datetime import datetime
 
 
 
-class Company(models.Model):
+'''class Company(models.Model):
     name = models.CharField(max_length = 100, db_index = True)
     ticker = models.CharField(max_length = 10, unique = True)
     description = models.TextField(max_length = 200)
@@ -17,10 +17,9 @@ class Company(models.Model):
 
     class Meta:
         ordering = ['name']
-
+'''
 
 class dashboardGrid(models.Model):
-    id = models.DateTimeField(auto_now=True, primary_key=True)
-    gridLayout = JSONField()
-    name = models.CharField(max_length = 100, unique = True)
+    grid_layout = JSONField()
+    name = models.CharField(max_length = 100, primary_key = True)
 
