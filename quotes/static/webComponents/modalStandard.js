@@ -91,11 +91,16 @@ class modal extends HTMLElement {
         return this.getAttribute('title');
     }
 
+    get name() {
+        return this.getAttribute('name');
+    }
+
     connectedCallback() {
         this._modal = this.shadowRoot.querySelector(".modal");
         this.shadowRoot.querySelector("button").addEventListener('click', this._showModal.bind(this));
         this.shadowRoot.querySelector(".close").addEventListener('click', this._hideModal.bind(this));
         this.shadowRoot.querySelector("h1").append(this.title);
+        this.shadowRoot.querySelector("button").innerHTML =  this.name;
     }
     disconnectedCallback() {
         this.shadowRoot.querySelector("button").removeEventListener('click', this._showModal);

@@ -63,12 +63,14 @@ def saveDashboard(request):
 
         cursor = connection.cursor()
             
-        query = ''' INSERT INTO quotes_dashboardGrid
-                    (grid_layout, name) VALUES
-                    (%s, %s)
-
-            '''
-        cursor.execute(query, [ json.dumps(data) ,'Name Test4'])
+        query = ''' 
+                INSERT INTO quotes_dashboardGrid
+                    (grid_layout, name) VALUES (%s, %s) 
+                ON CONFLICT (name) DO UPDATE   
+                SET grid_layout = excluded.grid_layout
+        '''
+        
+        cursor.execute(query, [ json.dumps(data) ,'Name Test7'])
     else:
         print('Error method not avalible: ' + request.method)
 
@@ -85,6 +87,17 @@ def loadDashboard(request):
         cursor.execute(query)
         rows = dictfetchall(cursor)
         response = {'names' : rows}
+
+    elif request.method == 'POST':
+        name = json.loads(request.body)
+        cursor = connection.cursor()
+        query = ''' 
+            SELECT grid_layout FROM quotes_dashboardGrid WHERE name = %s
+        '''
+        cursor.execute(query, [name])
+        positions = cursor.fetchone()[0]
+        response = {'positions' :  positions}
+
     
     return JsonResponse(response)
 
@@ -116,7 +129,6 @@ def dictfetchall(cursor):
     columns = [col[0] for col in cursor.description]
 
     data = [row[0] for row in cursor.fetchall() ]
-    print(data)
 
     return data
     

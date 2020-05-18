@@ -1,5 +1,31 @@
 
-// Toggle Button 
+// Navigation bar
+
+function dashboardFileDropdown() {
+    console.log(document.getElementById('dashboardNavFileDropdown').classList);
+    document.getElementById('dashboardNavFileDropdown').classList.toggle('dashboardNavFileDropdownShow');
+    console.log(document.getElementById('dashboardNavFileDropdown').classList);
+}
+
+window.onclick = function(event) {
+    if (!event.target.matches('#dashboardNavbarFileButton')) {
+      var dropdowns = document.getElementsByClassName("dashboardNavFileDropdown");
+      for (var i = 0; i < dropdowns.length; i++) {
+        var openDropdown = dropdowns[i];
+        if (openDropdown.classList.contains('dashboardNavFileDropdownShow')) {
+          openDropdown.classList.remove('dashboardNavFileDropdownShow');
+        }
+      }
+    }
+  } 
+
+
+
+
+
+
+
+// add component
 
 var grid = GridStack.init();
 
@@ -21,7 +47,6 @@ function addComponent() {
 
     grid.addWidget(dashboardComponent, { width: 4, height: 5 });
     var chart = createDashboardElement(testData);
-    console.log('This ran');
     document.getElementById(dataInputId).appendChild(chart);
 
 

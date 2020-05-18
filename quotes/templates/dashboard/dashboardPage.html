@@ -6,9 +6,33 @@
 
 {% block content %}
 
-
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/dashboard/dashboardNavBar.css' %}?version=1">
 <div id="dashboardContainer" style="width: 100%;">
-    <div class="dashboardHeader ">
+    <nav id='dashboardNavContainer'> 
+        <ul class='dashboardNavNav'>
+            <li> 
+                <div class='dashboardNavButtonContainer'>
+                    <button id='dashboardNavbarButtons' onclick="dashboardFileDropdown()"> 
+                        File
+                    </button> 
+                </div> 
+                <div id='dashboardNavFileDropdown' class='dashboardNavFileDropdown'>
+                    <ul class='dashboardNavFileDropdownList'>
+                        <li>New</li>
+                        <li>Save</li>
+                        <li>Save As</li>
+                        <li>Open</li>
+                    </ul>
+                </div>
+            </li>
+               
+                
+           
+            <li class>Add Component </li>
+        </ul>
+    </nav>
+    <div class="dashboardHeader">
         <div class="editMode">
             <label class="editModeTitle">Edit Mode: </label>
             <div class="toggleDiv">
@@ -25,7 +49,10 @@
         <button class="buttonNeutral buttonSizeWide " onclick="loadGridstackData()">
             Open
         </button>
-        <modal-standard id="dashboardEditModal" title="Add Component">
+
+       
+
+        <modal-standard id="dashboardEditModal" title="Add Componet" name='Add Component'>
 
             <div class="grid-container">
                 <div class="dashboardPrevied">Preview</div>
