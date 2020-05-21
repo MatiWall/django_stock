@@ -1,23 +1,10 @@
 
 // Navigation bar
 
-function dashboardFileDropdown() {
-    console.log(document.getElementById('dashboardNavFileDropdown').classList);
-    document.getElementById('dashboardNavFileDropdown').classList.toggle('dashboardNavFileDropdownShow');
-    console.log(document.getElementById('dashboardNavFileDropdown').classList);
-}
 
-window.onclick = function(event) {
-    if (!event.target.matches('#dashboardNavbarFileButton')) {
-      var dropdowns = document.getElementsByClassName("dashboardNavFileDropdown");
-      for (var i = 0; i < dropdowns.length; i++) {
-        var openDropdown = dropdowns[i];
-        if (openDropdown.classList.contains('dashboardNavFileDropdownShow')) {
-          openDropdown.classList.remove('dashboardNavFileDropdownShow');
-        }
-      }
-    }
-  } 
+function dashboardNavbarFileDropdown() {
+    document.getElementById('dashboardNavbarFileDropdown').classList.toggle('show');
+}
 
 
 
@@ -177,60 +164,27 @@ function loadSettings() {
 
 
 
+// Fetch data
 
-function getIEXData(ticker, type, isSandbox = true) {
+function fetchDashboardComponentData() {
+    
 
-    var baseURL;
-    var token;
-    var endpointPath;
-
-
-
-    const requestBaseIifoOptions = {
-        'standard': { 'baseURL': 'https://cloud.iexapis.com/stable/', 'token': 'pk_1fabca50feb84a8a960fda5d63eeab29' },
-        'sandbox': { 'baseURL': 'https://sandbox.iexapis.com/stable/', 'token': 'Tpk_1d9ebd084c5149d79631fa7cbf811a8e' }
-    }
-
-
-    const requestBaseInfo = !isSandbox ? requestBaseIifoOptions.standard : requestBaseIifoOptions.sandbox;
-    console.log(requestBaseInfo);
-
-    if (ticker.indexOf(',') === -1 && type.indexOf(',') === -1) {// Setting URL for batch or single stock request
-        endpointPath = 'stock/' + ticker + '/' + type + '?token=';
-
-    } else {
-        endpointPath = 'stock/market/batch?symbols=' + ticker + ',&types=' + type + '&token=';
-    }
-
-
-    const url = requestBaseInfo.baseURL + endpointPath + requestBaseInfo.token;
-    console.log(url);
-    fetch(url).then((response) => {
-        errorHandeling(response)
-        return response.json();
-    })
-        .then((stockData) => {
-            //console.log(data);
-            console.log(stockData);
-        });
-
-
-
-}
-
-function errorHandeling(response) {
-    if (response.status.toString()[0] !== '2') {
-
-        alert('Error: ' + response.status + ' - ' + response.statusText);
-        console.log(response);
-    }
-
-
+   fetch('/dashboard/getData/', {
+    method : 'POST',
+    credentials : 'same-origin',
+    headers: {
+        "X-CSRFToken": Cookies.get("csrftoken"),
+        "Accept": "application/json",
+        'X-Requested-With': 'XMLHttpRequest'
+    },
+    body: JSON.stringify({'fetchData': 'test'}),
+    }).then( (res)=> res.json())
+    .then( (data) => console.log(data))
 }
 
 
 
-//getIEXData('aapl', 'chart,quote');
+
 
 
 

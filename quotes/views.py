@@ -1,5 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import login_required
+
 from django.http import HttpResponse, JsonResponse
 
 from django.db import connection,transaction
@@ -9,11 +13,53 @@ from .models import dashboardGrid
 
 from.loadData import loadData
 from .webscraping import yhaooWebscraping, stockScreener
+
+from iexfinance.stocks import Stock, get_historical_data
+from datetime import datetime
+
+import json
+import os
 # Create your views here.
 
 
-def login(request):
-    return render(request, 'registration/login.html', {})
+def userSignup(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+
+            return redirect('/')
+    else: 
+        form = UserCreationForm()
+    return render(request,'registration/signup.html',{'form' : form} )
+
+
+def userLogin(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(data = request.POST)
+        
+        if form.is_valid():
+
+            user = form.get_user()
+            login(request, user)
+            if 'next' in request.POST:
+                return redirect(request.POST.get('next'))
+            else:
+                return redirect('/')
+
+    elif request.method == 'GET':
+        form = AuthenticationForm()
+        
+
+    return render(request, 'registration/login.html', {'form' : form})
+
+def userLogout(request):
+    if request.method == "POST":
+        logout(request)
+        return redirect('/userLogin/')
+
+    pass
 
 
 def home(request):
@@ -51,12 +97,11 @@ def about(request):
 
 
 
-
+@login_required(login_url='/userLogin/')
 def dashboard(request):
     return render(request, 'dashboard/dashboardPage.html', {})
 
 def saveDashboard(request):
-    import json
 
     if request.is_ajax() and request.method == 'PUT':
         data = json.loads(request.body) 
@@ -78,7 +123,7 @@ def saveDashboard(request):
     return HttpResponse()
 
 def loadDashboard(request):
-    import json
+
 
 
     if  request.method == 'GET': #and request.method == 'GET':
@@ -107,18 +152,26 @@ def loadDashboard(request):
 
 
 def fetchDashboardData(request):
-   # import requests
-    import json
+    
+    if  request.is_ajax() and request.method == 'POST':
+        
+        os.environ['IEX_API_VERSION'] = 'iexcloud-sandbox'
+        os.environ['IEX_TOKEN'] = 'Tpk_1d9ebd084c5149d79631fa7cbf811a8e'
+        
+        tsla = get_historical_data("TSLA", datetime(2015, 1, 1), datetime(2015, 1,31) ) 
+        print(tsla)
 
-    if  request.is_ajax():
-        print(request.POST)
         data = json.loads(request.body)
+        # Set IEX Finance API Token (Test)
+        #os.environ['IEX_API_VERSION'] = 'iexcloud-sandbox'
+        #os.environ['IEX_TOKEN'] = ''
+        #print(os.environ)
 
 
 
 
-        jsonData = json.dumps({'this' : 'Worked', 'Yes' : 'It fucking worked'})
-    return HttpResponse(jsonData, status=200)
+        jsonData = {'this' : 'Worked', 'Yes' : 'It fucking worked'}
+    return JsonResponse(jsonData)
 
 
 

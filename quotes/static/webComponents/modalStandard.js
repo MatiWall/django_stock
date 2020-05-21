@@ -70,7 +70,7 @@ class modal extends HTMLElement {
         
 
         </style>
-        <button class="buttonNeutral buttonSizeWide">Add Component</button>
+        <button id='showModal' class="buttonNeutral buttonSizeWide">Add Component</button>
         <div class="modal">
             <div class="modal-content">
                 <div class="modal-header">
@@ -94,6 +94,8 @@ class modal extends HTMLElement {
     get name() {
         return this.getAttribute('name');
     }
+
+ 
 
     connectedCallback() {
         this._modal = this.shadowRoot.querySelector(".modal");

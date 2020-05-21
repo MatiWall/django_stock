@@ -23,3 +23,8 @@ class dashboardGrid(models.Model):
     grid_layout = JSONField()
     name = models.CharField(max_length = 100, primary_key = True)
 
+
+
+class historicalStockData(models.Model):
+    name = models.CharField(max_length = 100, primary_key = True)
+    data = JSONField()

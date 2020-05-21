@@ -5,74 +5,81 @@
 
 
 {% block content %}
-
-{% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/dashboard/dashboardNavBar.css' %}?version=1">
-<div id="dashboardContainer" style="width: 100%;">
-    <nav id='dashboardNavContainer'> 
-        <ul class='dashboardNavNav'>
-            <li> 
-                <div class='dashboardNavButtonContainer'>
-                    <button id='dashboardNavbarButtons' onclick="dashboardFileDropdown()"> 
-                        File
-                    </button> 
-                </div> 
-                <div id='dashboardNavFileDropdown' class='dashboardNavFileDropdown'>
-                    <ul class='dashboardNavFileDropdownList'>
-                        <li>New</li>
-                        <li>Save</li>
-                        <li>Save As</li>
-                        <li>Open</li>
-                    </ul>
-                </div>
-            </li>
+<div id="dashboardContainer">
+    <div class="dashboardNavbar">
+        <ul class=navbar-nav>
+            <li>
+                <div class='position: relative; display: inline-block;'>
+                    <button class='dashboardNavbarButtons' onclick="dashboardNavbarFileDropdown()">File</button>
+                    
+                    <div id='dashboardNavbarFileDropdown' class='dashboardNavbarDropdown'>
+                        <ul class='dashboardNavbarDropdownList'>
+                            <li>
+                                <button class="dashboardNavbarButtons" onclick="loadGridstackData()">
+                                    Open
+                                </button>
+                            </li>
+                            <li>
+                                <modal-standard id="dashboardSaveAsModal" title="Save As" name='Save As'>
+                                    <p>bla bla </p>
+                                </modal-standard>
+                            </li>
+                            <li>
+                                <button class='dashboardNavbarButtons' onclick="saveGridstackData()">
+                                    Save
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
                
-                
-           
-            <li class>Add Component </li>
+                </div>
+               
+            </li>
+
+
+
+            <li>
+                <button class="buttonNeutral buttonSizeWide " onclick="addComponent()">
+                    Add Component
+                </button>
+            </li>
+            <li>
+                <button onclick="fetchDashboardComponentData()">
+                    Fetch Data
+                </button>
+            </li>
+
+            <li>
+            <div>
+                <modal-standard id="dashboardEditModal" title="Add Componet" name='Add Component'>
+
+                    <div class="grid-container">
+                        <div class="dashboardPrevied">Preview</div>
+                        <div id="dashboardComponentType" class="dashboardType">
+                            <c-fieldset id="dashboardTypeFieldset" title="Choose Type">
+                            </c-fieldset>
+                        </div>
+
+                        <div class="DashboardTickers">
+                            <input id="dashboardComponentTickers" type="text" placeholder="Input Ticker(s)"
+                                style="max-width: 85%;">
+                            </input>
+                        </div>
+                    </div>
+                </modal-standard>
+
+                <div class="editMode">
+                    <label class="editModeTitle">Edit Mode: </label>
+                    <div class="toggleDiv">
+                        <input class="tgl tgl-light" id="edit_tgl" type="checkbox" />
+                        <label class="tgl-btn" for="edit_tgl"></label>
+                    </div>
+                </div>
+            </div>
+
+            </li>
         </ul>
-    </nav>
-    <div class="dashboardHeader">
-        <div class="editMode">
-            <label class="editModeTitle">Edit Mode: </label>
-            <div class="toggleDiv">
-                <input class="tgl tgl-light" id="edit_tgl" type="checkbox" />
-                <label class="tgl-btn" for="edit_tgl"></label>
-            </div>
-        </div>
-        <button class="buttonNeutral buttonSizeWide " onclick="addComponent()">
-            Add Component
-        </button>
-        <button class="buttonNeutral buttonSizeWide " onclick="saveGridstackData()">
-            Save
-        </button>
-        <button class="buttonNeutral buttonSizeWide " onclick="loadGridstackData()">
-            Open
-        </button>
 
-       
-
-        <modal-standard id="dashboardEditModal" title="Add Componet" name='Add Component'>
-
-            <div class="grid-container">
-                <div class="dashboardPrevied">Preview</div>
-                <div id="dashboardComponentType" class="dashboardType">
-
-                    <c-fieldset id="dashboardTypeFieldset" title="Choose Type">
-                    </c-fieldset>
-
-
-                </div>
-
-                <div class="DashboardTickers">
-                    <input id="dashboardComponentTickers" type="text" placeholder="Input Ticker(s)"
-                        style="max-width: 85%;"> </input>
-                </div>
-                <div id="dashboardSettings" class="dashboardSettings">
-
-                </div>
-            </div>
-        </modal-standard>
     </div>
 
 
@@ -81,8 +88,8 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gridstack@1.1.1/dist/gridstack.min.css" />
         <script src="https://cdn.jsdelivr.net/npm/gridstack@1.1.1/dist/gridstack.all.js"></script>
 
-        
-     
+
+
 
 
         <div id="dashboardCanvasGridStack" class="grid-stack">
@@ -94,8 +101,8 @@
 
 </div>
 
-   
-    
+
+
 
 
 
@@ -109,7 +116,7 @@
 
 <link rel="stylesheet" type="text/css" href="https://code.highcharts.com/css/stocktools/gui.css">
 <link rel="stylesheet" type="text/css" href="https://code.highcharts.com/css/annotations/popup.css">
-       
+
 
 
 

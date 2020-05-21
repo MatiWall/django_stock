@@ -78,15 +78,14 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'about' %}">About</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'login' %}">Login</a>
+                <li>
+                    <form class="logoutForm" action="{% url 'logout' %}" method="POST" >
+                        {% csrf_token %}
+                        <button type="submit"> Logout</button>
+                    </form>
                 </li>
                 <li class="nav-item">
-                    <form class="form-inline" action="{% url 'home' %}" method="POST">
-                        {% csrf_token %}
-                        <input id="nav-search-input" type="search" placeholder="Get Stock Quote" name="ticker">
-                        <button class="nav-button" type="submit">Search</button>
-                    </form>
+                    <a class="nav-link" href="{% url 'login' %}">Login</a>
                 </li>
 
             </ul>
