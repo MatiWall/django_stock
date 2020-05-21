@@ -46,14 +46,30 @@
     transition: 400ms;
 }
 
+
+
+
 .nav-item a:hover {
     color: #333;
     background-color: #fff;
     transition: 400ms;
 }
 
+.nav-item button {
+    color:#fff;
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor: pointer;
+    padding: 1em;
+    position: absolute;
+    right: 0px;
+    bottom: -20px;
+  
+}
 
-
-.form-inline {
-    padding-top: 0.9em;
+.nav-item button:hover {
+    color: #333;
+    background-color: #fff;
+    transition: 400ms;
 }

@@ -82,7 +82,7 @@ def home(request):
     tsla = stockScreener(['TSLA'])
     tsla.scrapeStocks()
     
-
+    
 
 
     return render(request, 'home.html', {'currency' : currencyData ,'crypto' : cryptoData, 'commodity' : commodityData})

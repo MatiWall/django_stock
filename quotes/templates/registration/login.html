@@ -31,20 +31,19 @@
         <td>{{form.username}}</td>
       </tr>
       <tr>
-        <td>{{form.password.labe._tag}}</td>
-        <td>form.password</td>
+        <td>{{form.password.label_tag}}</td>
+        <td>{{form.password}}</td>
       </tr>
     </table>
 
 
-
-    {{ form }}
     {% if request.GET.next %}
       <input type="hidden" name="next" value="{{request.GET.next}}" >
     {% endif %}
-    <input type="submit">Login</input>
+    <input type="submit" value="Login"></input>
   </form>
 
+  <a>Reset password</a>
   <a class="nav-link" href="{% url 'signup' %}">Signup</a>
 
 {% endblock %}
