@@ -1,15 +1,16 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm, PasswordChangeForm
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import update_session_auth_hash
 
 from django.http import HttpResponse, JsonResponse
 
 from django.db import connection,transaction
 
 from .models import dashboardGrid
-
+from .forms import signupForm, editProfileForm
 
 from.loadData import loadData
 from .webscraping import yhaooWebscraping, stockScreener
@@ -24,15 +25,15 @@ import os
 
 def userSignup(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = signupForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
 
             return redirect('/')
     else: 
-        form = UserCreationForm()
-    return render(request,'registration/signup.html',{'form' : form} )
+        form = signupForm()
+        return render(request,'registration/signup.html',{'form' : form} )
 
 
 def userLogin(request):
@@ -62,6 +63,35 @@ def userLogout(request):
     pass
 
 
+def userProfile(request):
+
+    return render(request, 'registration/profile.html', {'user': request.user})
+
+def userProfileEdit(request):
+    if request.method == 'POST':
+        form = editProfileForm(request.POST, instance = request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('/userProfile/')
+    else:
+        form = editProfileForm(instance = request.user)
+    return render(request, 'registration/editProfile.html', {'form': form})
+
+def userChangePassword(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(data = request.POST, user = request.user)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            return redirect('/userProfile/')
+        else:
+            return redirect('/userProfile/changePassword/')
+    else:
+        form = PasswordChangeForm(user = request.user)
+    
+    return render(request, 'registration/changePassword.html', {'form': form })
+
+
 def home(request):
 
     currencyUrl = 'https://finance.yahoo.com/currencies?.tsrc=fin-srch'
@@ -82,7 +112,7 @@ def home(request):
     tsla = stockScreener(['TSLA'])
     tsla.scrapeStocks()
     
-    
+
 
 
     return render(request, 'home.html', {'currency' : currencyData ,'crypto' : cryptoData, 'commodity' : commodityData})

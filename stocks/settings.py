@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'quotes',
+    'notes',
 ]
 
 MIDDLEWARE = [
@@ -128,6 +129,13 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 
 
+
+
+
 django_heroku.settings(locals())
+
+
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 1025
 
 

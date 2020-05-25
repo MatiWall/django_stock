@@ -2,13 +2,13 @@
 
 
 
-.nav-logo {
+.c-nav-logo {
     font-size: 2rem;
     font-style: oblique;
 }
 
 
-.navbar {
+.c-navbar {
     margin: 0;
     top: 0;
     height: 2.5rem;
@@ -17,7 +17,7 @@
     background-color: grey;
 }
 
-.navbar-nav {
+.c-navbar-nav {
     list-style: none;
     padding: 0;
     padding-left: 1rem;
@@ -28,17 +28,17 @@
     height: 100%;
 }
 
-.navbar-nav li {
+.c-navbar-nav li {
     margin-right: 20px;
 }
 
-.navbar-nav > li:last-child {
+.c-navbar-nav > li:last-child {
     right:0;
     position: absolute;
     
 }
 
-.nav-item a {
+.c-nav-item a {
     color: #eee;
     text-decoration: none;
     display: block;
@@ -49,13 +49,13 @@
 
 
 
-.nav-item a:hover {
+.c-nav-item a:hover {
     color: #333;
     background-color: #fff;
     transition: 400ms;
 }
 
-.nav-item button {
+.c-nav-item button {
     color:#fff;
     background-color: Transparent;
     background-repeat:no-repeat;
@@ -68,7 +68,7 @@
   
 }
 
-.nav-item button:hover {
+.c-nav-item button:hover {
     color: #333;
     background-color: #fff;
     transition: 400ms;
