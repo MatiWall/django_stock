@@ -38,8 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'quotes',
-    'notes',
+    'apps.quotes',
+    'apps.notes',
+    'apps.accounts',
+    'apps.dashboard',
 ]
 
 MIDDLEWARE = [
@@ -50,6 +52,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'stocks.middleware.loginRequiredMiddleware',
 ]
 
 ROOT_URLCONF = 'stocks.urls'

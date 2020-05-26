@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+
+
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/dashboard.css' %}?version=1">
+<link rel="stylesheet" type="text/css" href="{% static 'css/editDashboardPopupLayout.css' %}?version=1">
+
+
+<div id="dashboardContainer">
+    <div class="dashboardNavbar">
+        <ul class=navbar-nav>
+            <li>
+                <div class='position: relative; display: inline-block;'>
+                    <button class='dashboardNavbarButtons' onclick="dashboardNavbarFileDropdown()">File</button>
+                    
+                    <div id='dashboardNavbarFileDropdown' class='dashboardNavbarDropdown'>
+                        <ul class='dashboardNavbarDropdownList'>
+                            <li>
+                                <button class="dashboardNavbarButtons" onclick="loadGridstackData()">
+                                    Open
+                                </button>
+                            </li>
+                            <li>
+                                <modal-standard id="dashboardSaveAsModal" title="Save As" name='Save As'>
+                                    <p>bla bla </p>
+                                </modal-standard>
+                            </li>
+                            <li>
+                                <button class='dashboardNavbarButtons' onclick="saveGridstackData()">
+                                    Save
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+               
+                </div>
+               
+            </li>
+
+
+
+            <li>
+               
+            </li>
+            <li>
+                <button onclick="fetchDashboardComponentData()">
+                    Fetch Data
+                </button>
+            </li>
+
+            <li>
+            <div>
+                <modal-standard id="dashboardEditModal" title="Add Componet" name='Add Component'>
+
+                    <div class="grid-container">
+                        <div class="dashboardPrevied">Preview</div>
+                        <div id="dashboardComponentType" class="dashboardType">
+                            <c-fieldset id="dashboardTypeFieldset" title="Choose Type">
+                            </c-fieldset>
+                        </div>
+
+                        <div class="DashboardTickers">
+                            <input id="dashboardComponentTickers" type="text" placeholder="Input Ticker(s)"
+                                style="max-width: 85%;">
+                            </input>
+                        </div>
+                    </div>
+                </modal-standard>
+
+                <div class="editMode">
+                    <label class="editModeTitle">Edit Mode: </label>
+                    <div class="toggleDiv">
+                        <input class="tgl tgl-light" id="edit_tgl" type="checkbox" />
+                        <label class="tgl-btn" for="edit_tgl"></label>
+                    </div>
+                </div>
+            </div>
+
+            </li>
+        </ul>
+
+    </div>
+    <button class="buttonNeutral buttonSizeWide " onclick="addComponent()">
+        Add Component
+        
+    </button>
+
+
+
+    <div class="dashboardCanvas">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gridstack@1.1.1/dist/gridstack.min.css" />
+        <script src="https://cdn.jsdelivr.net/npm/gridstack@1.1.1/dist/gridstack.all.js"></script>
+
+
+
+
+
+        <div id="dashboardCanvasGridStack" class="grid-stack">
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+
+
+
+<script src="https://code.highcharts.com/stock/highstock.js"></script>
+<script src="https://code.highcharts.com/stock/indicators/indicators-all.js"></script>
+<script src="https://code.highcharts.com/stock/modules/drag-panes.js"></script>
+<script src="https://code.highcharts.com/modules/annotations-advanced.js"></script>
+<script src="https://code.highcharts.com/modules/price-indicator.js"></script>
+<script src="https://code.highcharts.com/modules/full-screen.js"></script>
+<script src="https://code.highcharts.com/modules/stock-tools.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://code.highcharts.com/css/stocktools/gui.css">
+<link rel="stylesheet" type="text/css" href="https://code.highcharts.com/css/annotations/popup.css">
+
+
+
+
+<a href="https://iexcloud.io">IEX Cloud</a>
+
+
+
+<script src="{% static 'js/dashboardController.js' %}"></script>
+<script src="{% static 'js/saveDashboard.js' %}"></script>
+
+
+{% endblock %}

@@ -1,0 +1,138 @@
+- {% load static %}
+
+<html>
+
+<head>
+    <title>
+        Stock Portfolio
+    </title>
+
+
+
+    <!-- Web Components-->
+    <script type='text/javascript' src="{% static 'webComponents/modalStandard.js' %}"></script>
+    <script type='text/javascript' src="{% static 'webComponents/modalLayoutStandard.js' %}"></script>
+    <script type='text/javascript' src="{% static 'webComponents/dashboardTypeFieldset.js' %}"></script>
+    <script type='text/javascript' src="{% static 'webComponents/dual-picklist.js' %}"></script>
+
+
+
+
+
+
+
+
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/navbar.css' %}?version=1">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/footer.css' %}?version=1">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/body.css' %}?version=1">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/home/webscrabing.css' %}?version=1">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/popup/popupStyle.css' %}?version=1">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/buttons.css' %}?version=1">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/tableStyle.css' %}?version=1">
+ 
+
+
+
+
+
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <script src="{% static 'javascript/quotesTable.js' %}"></script>
+
+
+
+
+    <!--Cookies-->
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+
+
+    <!--Bootstrap-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+
+    
+
+
+</head>
+
+<body>
+    <header>
+        <nav class="c-navbar">
+
+            <ul class="c-navbar-nav">
+                <li class="c-nav-item">
+                    <div class="c-nav-logo">K&M Investments</div>
+                </li>
+                <li class="c-nav-item">
+                    <a class="c-nav-link" href="{% url 'home' %}">Home</a>
+                </li>
+                <li class="c-nav-item">
+                    <a class="c-nav-link" href="{% url 'dashboard:dashboard' %}">Dashboard</a>
+                </li>
+                <li class="c-nav-item">
+                    <a class="c-nav-link" href="{% url 'about' %}">About</a>
+                </li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown">User</a>
+                    <ul class="dropdown-menu">
+                      <li><a href="{% url 'accounts:profile' %}">Profile</a></li>
+                      <li><a href="{% url 'accounts:changePassword' %}">Change password</a></li>
+                      <li><a href="{% url 'accounts:password_reset' %}">Forgot password</a></li>
+                      <li>
+                        {% if user.is_authenticated %}
+                        <form class="logoutForm" action="{% url 'accounts:logout' %}" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" > Logout</button>
+                        </form>
+                        {% else %}
+                        <a class="c-nav-link" href="{% url 'accounts:login' %}">Login</a>
+                        {% endif %}
+                      </li>
+                    </ul>
+                  </li>
+              
+            </ul>
+
+        </nav>
+    </header>
+
+    <br/>
+    <br/>
+
+    {% block content %}
+
+    {% endblock %}
+
+
+
+    <footer>
+        <div class="footer">
+            <ul class="footer-foot">
+                <il class="footer-item">
+                    Powered by Heroku
+                </il>
+                <il class="footer-item">
+                    Developed using Python Django
+                </il>
+            </ul>
+        </div>
+    </footer>
+
+
+
+
+</body>
+
+</html>
