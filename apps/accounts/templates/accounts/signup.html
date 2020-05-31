@@ -4,7 +4,7 @@
 {% block content %}
 
 <h2> Sign Up</h2>
-<form class='signupForm' action="{% url 'signup' %}" method="POST">
+<form class='signupForm' action="{% url 'accounts:signup' %}" method="POST">
     {% csrf_token %} 
     {{form.as_p}}
     <input type="submit" value="Signup">
