@@ -1,0 +1,36 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-md-4">
+            <h2>Positions</h2>
+            <form action="{% url 'portfolio:home' %}" method="post">
+                {% csrf_token %}
+                {{ form }}
+                <input type="submit" value="Submit">
+            </form>
+
+            <h2>Accounts</h2>
+            {% for account in accounts %}
+                <p>account.name</p>
+            {% endfor %}
+
+        </div>
+
+        
+        
+
+
+    </div>
+
+
+
+</div>
+
+
+{% endblock %}

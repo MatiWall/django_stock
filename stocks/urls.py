@@ -22,4 +22,5 @@ urlpatterns = [
     path('notes/', include('apps.notes.urls') ),
     path('accounts/', include('apps.accounts.urls') ),
     path('dashboard/', include('apps.dashboard.urls') ),
+    path('portfolio/', include('apps.portfolio.urls') ),
 ]

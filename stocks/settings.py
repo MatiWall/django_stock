@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'apps.notes',
     'apps.accounts',
     'apps.dashboard',
+    'apps.portfolio',
 ]
 
 MIDDLEWARE = [
