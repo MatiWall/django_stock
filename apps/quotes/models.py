@@ -26,4 +26,4 @@ class friend(models.Model):
         friend, created = cls.objects.get_or_create(
             current_user = current_user
         )
-        friend.users.remove(new_friend)
+        friend.users.remove(new_friend) 

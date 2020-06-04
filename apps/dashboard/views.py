@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, JsonResponse
 
 from django.db import connection, transaction
@@ -12,7 +11,6 @@ import json
 
 
 
-#@login_required(login_url='/accounts/login/')
 def dashboard(request):
     return render(request, 'dashboard/dashboardPage.html', {})
 

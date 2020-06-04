@@ -1,0 +1,117 @@
+{% extends 'notes/home.html' %}
+{% load static %}
+
+
+{% block tasks %}
+<div class="container-fluid">
+    <form id="createTaskForm" class="form-inline" method="POST">
+        {% for field in form %}
+        <div class="mx-3">
+            {{field}}
+        </div>
+        {% endfor %}
+        <input type="submit" class="btn btn-outline-success" value="Create"></input>
+    </form>
+
+    <div class="col-5 mt-5" id="taskList">
+        {% for task in tasks %}
+    <div class="card mb-1" data-id="{{task.id}}" style ="{% if task.compeleted %} bla {% endif %}">
+            <div class="card-body">
+                {{task.title}} {{task}}
+                <button type="button" class="close float-right">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+
+
+
+<script src="{% static 'notes/js/notes.js' %}"></script>
+<script>
+    var csrfToken = Cookies.get("csrftoken")
+    $(document).ready(function () {
+
+
+        $('#createTaskForm').on('submit', function (event) {
+            event.preventDefault();
+            console.log('this ran');
+            var serializedData = $('#createTaskForm').serializeArray();
+            getTasks(serializedData);
+            $('#createTaskForm')[0].reset()
+            
+        })
+
+
+        $('#taskList').on('click', '.card',function() {
+            var dataId = $(this).data('id');
+            console.log(dataId)
+            completeTask(dataId)
+    
+        })
+            
+    })
+
+
+    function getTasks(data){
+        fetch("{% url 'notes:home' %}", {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+                "X-CSRFToken": csrfToken,
+                "Accept": "application/json",
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify(data),
+        }).then( res => res.json()).then((data) => {
+                
+            $('#taskList').append(`
+                <div class="card mb-1" data-id= " ` + data.tasks.id + `">
+            <div class="card-body">
+                `+  data.tasks.title +`
+                <button type="button" class="close float-right">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>`)
+
+            })
+            .catch(res => { console.log(res) });
+    }
+    
+    
+
+    function completeTask(id) {
+
+        fetch("{% url 'notes:taskCompleted' %}", {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+                "X-CSRFToken": csrfToken,
+                "Accept": "application/json",
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify(id),
+        }).then( res => res.json()).then((data) => {
+                
+            var cardItem = $('#taskCard[data-id="'+ id +' "]');
+            cardItem.css('text-decoration', 'line-through').hide().slideDown();
+            $('#taskList').append(cardItem);
+
+            })
+            .catch(res => { console.log(res) });
+        
+
+
+
+
+    }
+
+</script>
+
+
+{% endblock %}

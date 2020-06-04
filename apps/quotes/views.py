@@ -62,8 +62,11 @@ class homeView(TemplateView):
         users = User.objects.exclude(id = request.user.id)
 
         
-        Friend = friend.objects.get(current_user = request.user)
-        friends = Friend.users.all()
+        try:
+            Friend = friend.objects.get(current_user = request.user)
+            friends = Friend.users.all()
+        except:
+            friends = None
     
         args = {'form': form, 'posts': posts, 'users': users, 'friends': friends}
 
@@ -71,6 +74,7 @@ class homeView(TemplateView):
 
     def post(self, request):
         form = homeForm(request.POST)
+    
         if form.is_valid():
             post = form.save(commit = False)
             post.user = request.user

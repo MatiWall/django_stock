@@ -30,6 +30,8 @@ class positions(models.Model):
     shares = models.IntegerField()
     cost_basis = models.FloatField(default = 0.0)
     account = models.ForeignKey(accounts, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name = 'stock_positions', null = True,  on_delete=models.CASCADE)
+    
 
     created = models.DateTimeField(auto_now_add = True)
     updated = models.DateTimeField(auto_now = True)

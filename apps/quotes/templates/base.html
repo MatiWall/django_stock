@@ -4,7 +4,8 @@
 
 <head>
     <title>
-        Stock Portfolio
+        {% block title %}
+        {% endblock %}
     </title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -64,7 +65,6 @@
 
 
 
-
 </head>
 
 <body>
@@ -85,6 +85,9 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'portfolio:home' %}">Portfolio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'notes:home' %}">To do </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'about' %}">About</a>
