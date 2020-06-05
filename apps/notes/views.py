@@ -2,14 +2,15 @@ from django.shortcuts import render
 from django.views.generic import TemplateView
 from django.shortcuts import redirect
 
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.forms.models import model_to_dict
+from django.db import connection
 
-from django.custom_utils.utils import cleanFormData
+from django.custom_utils.utils import cleanFormData, dictFetchAll
 
 
 from .forms import taskForm
-from .models import task
+from .models import task, stickyNote
 
 import json
 # Create your views here.
@@ -49,3 +50,35 @@ def taskCompleted(request):
         completedTask = task.objects.get(id = json.loads(request.body))
         completedTask.delete()
     return JsonResponse({'task' : 'deleted'}, status = 200)
+
+
+
+def saveStickyNotes(request):
+    
+    if request.method == 'POST' and request.is_ajax():
+
+        data = json.loads(request.body) 
+        with connection.cursor() as cursor:
+            query = '''
+                INSERT INTO notes_stickyNote (notes, user_id) VALUES (%s, %s)
+                ON CONFLICT (user_id) DO UPDATE   
+                SET notes = excluded.notes
+            '''
+            cursor.execute(query, [json.dumps(data), request.user.id])
+        
+        return HttpResponse('')
+
+def getStickyNotes(request):
+    print(request.method == 'GET', request.is_ajax())
+    if request.method == 'GET' and request.is_ajax():
+
+        with connection.cursor() as cursor:
+            query = '''
+                SELECT user_id, notes FROM notes_stickyNote WHERE user_id = %s
+            '''
+            cursor.execute(query, [request.user.id])
+            notes = cursor.fetchone()
+            #notes = dictFetchAll(cursor)
+        print(notes)
+    
+    return JsonResponse({'data' : notes})

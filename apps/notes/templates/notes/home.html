@@ -1,21 +1,93 @@
 {% extends 'base.html' %}
-
-
+{% load static %}
 {% block title %}
 Tasks
 {% endblock %}
 
 {% block content %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'notes/css/notes.css' %}?version=1">
+
 <div class="container-fluid">
-<p>test</p>
-
-
 
     <div class="row">
         {% block tasks %}
         {% endblock %}
     </div>
+
+
+    <button onclick="addWidget()">Add note</button>
+    <button onclick="saveNotes()">Save notes</button>
+    <button onclick="loadNotes()">Load notes</button>
+   
+
+    <div id="postIt">
+        <div class=topBar></div>
+        <div class=form>
+          <div contenteditable class=textAria>
+            Hello, <b>Edit Me First</b> Then Drag & Drop me.
+          </div>
+        </div>
+      </div>
+
+
+
 </div>
 
+
+<script>
+$(function(){
+  $("#postIt").draggable({
+    handle:  '.topBar',
+    }); 
+});
+   
+
+function saveNotes() {
+    let elements = document.getElementById('postIt').outerHTML;
+
+    console.log(elements)
+
+    fetch("{% url 'notes:save' %}", {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+                "X-CSRFToken": Cookies.get("csrftoken"),
+                "Accept": "application/json",
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify(elements),
+        }).then((data) => {
+                console.log('saved')
+            })
+            .catch(res => { console.log(res) });
+
+
+}
+
+
+function loadNotes() {
+
+
+
+    fetch("{% url 'notes:load' %}",{
+        method : 'GET',
+        headers: {
+
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+    }
+    ).then( res => res.json())
+    .then(data => {console.log(data);})
+    .catch( (res)=> {console.log('catch'); console.log(res)})
+    
+  
+
+}
+
+
+
+
+</script>
 
 {% endblock %}
