@@ -10,7 +10,7 @@ from django.custom_utils.utils import cleanFormData, dictFetchAll
 
 
 from .forms import taskForm
-from .models import task, stickyNote
+from .models import task, stickyNote, treeItem
 
 import json
 # Create your views here.
@@ -25,7 +25,7 @@ class home(TemplateView):
         #tasks = task.objects.raw( query, [request.user.id])
         tasks = task.objects.filter(user = request.user)
     
-        return render(request, self.template_name, {'form': form, 'tasks' : tasks})
+        return render(request, self.template_name, {'form': form, 'tasks' : tasks, 'genres': treeItem.objects.all()})
 
 
     def post(self, request):
@@ -56,8 +56,8 @@ def taskCompleted(request):
 def saveStickyNotes(request):
     
     if request.method == 'POST' and request.is_ajax():
-
         data = json.loads(request.body) 
+        print(data)
         with connection.cursor() as cursor:
             query = '''
                 INSERT INTO notes_stickyNote (notes, user_id) VALUES (%s, %s)
@@ -68,17 +68,25 @@ def saveStickyNotes(request):
         
         return HttpResponse('')
 
+
+
 def getStickyNotes(request):
-    print(request.method == 'GET', request.is_ajax())
+    
     if request.method == 'GET' and request.is_ajax():
 
         with connection.cursor() as cursor:
             query = '''
-                SELECT user_id, notes FROM notes_stickyNote WHERE user_id = %s
+                SELECT notes FROM notes_stickyNote WHERE user_id = %s
             '''
             cursor.execute(query, [request.user.id])
-            notes = cursor.fetchone()
+            notes = cursor.fetchall()
+            print(notes)
             #notes = dictFetchAll(cursor)
-        print(notes)
+        
     
-    return JsonResponse({'data' : notes})
+    return JsonResponse({'data' : notes[0][0]})
+
+
+
+
+

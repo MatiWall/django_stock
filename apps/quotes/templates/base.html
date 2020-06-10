@@ -115,6 +115,17 @@
                             {% endif %}
                         </div>
                     </li>
+
+                    <li class="nav-item dropdown ">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarStickyNoteDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Sticky Note
+                          </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarStickyNoteDropdown">
+                           <button onclick="addStickyNote()"> Add Sticky Note</button>
+                           <button onclick="saveStickyNotes()">Hide</button>
+                           <button onclick="loadStickyNotes()">Load</button>
+                        </div>
+                    </li>
                    
                 </ul>
             </div>

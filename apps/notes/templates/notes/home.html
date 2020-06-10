@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load mptt_tags %}
+
 {% block title %}
 Tasks
 {% endblock %}
@@ -8,7 +10,28 @@ Tasks
 
 <link rel="stylesheet" type="text/css" href="{% static 'notes/css/notes.css' %}?version=1">
 
+
+
+<link rel="stylesheet" href="{% static 'notes/PostItAll-master/dist/jquery.postitall.css' %}">
+<link rel="stylesheet" href="{% static 'notes/PostItAll-master/dist/postItAllCustom.css' %}">
+
+
+
+
 <div class="container-fluid">
+   
+<ul>
+    {% recursetree genres %}
+        <li>
+            {{ node.name }}
+            {% if not node.is_leaf_node %}
+                <ul class="children">
+                    {{ children }}
+                </ul>
+            {% endif %}
+        </li>
+    {% endrecursetree %}
+</ul>
 
     <div class="row">
         {% block tasks %}
@@ -16,38 +39,96 @@ Tasks
     </div>
 
 
-    <button onclick="addWidget()">Add note</button>
-    <button onclick="saveNotes()">Save notes</button>
-    <button onclick="loadNotes()">Load notes</button>
+    <div id="divStickyNotesContainer">
+    </div>
    
-
-    <div id="postIt">
-        <div class=topBar></div>
-        <div class=form>
-          <div contenteditable class=textAria>
-            Hello, <b>Edit Me First</b> Then Drag & Drop me.
-          </div>
-        </div>
-      </div>
-
-
-
+  
 </div>
 
 
+
+
+<!--
+
+    <link href="{% static 'notes/jQueryStickyNote/Demo/css/jquery.stickynote.css' %}" rel="stylesheet" />
+<link href="{% static 'notes/jQueryStickyNote/Demo/css/StickyNoteDemo.css' %}" rel="stylesheet" />
+<link href="{% static 'notes/jQueryStickyNote/Demo/css/jquery-ui.css' %}" rel="stylesheet" />
+<link href="{% static 'notes/jQueryStickyNote/Demo/css/jquery.ui.resizable.css' %}" rel="stylesheet" />
+
+
+<script src="{% static 'notes/jQueryStickyNote/Demo/js/jquery-1.5.2.min.js' %}"></script>
+<script src="{% static 'notes/jQueryStickyNote/Demo/js/jquery-ui-1.7.3.min.js' %}"></script>
+<script src="{% static 'notes/jQueryStickyNote/Demo/js/jquery.stickynote.min.js' %}"></script>
+<script src="{% static 'notes/jQueryStickyNote/Demo/js/StickyNotes.js' %}"></script>
+-->
+
+<script src="{% static 'notes/PostItAll-master/dist/jquery.postitall.js' %}"></script>
+<script src="{% static 'notes/PostItAll-master/dist/jquery.postitall.ajax.js' %}"></script>
 <script>
-$(function(){
-  $("#postIt").draggable({
-    handle:  '.topBar',
-    }); 
-});
+
+$.fn.postitall.globals = {
+    prefix          : '#PIApostit_',//Id note prefixe
+    filter          : 'domain',     //Options: domain, page, all
+    savable         : false,        //Save postit in storage
+    randomColor     : false,         //Random color in new postits
+    toolbar         : true,         //Show or hide toolbar
+    autoHideToolBar : false,         //Animation efect on hover over postit shoing/hiding toolbar options
+    removable       : true,         //Set removable feature on or off
+    askOnDelete     : true,         //Confirmation before note remove
+    draggable       : true,         //Set draggable feature on or off
+    resizable       : true,         //Set resizable feature on or off
+    editable        : true,         //Set contenteditable and enable changing note content
+    changeoptions   : true,         //Set options feature on or off
+    blocked         : true,         //Postit can not be modified
+    hidden          : true,         //The note can be hidden
+    minimized       : true,         //true = minimized, false = maximixed
+    expand          : true,         //Expand note
+    fixed           : true,         //Allow to fix the note in page
+    addNew          : true,         //Create a new postit
+    showInfo        : true,         //Show info icon (info tab)
+    showMeta        : true,         //Show info icon (meta tab)
+    pasteHtml       : true,         //Allow paste html in contenteditor
+    htmlEditor      : true,         //Html editor (trumbowyg)
+    autoPosition    : true,         //Automatic reposition of the notes when user resize screen
+    addArrow        : 'back',       //Add arrow to notes : none, front, back, all
+    askOnHide       : true,         //Show configuration hideUntil back-panel (getBackPanelHideUntil)
+    hideUntil       : null,         //Note will be hidden since that datetime
+    export          : true          //Note can be exported
+};
+
+
+
+var postItAllIds = [];
+
+function addStickyNote(){
+
+    $.PostItAll.new({
+        onCreated: function(id, options, obj) {
+                postItAllIds.push(id);
+            },
+        onDelete: function(id) {
+            postItAllIds = postItAllIds.filter(function(item) { return item !== id });
+            }
+    });
+
+};
+
+
+
+
+
+function saveStickyNotes(){
+
+    var postItAllOptions = [];
+    postItAllIds.forEach(elem => {
+        let options = $(elem).postitall('options');
+        postItAllOptions.push(options)
+    })
+
+    
+
    
-
-function saveNotes() {
-    let elements = document.getElementById('postIt').outerHTML;
-
-    console.log(elements)
-
+    
     fetch("{% url 'notes:save' %}", {
             method: 'POST',
             credentials: 'same-origin',
@@ -56,38 +137,43 @@ function saveNotes() {
                 "Accept": "application/json",
                 'X-Requested-With': 'XMLHttpRequest'
             },
-            body: JSON.stringify(elements),
-        }).then((data) => {
-                console.log('saved')
+            body: JSON.stringify(postItAllOptions),
+        }).then((res) => {
+            $.PostItAll.destroy();
             })
             .catch(res => { console.log(res) });
 
 
 }
 
+function loadStickyNotes(){
 
-function loadNotes() {
+    let container = document.getElementById('the_notes');
 
-
-
-    fetch("{% url 'notes:load' %}",{
-        method : 'GET',
-        headers: {
-
+   
+        
+    fetch("{% url 'notes:load' %}", {
+            method: 'GET',
+            credentials: 'same-origin',
+            headers: {
                 'X-Requested-With': 'XMLHttpRequest'
             },
-    }
-    ).then( res => res.json())
-    .then(data => {console.log(data);})
-    .catch( (res)=> {console.log('catch'); console.log(res)})
+        }).then(res => res.json()).then((res) => {
+            let optionsArray = res.data;
+
+            optionsArray.forEach( (options) => {
+                $.PostItAll.new(options);
+            })
+            console.log(res);
+            
+
+                //$(id).postitall('new', options, callback);
+
+            })
+            .catch(res => { console.log(res) });
     
-  
-
 }
-
-
-
-
 </script>
+
 
 {% endblock %}
