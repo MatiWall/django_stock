@@ -9,67 +9,68 @@
 <link rel="stylesheet" type="text/css" href="{% static 'css/editDashboardPopupLayout.css' %}?version=1">
 
 
-<div id="dashboardContainer">
-    <div class="dashboardNavbar">
-        <ul class=navbar-nav>
-            <li>
-                <div class='position: relative; display: inline-block;'>
-                    <button class='dashboardNavbarButtons' onclick="dashboardNavbarFileDropdown()">File</button>
+<div id="dashboardNavContainer">
+
+        <ul class="nav">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="dashboardFileDropdown" role="button"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    File
+                </a>
+
+                <div class="dropdown-menu" aria-labelledby="dashboardFileDropdown">
+
+             
+                            <button class="dropdown-item" onclick="loadGridstackData()">
+                                Open
+                            </button>
+                                               
+                            <modal-standard id="dashboardSaveAsModal" title="Save As" name='Save As'>
+                                <p>bla bla </p>
+                            </modal-standard>
+                        
+                            <button class='dropdown-item' onclick="saveGridstackData()">
+                                Save
+                            </button>
+                            <button class="dropdown-item" onclick="addComponent()">
+                                Add Component
+                            
+                            </button>
+                        
                     
-                    <div id='dashboardNavbarFileDropdown' class='dashboardNavbarDropdown'>
-                        <ul class='dashboardNavbarDropdownList'>
-                            <li>
-                                <button class="dashboardNavbarButtons" onclick="loadGridstackData()">
-                                    Open
-                                </button>
-                            </li>
-                            <li>
-                                <modal-standard id="dashboardSaveAsModal" title="Save As" name='Save As'>
-                                    <p>bla bla </p>
-                                </modal-standard>
-                            </li>
-                            <li>
-                                <button class='dashboardNavbarButtons' onclick="saveGridstackData()">
-                                    Save
-                                </button>
-                            </li>
-                        </ul>
-                    </div>
-               
+
+
                 </div>
-               
+
             </li>
 
 
 
-            <li>
-               
-            </li>
-            <li>
-                <button onclick="fetchDashboardComponentData()">
-                    Fetch Data
-                </button>
-            </li>
 
-            <li>
-            <div>
-                <modal-standard id="dashboardEditModal" title="Add Componet" name='Add Component'>
+            <li class="nav-item">
+                <div>
+                    <modal-standard id="dashboardEditModal" title="Add Componet" name='Add Component'>
 
-                    <div class="grid-container">
-                        <div class="dashboardPrevied">Preview</div>
-                        <div id="dashboardComponentType" class="dashboardType">
-                            <c-fieldset id="dashboardTypeFieldset" title="Choose Type">
-                            </c-fieldset>
+                        <div class="grid-container">
+                            <div class="dashboardPrevied">Preview</div>
+                            <div id="dashboardComponentType" class="dashboardType">
+                                <c-fieldset id="dashboardTypeFieldset" title="Choose Type">
+                                </c-fieldset>
+                            </div>
+
+                            <div class="DashboardTickers">
+                                <input id="dashboardComponentTickers" type="text" placeholder="Input Ticker(s)"
+                                    style="max-width: 85%;">
+                                </input>
+                            </div>
                         </div>
+                    </modal-standard>
 
-                        <div class="DashboardTickers">
-                            <input id="dashboardComponentTickers" type="text" placeholder="Input Ticker(s)"
-                                style="max-width: 85%;">
-                            </input>
-                        </div>
-                    </div>
-                </modal-standard>
+                </div>
 
+            </li>
+
+            <li class="nav-item">
                 <div class="editMode">
                     <label class="editModeTitle">Edit Mode: </label>
                     <div class="toggleDiv">
@@ -77,29 +78,23 @@
                         <label class="tgl-btn" for="edit_tgl"></label>
                     </div>
                 </div>
-            </div>
-
             </li>
         </ul>
+</div>
+
+
+
+
+<div class="dashboardCanvas">
+
+
+
+
+    <div id="dashboardCanvasGridStack" class="grid-stack">
 
     </div>
-    <button class="buttonNeutral buttonSizeWide " onclick="addComponent()">
-        Add Component
-        
-    </button>
 
-
-
-    <div class="dashboardCanvas">
-       
-
-
-
-        <div id="dashboardCanvasGridStack" class="grid-stack">
-
-        </div>
-
-    </div>
+</div>
 
 
 </div>

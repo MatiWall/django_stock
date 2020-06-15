@@ -1,8 +1,8 @@
-{% extends 'notes/home.html' %}
-{% load static %}
+{% extends 'base.html' %}
 
 
-{% block tasks %}
+{% block content %}
+ 
 <div class="container-fluid">
     <form id="createTaskForm" class="form-inline" method="POST">
         {% for field in form %}

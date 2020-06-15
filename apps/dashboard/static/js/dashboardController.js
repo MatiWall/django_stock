@@ -1,10 +1,4 @@
 
-// Navigation bar
-
-
-function dashboardNavbarFileDropdown() {
-    document.getElementById('dashboardNavbarFileDropdown').classList.toggle('show');
-}
 
 
 
@@ -164,23 +158,7 @@ function loadSettings() {
 
 
 
-// Fetch data
 
-function fetchDashboardComponentData() {
-    
-
-   fetch('/dashboard/getData/', {
-    method : 'POST',
-    credentials : 'same-origin',
-    headers: {
-        "X-CSRFToken": Cookies.get("csrftoken"),
-        "Accept": "application/json",
-        'X-Requested-With': 'XMLHttpRequest'
-    },
-    body: JSON.stringify({'fetchData': 'test'}),
-    }).then( (res)=> res.json())
-    .then( (data) => console.log(data))
-}
 
 
 

@@ -1,4 +1,4 @@
- {% load static %}
+{% load static %}
 
 <html>
 
@@ -39,7 +39,7 @@
 
 
 
-  
+
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
@@ -58,12 +58,13 @@
 
 
     <!--Bootstrap-->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gridstack@1.1.1/dist/gridstack.min.css" />
-        <script src="https://cdn.jsdelivr.net/npm/gridstack@1.1.1/dist/gridstack.all.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gridstack@1.1.1/dist/gridstack.all.js"></script>
 
 
 
@@ -72,14 +73,31 @@
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark  fixed-top">
+
+            
             <a class="navbar-brand" href="{% url 'home' %}">K&M Investments</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTop" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTop"
+                aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
-              </button>
+            </button>
             <div class="collapse navbar-collapse" id="navbarTop">
-                
+
                 <ul class="navbar-nav">
+
+                    <li class="nav-item dropdown ">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarStickyNoteDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img src="{% static 'notes/PostItAll-master/dist/stickyNote.png' %}" width="20" height="22">
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarStickyNoteDropdown">
+                            <button class="dropdown-item" onclick="addStickyNote()"> Add Sticky Note</button>
+                            <button id="stickyNoteHide" class="dropdown-item" style="display:none;"
+                                onclick="saveStickyNotes()">Hide</button>
+                            <button id="stickyNoteShow" class="dropdown-item" onclick="loadStickyNotes()">Show</button>
+                        </div>
+                    </li>
+
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'home' %}">Home</a>
                     </li>
@@ -95,12 +113,13 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'about' %}">About</a>
                     </li>
-                   
-                    
+
+
                     <li class="nav-item dropdown ">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             User
-                          </a>
+                        </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <a class="dropdown-item" href="{% url 'accounts:profile' %}">Profile</a>
                             {% if user.is_authenticated %}
@@ -116,24 +135,20 @@
                         </div>
                     </li>
 
-                    <li class="nav-item dropdown ">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarStickyNoteDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Sticky Note
-                          </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarStickyNoteDropdown">
-                           <button onclick="addStickyNote()"> Add Sticky Note</button>
-                           <button onclick="saveStickyNotes()">Hide</button>
-                           <button onclick="loadStickyNotes()">Load</button>
-                        </div>
-                    </li>
-                   
+
+
+
                 </ul>
             </div>
         </nav>
     </header>
 
-    <br />
-    <br />
+    <br/>
+    <br/>
+    <br/>
+
+
+    {% include "notes/stickyNotes.html" %}
 
     {% block content %}
 
@@ -141,22 +156,37 @@
 
 
 
-    <footer>
-        <div class="footer">
-            <ul class="footer-foot">
-                <il class="footer-item">
-                    Powered by Heroku
+    <footer class="footer">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
+            <ul class="navbar-nav">
+                <il class="nav-item">
+                   <span class="navbar-text">Powered by Heroku</span> 
                 </il>
-                <il class="footer-item">
-                    Developed using Python Django
+                <il class="nav-item">
+                    <span class="navbar-text"> Developed using Python Django</span>
                 </il>
             </ul>
-        </div>
+ 
+        </nav>
+
     </footer>
 
 
 
 
+
+
+    <!--Sticky note controller-->
+    <script>
+
+        // Toggle between hide and show buttons
+        var btn = $('#stickyNoteShow,#stickyNoteHide').click(function () { // bind click handler to both button
+            $(this).hide(); // hide the clicked button
+            btn.not(this).show(); // show the another button which is hidden
+        });
+
+
+    </script>
 </body>
 
 </html>

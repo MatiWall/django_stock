@@ -1,12 +1,7 @@
-{% extends 'base.html' %}
+
 {% load static %}
-{% load mptt_tags %}
 
-{% block title %}
-Tasks
-{% endblock %}
-
-{% block content %}
+<!--https://postitall.txusko.com/plugin.html#doc_changeoptions-->
 
 <link rel="stylesheet" type="text/css" href="{% static 'notes/css/notes.css' %}?version=1">
 
@@ -18,49 +13,9 @@ Tasks
 
 
 
-<div class="container-fluid">
-   
-<ul>
-    {% recursetree genres %}
-        <li>
-            {{ node.name }}
-            {% if not node.is_leaf_node %}
-                <ul class="children">
-                    {{ children }}
-                </ul>
-            {% endif %}
-        </li>
-    {% endrecursetree %}
-</ul>
-
-    <div class="row">
-        {% block tasks %}
-        {% endblock %}
-    </div>
-
-
-    <div id="divStickyNotesContainer">
-    </div>
-   
-  
-</div>
 
 
 
-
-<!--
-
-    <link href="{% static 'notes/jQueryStickyNote/Demo/css/jquery.stickynote.css' %}" rel="stylesheet" />
-<link href="{% static 'notes/jQueryStickyNote/Demo/css/StickyNoteDemo.css' %}" rel="stylesheet" />
-<link href="{% static 'notes/jQueryStickyNote/Demo/css/jquery-ui.css' %}" rel="stylesheet" />
-<link href="{% static 'notes/jQueryStickyNote/Demo/css/jquery.ui.resizable.css' %}" rel="stylesheet" />
-
-
-<script src="{% static 'notes/jQueryStickyNote/Demo/js/jquery-1.5.2.min.js' %}"></script>
-<script src="{% static 'notes/jQueryStickyNote/Demo/js/jquery-ui-1.7.3.min.js' %}"></script>
-<script src="{% static 'notes/jQueryStickyNote/Demo/js/jquery.stickynote.min.js' %}"></script>
-<script src="{% static 'notes/jQueryStickyNote/Demo/js/StickyNotes.js' %}"></script>
--->
 
 <script src="{% static 'notes/PostItAll-master/dist/jquery.postitall.js' %}"></script>
 <script src="{% static 'notes/PostItAll-master/dist/jquery.postitall.ajax.js' %}"></script>
@@ -102,14 +57,7 @@ var postItAllIds = [];
 
 function addStickyNote(){
 
-    $.PostItAll.new({
-        onCreated: function(id, options, obj) {
-                postItAllIds.push(id);
-            },
-        onDelete: function(id) {
-            postItAllIds = postItAllIds.filter(function(item) { return item !== id });
-            }
-    });
+    $.PostItAll.new(changeNoteOptions({}));
 
 };
 
@@ -124,6 +72,7 @@ function saveStickyNotes(){
         let options = $(elem).postitall('options');
         postItAllOptions.push(options)
     })
+    
 
     
 
@@ -148,7 +97,6 @@ function saveStickyNotes(){
 
 function loadStickyNotes(){
 
-    let container = document.getElementById('the_notes');
 
    
         
@@ -162,9 +110,10 @@ function loadStickyNotes(){
             let optionsArray = res.data;
 
             optionsArray.forEach( (options) => {
-                $.PostItAll.new(options);
+                let changedOptions = changeNoteOptions(options);
+                $.PostItAll.new(changedOptions);
             })
-            console.log(res);
+            
             
 
                 //$(id).postitall('new', options, callback);
@@ -173,7 +122,12 @@ function loadStickyNotes(){
             .catch(res => { console.log(res) });
     
 }
+
+function changeNoteOptions(options){
+
+    options.onCreated = function(id, options, obj) { postItAllIds.push(id); }
+    options.onDelete =  function(id) { postItAllIds = postItAllIds.filter(function(item) { return item !== id });}
+    return options;
+
+}
 </script>
-
-
-{% endblock %}

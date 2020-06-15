@@ -48,7 +48,7 @@ class treeItem(MPTTModel):
     content_object = GenericForeignKey('content_type', 'object_id')
     parent = TreeForeignKey('self', null = True, blank = True, related_name = 'children', on_delete=models.CASCADE)
     
-    
+   
 
 
 class folder(models.Model):

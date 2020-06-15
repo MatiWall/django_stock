@@ -80,9 +80,6 @@ def getStickyNotes(request):
             '''
             cursor.execute(query, [request.user.id])
             notes = cursor.fetchall()
-            print(notes)
-            #notes = dictFetchAll(cursor)
-        
     
     return JsonResponse({'data' : notes[0][0]})
 
