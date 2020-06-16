@@ -8,13 +8,12 @@
 
 // add component
 
-var grid = GridStack.init();
 
 function addComponent() {
 
     var dataInputId = Math.random().toString(36).substr(2, 9); // Generate a unigue id (maybe overkill)
 
-    dashboardComponent = `
+    var dashboardComponent = `
             <div class="grid-stack-item dashboardComponents" data-gs-disable-drag="true">
                 <div id=${dataInputId} class="grid-stack-item-content">
                     <div class="widgetButton">
@@ -39,8 +38,8 @@ let editModeButton = document.getElementById('edit_tgl');
 editModeButton.checked = false;
 
 editModeButton.addEventListener('click', (e) => {
-    let dashboardContainer = document.getElementById('dashboardContainer'); 
-
+    let dashboardContainer = document.getElementById('dashboardCanvas'); 
+    
     if (e.target.checked) {
 
         grid.movable('.grid-stack-item', true);
@@ -60,13 +59,12 @@ editModeButton.addEventListener('click', (e) => {
 
 function updateDashboardVisibility(dashboardContainer, visibility) {
     let widgetButtonNodes = dashboardContainer.querySelectorAll('.widgetButton');
+
     for(var i = 0; i<widgetButtonNodes.length; i++) {
         widgetButtonNodes[i].style.display = visibility;
 
     }
 
-    
-    dashboardContainer.querySelector('#dashboardEditModal').shadowRoot.querySelector('button').style.display = visibility; // Visibility of "Add Component" button
     
 
 }
@@ -81,9 +79,10 @@ grid.on('change', function(event, items) {
   });
 */
 
+/*
 grid.on('gsresizestop', function(event, element) { // Resize highchart charts when widget is resized.
-    let chartComponent = element.querySelector('.dashboardComponentContainer');
-   // console.log(chartComponent);
+    let chartComponent = element.querySelector('.dahboardComponentContainer');
+   console.log(chartComponent);
     let chart = Highcharts.charts[chartComponent.getAttribute('data-highcharts-chart')];
 
     //console.log(chart);
@@ -91,7 +90,7 @@ grid.on('gsresizestop', function(event, element) { // Resize highchart charts wh
     chart.setSize(element.offsetWidth-20, element.scrollHeight-5, true);
   });
 
-
+*/
 
 
 
@@ -152,10 +151,6 @@ function loadSettings() {
         
     }
 }
-
-
-
-
 
 
 

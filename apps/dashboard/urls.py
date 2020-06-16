@@ -9,7 +9,8 @@ app_name = 'dashboard'
 urlpatterns = [
     path('dashboard', views.dashboard, name = "dashboard"),
     path('save/', views.save, name = 'save'),
-    path('getData/', views.fetchData, name = 'fetchData'),
     path('load/', views.load, name = 'load'),
+
+     path('getHistoricalStockData/', views.getHistoricalStockData, name = 'historicalStockData'),
 ]
 

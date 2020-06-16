@@ -4,6 +4,11 @@ from django.http import HttpResponse, JsonResponse
 from django.db import connection, transaction
 from .models import dashboardGrid
 
+
+from django.custom_utils.utils import dictFetchAll
+
+from .fetchData.historicalData import getYahooData
+
 import json
 # Create your views here.
 
@@ -51,7 +56,7 @@ def load(request):
         cursor = connection.cursor()           
         query = ''' SELECT name FROM dashboard_dashboardGrid'''
         cursor.execute(query)
-        rows = dictfetchall(cursor)
+        rows = dictFetchAll(cursor)
         response = {'names' : rows}
 
     elif request.method == 'POST':
@@ -72,17 +77,10 @@ def load(request):
 
 
 
-def fetchData(request):
-    
+def getHistoricalStockData(request):
+    print('This ran')
     if  request.is_ajax() and request.method == 'POST':
-        
-        os.environ['IEX_API_VERSION'] = 'iexcloud-sandbox'
-        os.environ['IEX_TOKEN'] = 'Tpk_1d9ebd084c5149d79631fa7cbf811a8e'
-        
-        tsla = get_historical_data("TSLA", datetime(2015, 1, 1), datetime(2015, 1,31) ) 
-        print(tsla)
-
-        data = json.loads(request.body)
+        print('This ran')
         # Set IEX Finance API Token (Test)
         #os.environ['IEX_API_VERSION'] = 'iexcloud-sandbox'
         #os.environ['IEX_TOKEN'] = ''
@@ -91,18 +89,11 @@ def fetchData(request):
 
 
 
-        jsonData = {'this' : 'Worked', 'Yes' : 'It fucking worked'}
+        data = getYahooData('tsla')
+        
+
+
+        jsonData = {'data' : data}
     return JsonResponse(jsonData)
 
 
-
-
-
-def dictfetchall(cursor):
-    "Return all rows from a cursor as a dict"
-    columns = [col[0] for col in cursor.description]
-
-    data = [row[0] for row in cursor.fetchall() ]
-
-    return data
-    
