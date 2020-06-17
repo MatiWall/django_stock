@@ -1,3 +1,5 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import dashboardComponentOptions
+# Register your models here.a
+admin.site.register(dashboardComponentOptions)

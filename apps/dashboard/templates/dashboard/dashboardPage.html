@@ -34,7 +34,7 @@ Dashboard
                 <button class='dropdown-item' onclick="saveGridstackData()">
                     Save
                 </button>
-                <button class="dropdown-item" onclick="addComponent()">
+                <button class="dropdown-item" onclick="addComponentPopup()">
                     Add Component
 
                 </button>
@@ -92,8 +92,17 @@ Dashboard
 
 </script>
 
+
+
 <script>
-    console.log(data)
+
+function addComponentPopup() {
+    newwindow=window.open("{% url 'dashboard:createChartPopup' %}",'{{title}}','height=700,width=800');
+
+}
+
+
+
 </script>
 
 
@@ -115,6 +124,7 @@ Dashboard
 <script src="{% static 'js/dashboardController.js' %}"></script>
 <script src="{% static 'js/saveDashboard.js' %}"></script>
 <script src="{% static 'js/historicalStockData.js' %}"></script>
+<script src="{% static 'js/createChartController.js' %}"></script>
 
 
 {% endblock %}

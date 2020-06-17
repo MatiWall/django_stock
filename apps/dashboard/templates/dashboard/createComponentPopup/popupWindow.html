@@ -1,0 +1,43 @@
+<html>
+<head>
+    <title>
+        Create Dashboard Component
+    </title>
+
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+
+</head>
+
+<body>
+    <div class="container">
+          <div class="row align-items-center">
+            <div class="col-sm-4">
+              
+            <form action="">
+                <select name="" id="">
+                    {% for item in  DashboardComponentOptions %}
+                    <p>item</p>
+                    <option value="{{ item.id }}">{{ item.name }}</option>
+                    {% endfor %}
+                </select>
+
+            </form>
+
+
+
+            </div>
+            <div class="col-sm-8">
+              One of three columns
+            </div>
+          </div>
+    </div>
+    
+</body>
+
+
+</html>

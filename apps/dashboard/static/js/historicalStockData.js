@@ -21,9 +21,9 @@ class historicalStockData {
             },
             body: JSON.stringify({ 'fetchData': 'test' }),
         }).then((res) => res.json())
-            .then((res) => {
+            .then((data) => {
                 
-                let chart = this.plotData(res.data);
+                let chart = this.plotData(data);
                 this.addComponent(chart)
 
             })
@@ -116,8 +116,13 @@ class historicalStockData {
                 type: 'ohlc',
                 id: 'aapl-ohlc',
                 name: 'AAPL Stock Price',
-                data: data,
-            },]
+                data: data.ohlc,
+            }, {type: 'column',
+            id: 'aapl-volume',
+            name: 'AAPL Volume',
+            data: data.volume,
+            yAxis: 1}
+        ]
         }
 
         return seriesOpt

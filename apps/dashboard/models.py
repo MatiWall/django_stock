@@ -25,6 +25,24 @@ class dashboardGrid(models.Model):
 
 
 
-class historicalStockData(models.Model):
-    name = models.CharField(max_length = 100, primary_key = True)
-    data = JSONField()
+
+
+
+
+
+class dashboardComponentOptions(models.Model):
+    name = models.CharField(max_length = 20, primary_key = True)
+    created = models.DateTimeField(auto_now_add = True)
+    updated = models.DateTimeField(auto_now = True)
+
+    def __str__(self):
+        return self.name
+
+
+
+#class historicalStockData(models.Model):
+ #   name = models.ForeignKey('dashboardComponentOptions', on_delete = models.CASCADE)
+  #  start_date = models.DateField()
+   # end_date = models.DateField()
+   # data = JSONField()
+

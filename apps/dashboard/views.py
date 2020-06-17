@@ -89,11 +89,14 @@ def getHistoricalStockData(request):
 
 
 
-        data = getYahooData('tsla')
+        ohlc_data, volume_data = getYahooData('tsla')
         
 
 
-        jsonData = {'data' : data}
+        jsonData = {'ohlc' : ohlc_data, 'volume' : volume_data}
     return JsonResponse(jsonData)
+
+
+
 
 
