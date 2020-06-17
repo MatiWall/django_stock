@@ -14,5 +14,7 @@ def popup(request):
 
 
 
-def chartType(request):
-    pass
+def chartOptions(request, type):
+
+    print(type)
+    return HttpResponse('It works')

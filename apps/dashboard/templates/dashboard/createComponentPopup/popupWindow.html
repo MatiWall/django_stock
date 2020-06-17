@@ -18,15 +18,14 @@
           <div class="row align-items-center">
             <div class="col-sm-4">
               
-            <form action="">
-                <select name="" id="">
+                <select id="chartType">
                     {% for item in  DashboardComponentOptions %}
                     <p>item</p>
-                    <option value="{{ item.id }}">{{ item.name }}</option>
+                    <option value="{{ item }}">{{ item.name }}</option>
                     {% endfor %}
                 </select>
 
-            </form>
+          
 
 
 
@@ -37,6 +36,37 @@
           </div>
     </div>
     
+
+
+<script>
+    $(document).ready( function() {
+    $('#chartType').on('change', function (event) {
+
+        let chartType = document.getElementById("chartType").value;
+        postChartType(chartType);
+    });
+
+})
+
+function postChartType(type) {
+
+        var url_mask = "{% url 'dashboard:chartOptions' type=12345 %}".replace(/12345/, type.toString());
+        
+        fetch(url_mask).then((data) => {
+               console.log('response');
+            })
+            .catch(res => { console.log(res) });
+    }
+     
+
+    /*
+            
+    }
+*/
+</script>
+
+
+
 </body>
 
 
