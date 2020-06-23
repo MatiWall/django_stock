@@ -10,6 +10,48 @@ Dashboard
 <link rel="stylesheet" type="text/css" href="{% static 'css/dashboard.css' %}?version=1">
 <link rel="stylesheet" type="text/css" href="{% static 'css/editDashboardPopupLayout.css' %}?version=1">
 
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
+
+<script src="{% static 'highcharts/highcharts-editor.js' %}"></script>
+<link rel="stylesheet" href="{% static 'highcharts/highcharts-editor.min.css' %}">
+
+
+<script>
+    $(function () {
+        $("#createDashboardComponentDialog").dialog({
+            autoOpen: false,
+            modal: true,
+            height: 400,
+            width: 770,
+            show: {
+                effect: "fade",
+                duration: 200,
+            },
+            hide: {
+                effect: "blind",
+                duration: 200,
+            },
+            buttons: {
+                Cancle: function () {
+                    $(this).dialog("close");
+                },
+                "Create": function () {
+                    $(this).dialog('close');
+                }
+            }
+
+        });
+    });
+
+    $('.ui-dialog').css('z-index',9999);
+
+</script>
+
 
 <div id="dashboardNavContainer">
 
@@ -34,11 +76,10 @@ Dashboard
                 <button class='dropdown-item' onclick="saveGridstackData()">
                     Save
                 </button>
-                <button class="dropdown-item" onclick="addComponentPopup()">
+                <button id="openDialog" class="dropdown-item"> 
                     Add Component
-
                 </button>
-
+                <button id="modalEditor-btn">Create chart with data</button>
 
 
 
@@ -64,10 +105,8 @@ Dashboard
 
 
 
+
 <div id="dashboardCanvas" class="dashboardCanvas">
-
-
-
 
     <div id="dashboardCanvasGridStack" class="grid-stack">
 
@@ -76,13 +115,28 @@ Dashboard
 </div>
 
 
+<div id="createDashboardComponentDialog" title="my title">
+    {% include "dashboard/createChartDialog.html" %}
+</div>
+
+
+<script>
+
+    $("#openDialog").on('click', function () {
+        $("#createDashboardComponentDialog").dialog("open")
+    });
+
+</script>
+
+
+
 <script>
     var grid = GridStack.init();
 
 
     $(document).ready(function () {
 
-        data = { ticker: 'tsla', container: '', url: "{% url 'dashboard:historicalStockData' %}" }
+        data = { ticker: 'tsla', url: "{% url 'dashboard:historicalStockData' %}" }
 
         test = new historicalStockData(data);
         test.getData();
@@ -95,16 +149,21 @@ Dashboard
 
 
 <script>
+    highed.ready( function() {
+        highed.ModalEditor('modalEditor-btn', {
+            allowDone: true,
+        },
+        function(chart) {var html = chart.export.html(true);
+            console.log(html);
 
-function addComponentPopup() {
-    newwindow=window.open("{% url 'dashboard:createChartPopup' %}",'{{title}}','height=700,width=800');
+        }
+        );
 
-}
+    }
 
-
-
+    );
+ 
 </script>
-
 
 
 
@@ -125,6 +184,7 @@ function addComponentPopup() {
 <script src="{% static 'js/saveDashboard.js' %}"></script>
 <script src="{% static 'js/historicalStockData.js' %}"></script>
 <script src="{% static 'js/createChartController.js' %}"></script>
+
 
 
 {% endblock %}

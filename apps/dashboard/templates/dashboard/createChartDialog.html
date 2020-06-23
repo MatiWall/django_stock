@@ -1,0 +1,114 @@
+    {% load static %}
+
+
+
+
+
+<div class="container-fluid">
+    <div class="row align-items-center">
+
+        <div class="col-sm-4">
+            
+            <div class="row align-items-center rounded border">
+            <select id="chartType">
+                {% for item in  DashboardComponentOptions %}
+                <p>item</p>
+                <option value="{{ item }}">{{ item.name }}</option>
+                {% endfor %}
+            </select>
+
+
+            <form id="options" method="POST">
+
+
+            </form>
+        </div>
+
+        <div class="row align-items-center rounded border">
+            <form id="chartLayoutForm">
+                <label for="chartTitle">Title</label>
+                <input id="chartTitle" type="text">
+
+                
+
+
+
+            </form>
+        </div>
+        </div>
+
+        
+     
+        <div class="col-sm-8  rounded border">
+            
+            One of three columns
+        
+    </div>
+    </div>
+
+</div>
+
+
+
+<script>
+    let chartType = document.getElementById("chartType").value;
+    chartTypeForm(chartType);
+    
+    $(document).ready(function () {
+        $('#chartType').on('change', function (event) {
+
+            let chartType = document.getElementById("chartType").value;
+            chartTypeForm(chartType);
+        });
+
+
+        $('#options').on('submit', function (event) {
+            
+            event.preventDefault();
+            let formData = $('#options').serializeArray();
+            console.log(formData);
+            postChartTypeForm(formData);
+        });
+
+    })
+
+    function chartTypeForm(type) {
+
+        var url_mask = "{% url 'dashboard:chartOptionsForm' chartType=12345 %}".replace(/12345/, type.toString());
+        console.log(url_mask)
+        fetch(url_mask).then((data) => data.json()).
+            then(data => {
+                console.log(data);
+                let optionsContainer = document.getElementById('options');
+                optionsContainer.innerHTML = data.form;
+                optionsContainer.innerHTML += '<input type="submit" value="Post">'
+
+            })
+            .catch(res => { console.log(res) });
+    }
+
+
+    function postChartTypeForm(formData) {
+
+        fetch("{% url 'dashboard:chartOptionsChosen' %}", {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: {
+            "X-CSRFToken": Cookies.get("csrftoken"),
+            "Accept": "application/json",
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify(formData),
+    }).then( res => res.json()).then((data) => {
+            console.log(data);
+        })
+        .catch(res => { console.log(res) });
+}
+
+
+
+    
+
+</script>
+
+

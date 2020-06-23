@@ -3,12 +3,12 @@ import pandas as pd
 import numpy as np
 
 
-def getYahooData(ticker, range=None):
+def getYahooData(ticker, start_date = None, end_date = None):
 
     ticker = yf.Ticker(ticker)
 
-    if range is not None:
-        df = ticker.history(start = range['start'], end = range['end'], auto_adjust=True, back_adjust=False)
+    if start_date is not None and end_date is not None:
+        df = ticker.history(start = start_date, end = end_date, auto_adjust=True, back_adjust=False)
     else:
         df = ticker.history(period = 'max')
 

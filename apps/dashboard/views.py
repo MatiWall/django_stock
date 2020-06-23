@@ -4,6 +4,7 @@ from django.http import HttpResponse, JsonResponse
 from django.db import connection, transaction
 from .models import dashboardGrid
 
+from .models import dashboardComponentOptions
 
 from django.custom_utils.utils import dictFetchAll
 
@@ -17,7 +18,9 @@ import json
 
 
 def dashboard(request):
-    return render(request, 'dashboard/dashboardPage.html', {})
+    DashboardComponentOptions  = dashboardComponentOptions.objects.all()
+
+    return render(request, 'dashboard/dashboardPage.html',  {'DashboardComponentOptions' :  DashboardComponentOptions})
 
 
 

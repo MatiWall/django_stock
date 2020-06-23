@@ -2,9 +2,9 @@ class historicalStockData {
 
     constructor(data) {
         this.ticker = data.ticker;
-        this.container = data.container;
         this.range = data.hasOwnProperty('range') ? data.range : undefined;
         this.url = data.url;
+         
 
     }
 
@@ -117,7 +117,8 @@ class historicalStockData {
                 id: 'aapl-ohlc',
                 name: 'AAPL Stock Price',
                 data: data.ohlc,
-            }, {type: 'column',
+            }, {
+            type: 'column',
             id: 'aapl-volume',
             name: 'AAPL Volume',
             data: data.volume,

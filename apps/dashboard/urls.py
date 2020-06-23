@@ -13,7 +13,8 @@ urlpatterns = [
 
     path('getHistoricalStockData/', views.getHistoricalStockData, name = 'historicalStockData'),
 
-    path('createChart/', createChart_views.popup, name = 'createChartPopup'),
-    path('createChart/chartOptions/<str:type>', createChart_views.chartOptions, name = 'chartOptions')
+    path('createChart/chartOptions/<str:chartType>', createChart_views.chartOptionsForm, name = 'chartOptionsForm'),
+    path('createChart/chartOptionsChosen/', createChart_views.chartOptionsChosen, name = 'chartOptionsChosen'),
+
 ]
 
