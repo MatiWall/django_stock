@@ -8160,6 +8160,10 @@ highed.DataTable = function(parent, attributes) {
       'div',
       'highed-box-size highed-dtable-gsheet-frame'
     ),
+    financialDataFrame = highed.dom.cr(
+      'div',
+      'highed-box-size highed-dtable-gsheet-frame'
+    ),
     gsheetFrame = highed.dom.cr(
       'div',
       'highed-box-size highed-dtable-gsheet-frame'
@@ -8172,11 +8176,14 @@ highed.DataTable = function(parent, attributes) {
       'div',
       'highed-box-size highed-prettyscroll highed-dtable-gsheet'
     ),
+    financalDataContainer = highed.dom.cr(
+      'div',
+      'highed-box-size highed-prettyscroll highed-dtable-gsheet'
+    ),
     liveDataInput = highed.dom.cr('input', 'highed-imp-input-stretch'),
     liveDataIntervalInput = highed.dom.cr('input', 'highed-imp-input-stretch'),
     liveDataTypeSelect = highed.DropDown(),
 
-    liveDataTypeContainer = highed.dom.cr('div', 'highed-customize-group'),
     liveDataTypeMasterNode = highed.dom.cr('div', 'highed-customize-master-dropdown'),
 
     gsheetID = highed.dom.cr(
@@ -8212,6 +8219,14 @@ highed.DataTable = function(parent, attributes) {
       'highed-import-button green padded',
       'Detach Sheet From Chart'
     ),
+    fdataticker = highed.dom.cr(
+      'input',
+    ),
+    fdatatype = highed.dom.cr(
+      'input',
+    ),
+
+
     switchRowColumns = highed.dom.cr(
       'button',
       'switch-column-button highed-template-tooltip',
@@ -9712,7 +9727,7 @@ highed.DataTable = function(parent, attributes) {
       height: ps.h - hs.h - 55 - 17 + 'px' //55 is padding from top for data column and letter
     });
 
-    highed.dom.style([container, gsheetFrame, liveDataFrame], {
+    highed.dom.style([container, gsheetFrame, liveDataFrame, financialDataFrame], {
       height: ps.h - hs.h - 22 /*- tb.h*/ + 'px'
     });
 
@@ -9993,6 +10008,7 @@ highed.DataTable = function(parent, attributes) {
       //loadRows(params.csv);
 
       isInLiveDataMode = true;
+    
       highed.dom.style(gsheetFrame, {
         display: 'none'
       });
@@ -10028,6 +10044,10 @@ highed.DataTable = function(parent, attributes) {
 
       highed.dom.style(liveDataFrame, {
         display: 'none'
+      });
+
+      highed.dom.style(financialDataFrame,{
+        dispaly: 'none'
       });
 
       highed.dom.style(container, {
@@ -10112,6 +10132,10 @@ highed.DataTable = function(parent, attributes) {
       display: 'none'
     });
 
+    highed.dom.style(financialDataFrame,{
+      dispaly: 'none'
+    });
+
     if (!skipLoad) {
 
       events.emit('LoadGSheet', {
@@ -10125,6 +10149,36 @@ highed.DataTable = function(parent, attributes) {
         endColumn: gsheetEndCol.value || undefined
       });
     }
+  }
+
+  function initFData(
+    ticker,
+    type
+    )
+    {
+
+    highed.dom.style(financialDataFrame,{
+      dispaly: 'block'
+    });
+
+    highed.dom.style(gsheetFrame, {
+      display: 'none'
+    });
+
+    highed.dom.style(container, {
+      display: 'none'
+    });
+
+    highed.dom.style(liveDataFrame, {
+      display: 'none'
+    });
+
+
+    fdataticker.value = ticker;
+    fdatatype.value = type;
+
+
+
   }
 
   function showDataTableError() {
@@ -10187,6 +10241,37 @@ highed.DataTable = function(parent, attributes) {
       isInLiveDataMode = true;
     }
   }
+
+  function showFinancialData(skipConfirm) {
+    if (
+      skipConfirm ||
+      rows.length <= 1 ||
+      confirm('This will clear your existing data. Continue?')
+    ) {
+      clear(true);
+      events.emit('ClearSeries');
+      
+      gsheetID.value = '';
+      gsheetWorksheetID.value = '';
+      gsheetRefreshTime.value = '';
+      highed.dom.style(gsheetFrame, {
+        display: 'block'
+      });
+
+      highed.dom.style(container, {
+        display: 'none'
+      });
+
+      highed.dom.style(liveDataFrame, {
+        display: 'none'
+      });
+
+      importModal.hide();
+      isInGSheetMode = true;
+      isInLiveDataMode = false;
+    }
+  }
+
 
   function showGSheet(skipConfirm) {
     if (
@@ -10304,6 +10389,11 @@ highed.DataTable = function(parent, attributes) {
     events.emit('DisableAssignDataPanel');
     showGSheet();
   });
+
+  importer.on('ImportFinancialData', function () {
+    events.emit('DisableAssignDataPanel');
+    showFinancialData();
+  })
 
   importer.on('ImportLiveData', function(data) {
     isInLiveDataMode = true;
@@ -10445,6 +10535,7 @@ highed.DataTable = function(parent, attributes) {
     parent,
     gsheetFrame,
     liveDataFrame,
+    financialDataFrame,
     highed.dom.ap(
       container,
       highed.dom.ap(
@@ -10561,6 +10652,98 @@ highed.DataTable = function(parent, attributes) {
       )
     )
   );
+
+  // Custom financial data
+  
+  gsheetID.placeholder = 'Spreadsheet ID';
+  gsheetWorksheetID.placeholder = 'Worksheet (leave blank for first)';
+  gsheetRefreshTime.placeholder = 'Refresh Time (leave blank for no refresh)';
+
+  highed.dom.ap(
+    financialDataFrame,
+    highed.dom.ap(
+      financalDataContainer,
+      highed.dom.cr(
+        'div',
+        'highed-dtable-gsheet-heading',
+        'Link Google Spreadsheet'
+      ),
+      highed.dom.ap(
+        highed.dom.cr('div', 'highed-dtable-gsheet-inner'),
+        // highed.dom.cr('div', 'highed-dtable-gsheet-centered', 'You have loaded a Google Spreadsheet.'),
+        // highed.dom.cr(
+        //   'div',
+        //   'highed-dtable-gsheet-desc',
+        //   [
+        //     'Google Spreadsheets are referenced, meaning that the data is imported',
+        //     'on the fly. When viewing the chart, the latest version of your sheet',
+        //     'will always be used!<br/><br/>'
+        //   ].join(' ')
+        // ),
+        highed.dom.cr(
+          'div',
+          'highed-dtable-gsheet-label',
+          'Google Spreadsheet ID'
+        ),
+        highed.dom.ap(highed.dom.cr('div'), gsheetID),
+        highed.dom.ap(
+          highed.dom.cr('table', 'highed-stretch'),
+          highed.dom.ap(
+            highed.dom.cr('tr'),
+            highed.dom.cr('td', 'highed-dtable-gsheet-label', 'Worksheet'),
+            highed.dom.cr('td', 'highed-dtable-gsheet-label', 'Refresh Time (Seconds)')
+          ),
+          highed.dom.ap(
+            highed.dom.cr('tr'),
+            highed.dom.ap(highed.dom.cr('td', '', ''), gsheetWorksheetID),
+            highed.dom.ap(highed.dom.cr('td', '', ''), gsheetRefreshTime)
+          ),
+          highed.dom.ap(
+            highed.dom.cr('tr'),
+            highed.dom.cr('td', 'highed-dtable-gsheet-label', 'Start Row'),
+            highed.dom.cr('td', 'highed-dtable-gsheet-label', 'End Row')
+          ),
+          highed.dom.ap(
+            highed.dom.cr('tr'),
+            highed.dom.ap(highed.dom.cr('td', '', ''), gsheetStartRow),
+            highed.dom.ap(highed.dom.cr('td', '', ''), gsheetEndRow)
+          ),
+          highed.dom.ap(
+            highed.dom.cr('tr'),
+            highed.dom.cr('td', 'highed-dtable-gsheet-label', 'Start Column'),
+            highed.dom.cr('td', 'highed-dtable-gsheet-label', 'End Column')
+          ),
+          highed.dom.ap(
+            highed.dom.cr('tr'),
+            highed.dom.ap(highed.dom.cr('td', '', ''), gsheetStartCol),
+            highed.dom.ap(highed.dom.cr('td', '', ''), gsheetEndCol)
+          )
+        ),
+        highed.dom.ap(
+          highed.dom.cr('div', 'highed-gsheet-btn-container'),
+          gsheetLoadButton,
+          gsheetCancelButton
+        ),
+        highed.dom.cr(
+          'div',
+          'highed-gsheet-text',
+          [
+            'When using Google Spreadsheet, Highcharts references the sheet directly.<br/><br/>',
+            'This means that the published chart always loads the latest version of the sheet.<br/><br/>',
+
+            'For more information on how to set up your spreadsheet, visit',
+            '<a target="_blank" href="https://cloud.highcharts.com/docs/#/google-spread-sheet-setting">the documentation</a>.'
+          ].join(' ')
+        )
+      )
+    )
+  );
+
+
+  // end custom financial data
+
+
+
 
   liveDataTypeSelect.addItems([
     {id: 'columnsURL', title: "JSON (Column Ordered)"},
@@ -10972,6 +11155,43 @@ highed.DataTable = function(parent, attributes) {
     return container;
   }
 
+  function createFDataContainer(nextToPage) {
+    const container = highed.dom.cr('div', 'highed-modal-container');
+    inputs = [
+      { label: 'Google Spreadsheet ID', placeholder: 'Spreadsheet ID', colspan: 4, linkedTo: gsheetID},
+      { label: 'Worksheet', placeholder: 'Worksheet (leave blank for first)', colspan: 4, linkedTo: gsheetWorksheetID},
+      { label: 'Refresh Time in Seconds', placeholder: 'Refresh time  (leave blank for no refresh)', colspan: 4, linkedTo: gsheetRefreshTime},
+      { label: 'Start Row', colspan: 2, linkedTo: gsheetStartRow},
+      { label: 'End Row', colspan: 2, linkedTo: gsheetEndRow},
+      { label: 'Start Column', colspan: 2, linkedTo: gsheetStartCol},
+      { label: 'End Column', colspan: 2, linkedTo: gsheetEndCol}],
+    table = createTableInputs(inputs, 4),
+    connectSheet = highed.dom.cr('button', 'highed-ok-button highed-import-button negative', 'Connect Sheet');
+    cancel = createCancelBtn();
+
+    highed.dom.on(connectSheet, 'click', function() {
+      showFinancialData(true);
+      dataModal.hide();
+      inputs.forEach(function(input) {
+        input.linkedTo.value = input.element.input.value;
+      });
+      gsheetLoadButton.click();
+      toNextPage();
+    });
+
+    highed.dom.ap(container, 
+                  highed.dom.cr('div', 'highed-modal-title highed-help-toolbar', 'Connect Google Sheet'),
+                  highed.dom.ap(highed.dom.cr('div'), 
+                    highed.dom.cr('div', 'highed-modal-text', 'When using Google Spreadsheet, Highcharts references the sheet directly.'),
+                    highed.dom.cr('div', 'highed-modal-text', 'This means that the published chart always loads the latest version of the sheet.'),
+                    highed.dom.cr('div', 'highed-modal-text', 'For more information on how to set up your spreadsheet, visit the documentation.')),
+                  highed.dom.ap(highed.dom.cr('div', 'highed-table-container'), table),
+                  highed.dom.ap(highed.dom.cr('div', 'highed-button-container'), connectSheet, cancel));
+
+    return container;
+  
+  }
+
   function createCutAndPasteContainer(toNextPage) {
     const container = highed.dom.cr('div', 'highed-modal-container');
     importData = highed.dom.cr('button', 'highed-ok-button highed-import-button negative', 'Import Data');
@@ -11040,13 +11260,15 @@ highed.DataTable = function(parent, attributes) {
         modalContainer = highed.dom.cr('div', 'highed-table-modal'),
         gSheetContainer = createGSheetContainer(toNextPage),
         liveContainer = createLiveDataContainer(toNextPage),
+        financalDataContainer = createFDataContainer(toNextPage),
         sampleDataContainer = createSampleData(toNextPage, loading);
         cutAndPasteContainer = createCutAndPasteContainer(toNextPage);
 
     var buttons = [{ title: 'Connect Google Sheet', linkedTo: gSheetContainer}, 
                    { title: 'Import Live Data', linkedTo: liveContainer, height: 321}, 
                    { title: 'Cut and Paste Data', linkedTo: cutAndPasteContainer, height: 448, width: 518}, 
-                   { title: 'Load Sample Data', linkedTo: sampleDataContainer}];
+                   { title: 'Load Sample Data', linkedTo: sampleDataContainer},
+                   { title: 'Load Financial Data', linkedTo:  financalDataContainer}];
 
     buttons.forEach(function(buttonProp) {
       const button = highed.dom.cr('button', 'highed-ok-button highed-import-button', buttonProp.title);
@@ -11162,6 +11384,7 @@ highed.DataTable = function(parent, attributes) {
     resize: resize,
     loadLiveDataFromURL: loadLiveDataFromURL,
     loadLiveDataPanel: loadLiveDataPanel,
+    initFData: initFData,
     isInCSVMode: isInCSVMode,
     //highlightSelectedFields: highlightSelectedFields,
     highlightCells: highlightCells,
@@ -11868,6 +12091,11 @@ highed.DataPage = function(parent, options, chartPreview, chartFrame, props) {
   chartPreview.on('ProviderLiveData', function(p) {
     assignDataPanel.disable();
     dataTable.loadLiveDataPanel(p);
+  });
+
+  chartPreview.on('ProviderFinancialData', function(p) {
+    assignDataPanel.disable();
+    dataTable.initFData(p);
   });
 
 
@@ -19050,6 +19278,11 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         'highed-imp-button',
         'Google Spreadsheet'
       ),
+      financialImportBtn = highed.dom.cr(
+        'button',
+        'highed-imp-button',
+        'Financial Data'
+      ),
       commaDelimitedBtn = highed.dom.cr(
         'button',
         'highed-imp-button highed-export-btn',
@@ -19367,6 +19600,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     highed.dom.ap(
       csvTab.body,
       spreadsheetImportBtn,
+      financialImportBtn,
       liveDataImportBtn,
       csvImportFileBtn,
       highed.dom.cr('hr', 'highed-imp-hr'),
@@ -19418,6 +19652,10 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
     highed.dom.on(spreadsheetImportBtn, 'click', function(){
       events.emit('ImportGoogleSpreadsheet');
+    });
+
+    highed.dom.on(financialImportBtn, 'click', function(){
+      events.emit('ImportFinancialData');
     });
 
     highed.dom.on(csvImportBtn, 'click', function() {
@@ -21058,6 +21296,8 @@ highed.ChartPreview = function(parent, attributes) {
             );
           });
           hasData = true;
+        }else if (true){
+
         }
       }
 
@@ -21133,7 +21373,6 @@ highed.ChartPreview = function(parent, attributes) {
     });
 
 
-
     updateAggregated();
     init(aggregatedOptions);
     loadSeries();
@@ -21147,6 +21386,15 @@ highed.ChartPreview = function(parent, attributes) {
       });
     });
   }
+
+
+  function loadFinancialData(options){
+    events.emit('ProviderFinancialData', settings);
+      
+    console.log('loadFinancialData ran')
+
+  }
+
 
   function getCleanOptions(source) {
     return source;
@@ -21248,6 +21496,7 @@ highed.ChartPreview = function(parent, attributes) {
           csv: !gsheet && !livedata ? loadedCSVRaw || lastLoadedCSV : false,
           googleSpreadsheet: gsheet,
           liveData: livedata,
+          financialData: fdata,
           assignDataFields: assignDataFields,
           seriesMapping: seriesMapping
         }
