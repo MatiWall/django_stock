@@ -8,14 +8,8 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 
-import geckodriver_autoinstaller
-geckodriver_autoinstaller.install()
 
-#from multiprocessing.dummy import Pool as ThreadPool 
 
-#import json
-
-#from tidylib import tidy_document # for tidying incorrect html
 
 
 

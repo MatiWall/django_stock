@@ -40,12 +40,20 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mptt',
+    'crispy_forms',
+    'bootstrap4',
+    'bootstrap_datepicker_plus',
     'apps.quotes',
     'apps.notes',
     'apps.accounts',
     'apps.dashboard',
     'apps.portfolio',
+    'apps.journal',
 ]
+
+BOOTSTRAP4 = {
+    'include_jquery': True,
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

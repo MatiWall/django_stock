@@ -1,0 +1,21 @@
+
+<p>testtt</p>
+
+{% for item in tsc_query %}
+<tr>
+    <td>{{item}}</td>
+
+
+</tr>
+
+
+{% endfor %}
+
+
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Submit">
+</form>
+

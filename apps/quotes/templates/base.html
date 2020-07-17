@@ -14,11 +14,7 @@
     <script type='text/javascript' src="{% static 'webComponents/modalStandard.js' %}"></script>
     <script type='text/javascript' src="{% static 'webComponents/modalLayoutStandard.js' %}"></script>
     <script type='text/javascript' src="{% static 'webComponents/dashboardTypeFieldset.js' %}"></script>
-    <script type='text/javascript' src="{% static 'webComponents/dual-picklist.js' %}"></script>
-
-
-
-
+   
 
 
 
@@ -52,17 +48,42 @@
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
 
 
-    <!--Bootstrap-->
+    <!--Bootstrap
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+-->
 
 
-    
+    {% load bootstrap4 %} {# import bootstrap4/bootstrap3 #}
+    {% bootstrap_css %} {# Embed Bootstrap CSS #}
+    {% bootstrap_javascript jquery='full' %} {# Embed Bootstrap JS+jQuery #}
+    {{ form.media }} {# Adds date-picker required JS and CSS #}
+
+
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gridstack@1.1.1/dist/gridstack.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/gridstack@1.1.1/dist/gridstack.all.js"></script>
 
+
+
+    <!--Jquery dialog-->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <!--<script src="https://code.jquery.com/jquery-1.12.4.js"></script> -->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <!--Jquery DataTable-->
+    
+    <script src="https://nightly.datatables.net/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://nightly.datatables.net/css/jquery.dataTables.min.css">
+
+    <script src="https://nightly.datatables.net/colreorder/js/dataTables.colReorder.min.js"></script>
+    <link rel="stylesheet" href="https://nightly.datatables.net/colreorder/css/colReorder.dataTables.min.css">
+
+    <script src="https://cdn.datatables.net/buttons/1.6.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.colVis.min.js"></script>
 
 
 
@@ -72,7 +93,7 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark  fixed-top">
 
-            
+
             <a class="navbar-brand" href="{% url 'home' %}">K&M Investments</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTop"
                 aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -103,6 +124,9 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'portfolio:home' %}">Portfolio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'journal:home' %}">Journal</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'notes:home' %}">To do </a>
@@ -140,9 +164,9 @@
         </nav>
     </header>
 
-    <br/>
-    <br/>
-    <br/>
+    <br />
+    <br />
+    <br />
 
 
     {% include "notes/stickyNotes.html" %}
@@ -157,13 +181,13 @@
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
             <ul class="navbar-nav">
                 <il class="nav-item">
-                   <span class="navbar-text">Powered by Heroku</span> 
+                    <span class="navbar-text">Powered by Heroku</span>
                 </il>
                 <il class="nav-item">
                     <span class="navbar-text"> Developed using Python Django</span>
                 </il>
             </ul>
- 
+
         </nav>
 
     </footer>

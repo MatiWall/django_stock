@@ -24048,6 +24048,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  * @param fn {function} - function to call when done editing, argument is an instance of highed.ChartPreview
  *
  */
+
+
+ 
 highed.ModalEditor = function(summoner, attributes, fn) {
   var properties = highed.merge(
       {

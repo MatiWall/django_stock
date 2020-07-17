@@ -1,0 +1,64 @@
+{% load static %}
+
+<div id="journalDataTableWrapper" style="width: 50%;">
+   
+
+
+
+    <table id="example" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>Status</th>
+                <th>Ticker</th>
+                <th>Name</th>
+                <th>Opened</th>
+                <th>Entry Price</th>
+                <th>Size</th>
+                <th>Side</th>
+                <th>Strategy</th>
+                <th>Closed</th>
+                <th>Exit Price</th>
+                <th>Currency</th>
+            </tr>
+        </thead>
+    </table>
+
+</div>
+
+<script>
+
+    $(document).ready(function () {
+
+        var table = $('#example').DataTable({
+            "processing": true,
+            "colReorder": true,
+            "dom": 'Bfrtip',
+            "buttons": [
+            'colvis',
+            ],
+            "ajax": {
+                "url": "{% url 'journal:homeTableData' %}",
+                "dataSrc": ""
+            }
+            ,
+            "columns": [
+                { data: 'status' },
+                { data: "ticker" },
+                { data: "name" },
+                { data: "position_opened" },
+                { data: "entry_price" },
+                { data: "size" },
+                { data: "side" },
+                { data: "strategy" },
+                { data: "position_closed" },
+                { data: "exit_price" },
+                { data: "currency" }
+            ],
+            "scrollY": "400px",
+
+        });
+       
+    });
+
+
+</script>
