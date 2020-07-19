@@ -12,7 +12,7 @@ from django.core import serializers
 from .models import tradingStrategyChoices, journalEntry
 
 
-from .forms import journalEntryForm
+from .forms import journalEntryForm, journalEntryActionForm
 # Create your views here.
 
 
@@ -23,7 +23,7 @@ class homeView(TemplateView):
 
     def get(self, request):
 
-        form = journalEntryForm(request.user)
+        form = journalEntryForm()
 
         return render(request, self.template_name, {'form' : form})
 
@@ -46,6 +46,11 @@ class editView(TemplateView):
 
 class tradesView(TemplateView):
     template_name = 'journal/tradesPage.html'
+
+    def get(self, request):
+        actionForm = journalEntryActionForm(request.user)
+
+        return render( request, self.template_name, {'actionForm': actionForm})
 
 
 

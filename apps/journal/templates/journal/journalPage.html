@@ -186,34 +186,20 @@ Journal
         <div class="form-row">
             <div class="form-groud col-md-6">
                 {{form.ticker|as_crispy_field}}
-                {{form.status|as_crispy_field}}
                 {{form.name|as_crispy_field}}
-                {{form.position_opened|as_crispy_field}}
-                {{form.position_closed|as_crispy_field}}
 
-                <div class="form-row">
-                    <div class="col-md-4"> {{form.entry_price|as_crispy_field}}</div>
-                    <div class="col-md-4">{{form.exit_price|as_crispy_field}}</div>
-                    <div class="col-md-4">{{form.currency|as_crispy_field}}</div>
+             
+            {{form.currency|as_crispy_field}}
 
-                </div>
+            {{form.found_via|as_crispy_field}}
 
-                <div class="form-row">
-                    <div class="col-md-6">{{form.size|as_crispy_field}}</div>
-                    <div class="col-md-6">{{form.side|as_crispy_field}}</div>
-
-                </div>
-
-
-                {{form.strategy|as_crispy_field}}
+            
+            {{form.notes|as_crispy_field}}
+    
 
             </div>
 
-            <div class="form-groud col-md-6">
-                {{form.reason_bought|as_crispy_field}}
-                {{form.reason_sold|as_crispy_field}}
-                {{form.notes|as_crispy_field}}
-            </div>
+          
         </div>
     </form>
 

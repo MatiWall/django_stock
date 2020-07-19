@@ -40,43 +40,74 @@ class currenciesChoices(models.Model):
 
 class journalEntry(models.Model):
 
-
-    side_choices = (
-        ('long', 'Long'),
-        ('short', 'Short')
-        )
-
-    status_choices = (
-        ('open', 'Open'),
-        ('win', 'Win'),
-        ('loss', 'Loss')
-    )
-
      
 
     ticker = models.CharField(max_length = 10, blank= True, null = True)
-    status = models.CharField(max_length = 10, choices = status_choices, default = 'open' )
     name = models.CharField(max_length = 40, blank= True, null = True)
 
-    entry_price = models.DecimalField(max_digits = 7, decimal_places = 2, blank= True, null = True)
-    exit_price = models.DecimalField(max_digits = 7, decimal_places = 2, blank= True, null = True)
     currency = models.CharField(max_length = 40, blank= True, null = True)
 
-    size = models.IntegerField(blank= True, null = True)
-    side = models.CharField(max_length = 40, choices = side_choices, default='long')
-
-
     strategy = models.CharField( max_length = 40, blank= True, null = True)
-    
-    position_opened = models.DateTimeField(default = now, blank= True)
-    position_closed = models.DateTimeField(blank = True, null = True)
-
+      
     found_via = models.CharField(max_length = 50, blank = True)
-    reason_bought = models.TextField(blank = True, null = True)
-    reason_sold = models.TextField(blank = True, null = True)
+    
     notes = models.TextField(blank = True, null = True) 
 
     created = models.DateTimeField(auto_now_add = True)
     updated = models.DateTimeField(auto_now = True)
 
     user = models.ForeignKey(User,  on_delete=models.CASCADE)
+
+
+
+class journalEntryAction(models.Model):
+
+    action_choices = (
+        ('buy', 'Buy'),
+        ('sell', 'Sell')
+    )
+
+    type_choices = (
+        ('share', 'Share'),
+        ('crypto', 'Crypto'),
+        ('forex', 'Forex'),
+        ('futures', 'Futures')
+    )
+
+    action = models.CharField(max_length = 10, choices = action_choices)
+    action_type = models.CharField(max_length = 20, choices = type_choices)
+
+    reason_bought = models.TextField(blank = True, null = True)
+    reason_sold = models.TextField(blank = True, null = True)
+    
+    entry_price = models.DecimalField(max_digits = 7, decimal_places = 2, blank= True, null = True)
+    exit_price = models.DecimalField(max_digits = 7, decimal_places = 2, blank= True, null = True)
+
+
+    commision = models.DecimalField(max_digits = 7, decimal_places = 2, blank= True, null = True)
+    fees = models.DecimalField(max_digits = 7, decimal_places = 2, blank= True, null = True)
+
+    journal_entry = models.ForeignKey(journalEntry, on_delete = models.CASCADE) 
+
+    
+
+class journalEntryTargets(models.Model):
+
+    target_price = models.DecimalField(max_digits = 7, decimal_places = 2, blank= True, null = True)
+    journalEntry = models.ForeignKey(journalEntry, on_delete = models.CASCADE) 
+
+
+class journalEntryStopLosses(models.Model):
+
+    stop_loss = models.DecimalField(max_digits = 7, decimal_places = 2, blank= True, null = True)
+    journalEntry = models.ForeignKey(journalEntry, on_delete = models.CASCADE)
+    
+
+class journalEntryScreenShots(models.Model):
+
+    title = models.CharField(max_length = 200)
+    image = models.ImageField(upload_to='images')
+    journalEntry = models.ForeignKey(journalEntry, on_delete = models.CASCADE)
+
+    def __str__(self):
+        return self.title
