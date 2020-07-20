@@ -7,11 +7,13 @@ app_name = 'journal'
 
 
 urlpatterns = [
-    path('home/', views.homeView.as_view(), name = "home"),
-    path('dashboard/', views.dashboardView, name = "dashboard"),
-    path('trades/', views.tradesView.as_view(), name = 'trades'),
+    path('dashboard/', views.dashboardView.as_view(), name = "dashboard"),
+    path('trades/', views.tradesView.as_view(), name = "trades"),
+    path('trades/detail/', views.tradeDetailView.as_view(), name = 'tradeDetail'),
     path('edit/', views.editView.as_view(), name = "edit"),
 
+
+    path('newEntry/', ajax_views.journalEntryCreateView.as_view(), name = 'createJournalEntry'),
 
     path('getUserJournals/', ajax_views.homeTableView.as_view(), name = 'homeTableData'),
     path('postJournalEntry/', ajax_views.journalFormView, name = 'postJournalEntry'),

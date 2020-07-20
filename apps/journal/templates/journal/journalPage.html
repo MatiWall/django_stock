@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% load crispy_forms_tags %}
+
 
 
 
@@ -14,325 +14,62 @@ Journal
 
 
 <style>
-    #journalSideBar {
-        position: fixed;
-        height: 100%;
-        background-color: #222;
-        padding: 0 10px;
-        left: 0px;
-        overflow-x: hidden;
+    :root {
+        --sidebarWidth: 3%;
+        --bodyWidth: 97%;
     }
-
-    #journalSideBar>ul {
-        float: left;
-    }
-
-    #jounralSideBar>ul>li>a {
-        color: #9d9d9d;
-    }
-
-    #journalSideBar>ul>li>a:hover {
-        background: #080808;
-        color: #FFF;
-    }
-
-    #journalSideBar>ul>li>a>span {
-        display: none;
-    }
-
-    #journalSideBar:hover>ul>li>a>span {
-        display: inline-block;
-    }
-
-
 
     .ui-dialog-titlebar {
-        background-color: #222;
+        background-color: rgb(17, 21, 30);
+        ;
         background-image: none;
         color: white;
         text-align: center;
+    }
+
+
+    .text-style-dark {
+        color: rgb(158, 158, 158);
+    }
+
+    .side-bar {
+        width: var(--sidebarWidth);
+    }
+    .body {
+        width: var(--bodyWidth);
     }
 </style>
 
 
 
 
+<div class="text-style-dark" style="background-color: rgb(18, 23, 37); width: 100%; height: 100%; ">
 
 
-<nav class="navbar navbar-expand-lg " style=" background-color: #222;">
-    <ul class="nav navbar-nav">
-        <li class="nav-item">
-            <a class="nav-link" id="newEntryDialog" style="color: azure;" type="button">New Trade</a>
-        </li>
-
-    </ul>
-
-
-</nav>
-
-
-
-
-<div id="journalSideBar" style="z-index: 9999;">
-    <ul class="nav navbar-nav side-nav flex-column">
-        <li class="nav-item">
-            <a class="nav-link" id="journalDashboard" href="#">
-
-                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-grid-fill" fill="currentColor"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd"
-                        d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zm8 0A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm-8 8A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm8 0A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5v-3z" />
-                </svg>
-
-                <span>Dashboard</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">
-                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-clipboard-data" fill="currentColor"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd"
-                        d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z" />
-                    <path fill-rule="evenodd"
-                        d="M9.5 1h-3a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z" />
-                    <path
-                        d="M4 11a1 1 0 1 1 2 0v1a1 1 0 1 1-2 0v-1zm6-4a1 1 0 1 1 2 0v5a1 1 0 1 1-2 0V7zM7 9a1 1 0 0 1 2 0v3a1 1 0 1 1-2 0V9z" />
-                </svg>
-                <span>Reports</span>
-            </a>
-        </li>
-        <li class="nav-item dropdown">
-            <a class="nav-link" id="journalTrades" href="#">
-                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-left-right" fill="currentColor"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd"
-                        d="M10.146 7.646a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L12.793 11l-2.647-2.646a.5.5 0 0 1 0-.708z" />
-                    <path fill-rule="evenodd"
-                        d="M2 11a.5.5 0 0 1 .5-.5H13a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 11zm3.854-9.354a.5.5 0 0 1 0 .708L3.207 5l2.647 2.646a.5.5 0 1 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 0 1 .708 0z" />
-                    <path fill-rule="evenodd" d="M2.5 5a.5.5 0 0 1 .5-.5h10.5a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z" />
-                </svg>
-                <span>Trades</span>
-
-            </a>
-
-            <div class="collapse" id="tradesChoices">
-                <ul class="flex-column pl-2 nav">
-                    <li class="nav-item" style="color: white"><span>Journal</span></a></li>
-                    <li class="nav-item"><span>Trades</span></li>
-                </ul>
-            </div>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">
-                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-sliders" fill="currentColor"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd"
-                        d="M14 3.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0zM11.5 5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM7 8.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0zM4.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm9.5 3.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0zM11.5 15a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" />
-                    <path fill-rule="evenodd"
-                        d="M9.5 4H0V3h9.5v1zM16 4h-2.5V3H16v1zM9.5 14H0v-1h9.5v1zm6.5 0h-2.5v-1H16v1zM6.5 9H16V8H6.5v1zM0 9h2.5V8H0v1z" />
-                </svg>
-                <span> Performance</span>
-            </a>
-        </li>
-
-        <li>
-            <a class="nav-link" data-toggle="collapse" href="#journalSettings" role="button" aria-haspopup="true"
-                aria-expanded="false" aria-controls="journalSettings">
-                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-gear" fill="currentColor"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd"
-                        d="M8.837 1.626c-.246-.835-1.428-.835-1.674 0l-.094.319A1.873 1.873 0 0 1 4.377 3.06l-.292-.16c-.764-.415-1.6.42-1.184 1.185l.159.292a1.873 1.873 0 0 1-1.115 2.692l-.319.094c-.835.246-.835 1.428 0 1.674l.319.094a1.873 1.873 0 0 1 1.115 2.693l-.16.291c-.415.764.42 1.6 1.185 1.184l.292-.159a1.873 1.873 0 0 1 2.692 1.116l.094.318c.246.835 1.428.835 1.674 0l.094-.319a1.873 1.873 0 0 1 2.693-1.115l.291.16c.764.415 1.6-.42 1.184-1.185l-.159-.291a1.873 1.873 0 0 1 1.116-2.693l.318-.094c.835-.246.835-1.428 0-1.674l-.319-.094a1.873 1.873 0 0 1-1.115-2.692l.16-.292c.415-.764-.42-1.6-1.185-1.184l-.291.159A1.873 1.873 0 0 1 8.93 1.945l-.094-.319zm-2.633-.283c.527-1.79 3.065-1.79 3.592 0l.094.319a.873.873 0 0 0 1.255.52l.292-.16c1.64-.892 3.434.901 2.54 2.541l-.159.292a.873.873 0 0 0 .52 1.255l.319.094c1.79.527 1.79 3.065 0 3.592l-.319.094a.873.873 0 0 0-.52 1.255l.16.292c.893 1.64-.902 3.434-2.541 2.54l-.292-.159a.873.873 0 0 0-1.255.52l-.094.319c-.527 1.79-3.065 1.79-3.592 0l-.094-.319a.873.873 0 0 0-1.255-.52l-.292.16c-1.64.893-3.433-.902-2.54-2.541l.159-.292a.873.873 0 0 0-.52-1.255l-.319-.094c-1.79-.527-1.79-3.065 0-3.592l.319-.094a.873.873 0 0 0 .52-1.255l-.16-.292c-.892-1.64.902-3.433 2.541-2.54l.292.159a.873.873 0 0 0 1.255-.52l.094-.319z" />
-                    <path fill-rule="evenodd"
-                        d="M8 5.754a2.246 2.246 0 1 0 0 4.492 2.246 2.246 0 0 0 0-4.492zM4.754 8a3.246 3.246 0 1 1 6.492 0 3.246 3.246 0 0 1-6.492 0z" />
-                </svg>
-                <span> Settings </span>
-            </a>
-            <div class="collapse" id="journalSettings">
-                <ul class="flex-column pl-2 nav">
-                    <li class="nav-item" style="color: white">
-                        <a type="button" id="journalSettingsEdit">
-                            <span>Edit</span>
-                        </a>
-
-                    </li>
-
-                </ul>
-            </div>
-
-        </li>
-    </ul>
-
-</div>
-
-<div id="journalContent" style="padding-left: 40px;">
-    {% include 'journal/journalContent.html' %}
-</div>
-
-
-
-
-
-
-
-
-
-<div id="createJournalEntryDialog" title="Enter new journal entry">
-    <!--{% include "journal/newEntry.html" %}-->
-
-    <form id='journalEntryFrom' method="POST">
-        {% csrf_token %}
-
-
-        <div class="form-row">
-            <div class="form-groud col-md-6">
-                {{form.ticker|as_crispy_field}}
-                {{form.name|as_crispy_field}}
-
-             
-            {{form.currency|as_crispy_field}}
-
-            {{form.found_via|as_crispy_field}}
-
-            
-            {{form.notes|as_crispy_field}}
+    {% include 'journal/navbarTop.html' %}
     
 
-            </div>
-
-          
+    <div class="row">
+        <div class="side-bar">
+            {% include 'journal/navbarSide.html' %}
         </div>
-    </form>
+        <div class="body">
+
+            {% block journal %}
+
+
+            {% endblock %}
+
+
+        </div>
+    </div>
+
 
 </div>
 
 
-<script>
-    $(function () {
-        $("#createJournalEntryDialog").dialog({
-            autoOpen: false,
-            modal: false,
-
-            height: 700,
-            width: 700,
-            position: {
-                using: function (pos) {
-                    $(this).css("top", 100 + 'px');
-                    $(this).css("left", 100 + 'px');
-                }
-            },
-            show: {
-                effect: "fade",
-                duration: 200,
-            },
-            hide: {
-                effect: "blind",
-                duration: 200,
-            },
-            buttons: {
-                Cancle: function () {
-                    $(this).dialog("close");
-                },
-                "Create": async function () {
-
-                    let response = await postFormData("{% url 'journal:postJournalEntry' %}", 'journalEntryFrom');
-
-                    console.log(response);
-
-                    if (response !== 'Invalid') {
-                        $(this).dialog('close');
-                    } else {
-                        alert('Invalid form');
-                    }
-                }
-            }
-
-        });
-    });
 
 
-
-    async function postFormData(url, formId) {
-
-        let formData = $('#' + formId).serializeArray();
-
-        let response = fetch(url, {
-            method: 'POST',
-            credentials: 'same-origin',
-            headers: {
-                "X-CSRFToken": Cookies.get("csrftoken"),
-                "Accept": "application/json",
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            body: JSON.stringify(formData),
-        }).then(res => res.json()).then(data => { return data.res; });
-
-        return response;
-
-    }
-
-</script>
-
-
-
-<script>
-
-
-
-
-    $("#newEntryDialog").on('click', function () {
-        $("#createJournalEntryDialog").dialog("open");
-    });
-
-
-
-
-
-</script>
-
-
-
-
-
-<!--Side Navbar-->
-<script>
-
-    function fetchInputHTML(id, url) {
-
-        var xmlHttp = new XMLHttpRequest();
-        xmlHttp.open("GET", url, false); // false for synchronous request
-        xmlHttp.send(null);
-        document.getElementById(id).innerHTML = xmlHttp.responseText;
-
-    }
-
-    $("#journalDashboard").on('click', function () {
-
-        fetchInputHTML("journalContent", "{% url 'journal:dashboard' %}")
-
-    });
-
-
-    $("#journalTrades").on('click', function () {
-
-
-        fetchInputHTML("journalContent", "{% url 'journal:trades' %}")
-
-        
-    })
-
-
-    $("#journalSettingsEdit").on('click', function () {
-
-        fetchInputHTML("journalContent", "{% url 'journal:edit' %}")
-
-    });
-
-
-
-
-
-
-</script>
 
 
 {% endblock %}

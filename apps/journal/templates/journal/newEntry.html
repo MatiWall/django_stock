@@ -1,1 +1,104 @@
+{% load crispy_forms_tags %}
+<div id="createJournalEntryDialog" title="Enter new journal entry">
+    <form id='journalEntryFrom' method="POST">
+        {% csrf_token %}
+
+
+        <div class="form-row">
+            <div class="form-groud col-md-6">
+                {{form.ticker|as_crispy_field}}
+                {{form.name|as_crispy_field}}
+
+             
+            {{form.currency|as_crispy_field}}
+
+            {{form.found_via|as_crispy_field}}
+
+            
+            {{form.notes|as_crispy_field}}
+    
+
+            </div>
+
+          
+        </div>
+    </form>
+
+</div>
+
+<script>
+    $(function () {
+        $("#createJournalEntryDialog").dialog({
+            autoOpen: false,
+            modal: false,
+
+            height: 700,
+            width: 700,
+            position: {
+                using: function (pos) {
+                    $(this).css("top", 100 + 'px');
+                    $(this).css("left", 100 + 'px');
+                }
+            },
+            show: {
+                effect: "fade",
+                duration: 200,
+            },
+            hide: {
+                effect: "blind",
+                duration: 200,
+            },
+            buttons: {
+                Cancle: function () {
+                    $(this).dialog("close");
+                },
+                "Create": async function () {
+
+                    let response = await postFormData("{% url 'journal:postJournalEntry' %}", 'journalEntryFrom');
+
+                    console.log(response);
+
+                    if (response !== 'Invalid') {
+                        $(this).dialog('close');
+                    } else {
+                        alert('Invalid form');
+                    }
+                }
+            }
+
+        });
+    });
+
+
+
+    async function postFormData(url, formId) {
+
+        let formData = $('#' + formId).serializeArray();
+
+        let response = fetch(url, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+                "X-CSRFToken": Cookies.get("csrftoken"),
+                "Accept": "application/json",
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify(formData),
+        }).then(res => res.json()).then(data => { return data.res; });
+
+        return response;
+
+    }
+
+</script>
+
+
+
+<script>
+
+    $("#newEntryDialog").on('click', function () {
+        $("#createJournalEntryDialog").dialog("open");
+    });
+
+</script>
 

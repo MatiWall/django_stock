@@ -1,3 +1,5 @@
+from django.views.generic.edit import CreateView
+
 from django.http import HttpResponse, JsonResponse
 from django.core import serializers 
 
@@ -34,7 +36,16 @@ class homeTableView(View):
 
 
 
+class journalEntryCreateView(CreateView):
+    model = journalEntry
+    fields = ['portfolio', 'market', 'ticker', 'name', 'currency', 'strategy', 'found_via', 'notes']
+    template_name = 'journal/newEntry.html'
+
+
+
 def journalFormView(request):
+
+     
 
     if request.method == 'POST':
         response = 'Invalid'

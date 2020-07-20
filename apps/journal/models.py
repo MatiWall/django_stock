@@ -8,6 +8,16 @@ from django.utils.timezone import now
 # Create your models here.
 
 
+class portfolio(models.Model):
+
+    name = models.CharField(max_length = 100)
+
+
+    created = models.TimeField(auto_now_add = True)
+    updated = models.TimeField(auto_now = True)
+
+
+
 
 
 class tradingStrategyChoices(models.Model):
@@ -17,6 +27,7 @@ class tradingStrategyChoices(models.Model):
     updated = models.TimeField(auto_now = True)
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
 
     def __str__(self):
         return self.strategyChoice
@@ -40,7 +51,16 @@ class currenciesChoices(models.Model):
 
 class journalEntry(models.Model):
 
-     
+    type_choices = (
+        ('share', 'Share'),
+        ('crypto', 'Crypto'),
+        ('forex', 'Forex'),
+        ('futures', 'Futures')
+    )
+
+    portfolio = models.ForeignKey(portfolio, on_delete = models.CASCADE)
+
+    market = models.CharField(max_length = 20, choices = type_choices)
 
     ticker = models.CharField(max_length = 10, blank= True, null = True)
     name = models.CharField(max_length = 40, blank= True, null = True)
@@ -67,15 +87,10 @@ class journalEntryAction(models.Model):
         ('sell', 'Sell')
     )
 
-    type_choices = (
-        ('share', 'Share'),
-        ('crypto', 'Crypto'),
-        ('forex', 'Forex'),
-        ('futures', 'Futures')
-    )
+  
 
     action = models.CharField(max_length = 10, choices = action_choices)
-    action_type = models.CharField(max_length = 20, choices = type_choices)
+   
 
     reason_bought = models.TextField(blank = True, null = True)
     reason_sold = models.TextField(blank = True, null = True)

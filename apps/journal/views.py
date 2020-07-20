@@ -18,14 +18,12 @@ from .forms import journalEntryForm, journalEntryActionForm
 
 
 
-class homeView(TemplateView):
-    template_name = "journal/journalPage.html"
+class tradesView(TemplateView):
+    template_name = 'journal/journalTrades.html'
 
     def get(self, request):
 
-        form = journalEntryForm()
-
-        return render(request, self.template_name, {'form' : form})
+        return render(request, self.template_name, {})
 
 
 
@@ -44,8 +42,8 @@ class editView(TemplateView):
         return render(request, self.template_name, {'form': form, 'tsc_query' :  tsc_query})
 
 
-class tradesView(TemplateView):
-    template_name = 'journal/tradesPage.html'
+class tradeDetailView(TemplateView):
+    template_name = 'journal/tradeDetail.html'
 
     def get(self, request):
         actionForm = journalEntryActionForm(request.user)
@@ -53,13 +51,17 @@ class tradesView(TemplateView):
         return render( request, self.template_name, {'actionForm': actionForm})
 
 
-
-
-
-def dashboardView(request):
+class dashboardView(TemplateView):
     template_name = "journal/dashboardPage.html"
 
-    html = render_to_string( template_name, {})
+    def get(self, request):
     
-    return HttpResponse(html)
+
+        return render( request, self.template_name,{})
+
+
+
+
+
+
 

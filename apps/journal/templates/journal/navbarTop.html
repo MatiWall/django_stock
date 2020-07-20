@@ -1,0 +1,42 @@
+
+<nav class="navbar navbar-expand-lg " style=" background-color: rgb(17, 21, 30);">
+    <ul class="nav navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" id="newEntryDialog" type="button">New Trade</a>
+        </li>
+        <li>
+            <div class="dropdown">
+                <a class="nav-link dropdown-toggle" id="portfolioOptionsId" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Portfolio
+                  </a>
+                <div class="dropdown-menu" aria-labelledby="portfolioOptionsId">
+                  <a class="dropdown-item">View all</a>
+                  <a class="dropdown-item" >Add</a>
+                </div>
+              </div>
+        </li>
+        
+    </ul>
+
+
+</nav>
+
+
+
+{% include 'journal/newPortfolio.html' %}
+
+<div id="newJournalEntrycContainer" title="Enter new journal entry">
+
+</div>
+
+<script>
+
+    fetch("{% url 'journal:createJournalEntry' %}").then(res => {return res.text()})
+    .then(html => {
+        
+     
+        let container = document.getElementById('newJournalEntrycContainer');
+    })
+
+
+</script>
