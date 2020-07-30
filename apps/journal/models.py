@@ -1,8 +1,10 @@
 from django.db import models
+
+# Create your models here.
+from django.db import models
 from django.contrib.auth.models import User
 
-from datetime import datetime, timedelta
-from django.utils.timezone import now
+
 
 
 # Create your models here.
@@ -12,10 +14,18 @@ class portfolio(models.Model):
 
     name = models.CharField(max_length = 100)
 
+    notes = models.TextField(blank = True, null = True) 
+
+    selected = models.BooleanField(default = False)
+
 
     created = models.TimeField(auto_now_add = True)
     updated = models.TimeField(auto_now = True)
 
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
 
 
 
@@ -49,7 +59,7 @@ class currenciesChoices(models.Model):
 
 
 
-class journalEntry(models.Model):
+class journal(models.Model):
 
     type_choices = (
         ('share', 'Share'),
@@ -60,7 +70,7 @@ class journalEntry(models.Model):
 
     portfolio = models.ForeignKey(portfolio, on_delete = models.CASCADE)
 
-    market = models.CharField(max_length = 20, choices = type_choices)
+    market = models.CharField(max_length = 20, choices = type_choices, default = 'share')
 
     ticker = models.CharField(max_length = 10, blank= True, null = True)
     name = models.CharField(max_length = 40, blank= True, null = True)
@@ -76,11 +86,10 @@ class journalEntry(models.Model):
     created = models.DateTimeField(auto_now_add = True)
     updated = models.DateTimeField(auto_now = True)
 
-    user = models.ForeignKey(User,  on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete = models.CASCADE)
 
 
-
-class journalEntryAction(models.Model):
+class journalAction(models.Model):
 
     action_choices = (
         ('buy', 'Buy'),
@@ -102,27 +111,44 @@ class journalEntryAction(models.Model):
     commision = models.DecimalField(max_digits = 7, decimal_places = 2, blank= True, null = True)
     fees = models.DecimalField(max_digits = 7, decimal_places = 2, blank= True, null = True)
 
-    journal_entry = models.ForeignKey(journalEntry, on_delete = models.CASCADE) 
+    journal_entry = models.ForeignKey(journal, on_delete = models.CASCADE) 
+
+
+    created = models.DateTimeField(auto_now_add = True)
+    updated = models.DateTimeField(auto_now = True)
+    user = models.ForeignKey(User, on_delete = models.CASCADE)
 
     
 
-class journalEntryTargets(models.Model):
+class journalTargets(models.Model):
 
     target_price = models.DecimalField(max_digits = 7, decimal_places = 2, blank= True, null = True)
-    journalEntry = models.ForeignKey(journalEntry, on_delete = models.CASCADE) 
+    journal = models.ForeignKey(journal, on_delete = models.CASCADE) 
+
+    created = models.DateTimeField(auto_now_add = True)
+    updated = models.DateTimeField(auto_now = True)
+    user = models.ForeignKey(User, on_delete = models.CASCADE)
 
 
-class journalEntryStopLosses(models.Model):
+class journalStopLosses(models.Model):
 
     stop_loss = models.DecimalField(max_digits = 7, decimal_places = 2, blank= True, null = True)
-    journalEntry = models.ForeignKey(journalEntry, on_delete = models.CASCADE)
+    journal = models.ForeignKey(journal, on_delete = models.CASCADE)
+
+    created = models.DateTimeField(auto_now_add = True)
+    updated = models.DateTimeField(auto_now = True)
+    user = models.ForeignKey(User, on_delete = models.CASCADE)
     
 
-class journalEntryScreenShots(models.Model):
+class journalScreenShots(models.Model):
 
     title = models.CharField(max_length = 200)
     image = models.ImageField(upload_to='images')
-    journalEntry = models.ForeignKey(journalEntry, on_delete = models.CASCADE)
+    journal = models.ForeignKey(journal, on_delete = models.CASCADE)
+
+    created = models.DateTimeField(auto_now_add = True)
+    updated = models.DateTimeField(auto_now = True)
+    user = models.ForeignKey(User, on_delete = models.CASCADE)
 
     def __str__(self):
         return self.title

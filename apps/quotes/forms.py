@@ -8,7 +8,7 @@ class homeForm(forms.ModelForm):
         attrs = {
             'class' : 'form-control',
             'placeholder' : 'Write a post'
-                }
+            }
     ))
 
     class Meta:

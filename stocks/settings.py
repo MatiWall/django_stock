@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'mptt',
     'crispy_forms',
     'bootstrap4',
@@ -49,6 +50,7 @@ INSTALLED_APPS = [
     'apps.dashboard',
     'apps.portfolio',
     'apps.journal',
+    'apps.api.journal-api',
 ]
 
 BOOTSTRAP4 = {
@@ -86,6 +88,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'stocks.wsgi.application'
 
+
+# Django rest framework
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication'
+    ]
+}
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases

@@ -57,7 +57,7 @@ def saveStickyNotes(request):
     
     if request.method == 'POST' and request.is_ajax():
         data = json.loads(request.body) 
-        print(data)
+    
         with connection.cursor() as cursor:
             query = '''
                 INSERT INTO notes_stickyNote (notes, user_id) VALUES (%s, %s)
