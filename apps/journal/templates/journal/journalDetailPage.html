@@ -1,0 +1,66 @@
+{% extends 'journal/journalPage.html' %}
+{% load static %}
+
+{% block journal %}
+
+<div class="container-fluid">
+  <div id="main-detail"></div>
+
+</div>
+
+
+
+<template id="data-table" >
+  
+
+  <div id="card-main-detail" class="card text-white bg-secondary" style="max-width: 70%;" data-primary-key = "2">
+  <div id="card-header" class="card-header">
+    Detail
+  </div>
+  <div class="card-body card-body-main-detail">
+    <div class="row">
+      <div class="col">
+        <div class="row">
+          <div id="journal-ticker">
+            {{journal.ticker}}
+          </div>
+        </div>
+        <div class="row">
+          <div id="journal-name">
+            {{journal.name}}
+          </div>
+        </div>
+      </div>
+      <div class="col">Other stuff here</div>
+
+
+
+    </div>
+
+    <div class="row">
+      <h5 class="card-title">Secondary card title</h5>
+      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
+        content.
+      </p>
+    </div>
+  </div>
+</div>
+
+</template>
+
+
+<script>
+
+  var container = document.getElementById('main-detail');
+  var template = document.getElementById("data-table");
+
+  const firstClone = template.content.cloneNode(true);
+  container.appendChild(firstClone);
+
+</script>
+
+
+
+
+
+{% endblock %}

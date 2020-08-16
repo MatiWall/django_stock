@@ -1,0 +1,44 @@
+{% extends 'expenses/expensesBase.html' %}
+{% load crispy_forms_tags %}
+
+{% block expenses %}
+
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-10">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">De</a></li>
+                    <li class="breadcrumb-item"><a href="#">Library</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Data</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="col-md-2">
+            <a href="{% url 'expenses:delete-expense' expense.pk %}" class="btn btn-danger btn-sm">Delete Expense</a>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <form action="{% url 'expenses:edit-expense' expense.pk %}" method="POST" class="uniForm">
+                
+                <div class="form-group">
+                    {% csrf_token%}
+                    {{form|crispy }}
+                </div>
+
+                <input type="submit" value="Save" class="btn btn-primary btn-primary-sm">
+
+
+            </form>
+        </div>
+    </div>
+
+</div>
+
+
+{% endblock %}

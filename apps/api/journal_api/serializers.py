@@ -31,3 +31,13 @@ class journalSerializer(serializers.ModelSerializer):
 
 
   
+
+class journalActionSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = journal
+        fields = ['id', 'action', 'action_reason', 'price', 'notes', 'commision', 'fees']
+
+
+
+  

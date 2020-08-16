@@ -101,17 +101,14 @@ class journalAction(models.Model):
     action = models.CharField(max_length = 10, choices = action_choices)
    
 
-    reason_bought = models.TextField(blank = True, null = True)
-    reason_sold = models.TextField(blank = True, null = True)
-    
-    entry_price = models.DecimalField(max_digits = 7, decimal_places = 2, blank= True, null = True)
-    exit_price = models.DecimalField(max_digits = 7, decimal_places = 2, blank= True, null = True)
-
+    action_reason = models.TextField(blank = True, null = True)
+   
+    price = models.DecimalField(max_digits = 7, decimal_places = 2, blank= True, null = True)
 
     commision = models.DecimalField(max_digits = 7, decimal_places = 2, blank= True, null = True)
     fees = models.DecimalField(max_digits = 7, decimal_places = 2, blank= True, null = True)
 
-    journal_entry = models.ForeignKey(journal, on_delete = models.CASCADE) 
+    journal = models.ForeignKey(journal, on_delete = models.CASCADE) 
 
 
     created = models.DateTimeField(auto_now_add = True)

@@ -25,6 +25,7 @@ urlpatterns = [
     path('dashboard/', include('apps.dashboard.urls') ),
     path('portfolio/', include('apps.portfolio.urls') ),
     path('journal/', include('apps.journal.urls') ),
-    path('api/', include('apps.api.journal-api.urls') ),
+    path('expenses/', include('apps.expenses.urls') ),
+    path('api/', include('apps.api.journal_api.urls') ),
     
 ]

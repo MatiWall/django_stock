@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'django_filters',
     'mptt',
     'crispy_forms',
     'bootstrap4',
@@ -50,7 +51,8 @@ INSTALLED_APPS = [
     'apps.dashboard',
     'apps.portfolio',
     'apps.journal',
-    'apps.api.journal-api',
+    'apps.expenses',
+    'apps.api.journal_api',
 ]
 
 BOOTSTRAP4 = {
@@ -93,7 +95,10 @@ WSGI_APPLICATION = 'stocks.wsgi.application'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication'
-    ]
+    ],
+     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 10
 }
 
 # Database
@@ -171,3 +176,9 @@ EMAIL_HOST = 'localhost'
 EMAIL_PORT = 1025
 
 
+from django.contrib.messages import constants as message_constants
+MESSAGE_TAGS = {message_constants.DEBUG: 'debug',
+                message_constants.INFO: 'info',
+                message_constants.SUCCESS: 'success',
+                message_constants.WARNING: 'warning',
+                message_constants.ERROR: 'danger',}

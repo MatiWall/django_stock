@@ -7,16 +7,16 @@ router.register('portfolios', views.portfolioView, basename = 'portfolio')
 
 router.register('journals', views.journalView, basename = 'journal')
 
+router.register('journalActions', views.journalView, basename = 'journalAction')
 
 
 
 app_name = 'journal-api'
 
 
-
 urlpatterns = [
     path('', include(router.urls)),
     path('portfolio/form/', views.portfolioFormView.as_view(), name = 'portfolioForm'),
-    path('journal/form', views.journalFormView.as_view(), name = 'journalForm')
- 
+    path('journal/form', views.journalFormView.as_view(), name = 'journalForm'),
+
 ]

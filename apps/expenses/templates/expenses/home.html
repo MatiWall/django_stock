@@ -1,0 +1,238 @@
+{% extends 'expenses/expensesBase.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block expenses %}
+
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-10">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Home</a></li>
+                    <li class="breadcrumb-item"><a href="#">Library</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Data</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="col-md-2">
+            <a href="{% url 'expenses:add-expense' %}" class="btn btn-primary">Add Expense</a>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-2">
+
+    <section class="card">
+        <div class="card-header">
+            Filters
+        </div>
+        <div class="card-body">
+            <form action="">
+                <ul class="nav">
+
+                    <li class="nav-item">
+
+                        <button class="btn dropdown-toggle" type="button" id="expenses-amount-range"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Amount range
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="expenses-amount-range">
+                            <div class="form-group">
+                                {{amountForm|crispy}}
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+
+                        <button class="btn dropdown-toggle" type="button" id="expenses-categories"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Category
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="expenses-categories">
+                            <div class="form-group">
+                                {% for field in categoryForm %}
+
+                                {{field}}
+
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="nav-item">
+
+                        <button class="btn dropdown-toggle" type="button" id="expenses-date-range"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Date range
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="expenses-date-range">
+                            <div class="form-group">
+
+                                {% for field in dateForm %}
+                                <div>{{field|as_crispy_field}}</div>
+
+
+                                {% endfor %}
+
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="nav-item">
+                        <input class="searchfield" id="searchbox" name="q" type="text" value="{{ request.GET.q }}" placeholder="Search..."/>
+                    </li>
+                </ul>
+            </form>
+
+        </div>
+    </section>
+
+
+    <div id="expenses-table-output" class="table-output">
+        <table class="table table-striped table-hover">
+            <thead id="expenses-tablehead-output" class="thead-light">
+
+            </thead>
+            <tbody id="expenses-tablebody-output">
+
+            </tbody>
+
+        </table>
+    </div>
+
+    <div id="expenses-pagination-container" class="pagination-container">
+        <div>
+            Showing page <span id="pageNumber"></span> of <span id="numberOfPages"></span>
+        </div>
+
+        <ul class="pagination align-right float-right mr-auto ">
+
+            <li class="page-item active">
+                <input data-url="" class="page-link" type="button" value="&laquo 1">
+            </li>
+            <li class="page-item">
+                <input id="previousPage" data-url="" class="page-link" type="button" value="Previous">
+            </li>
+
+            <li class="page-item">
+                <input id="nextPage" data-url="" class="page-link" type="button" value="Next">
+            </li>
+            <li class="page-item">
+                <input data-url="" class="page-link" type="button" value="&raquo">
+            </li>
+
+        </ul>
+    </div>
+
+</div>
+
+
+<script>
+
+    (function () {
+        $(document).ready(function () {
+            const expenseTableBody = document.getElementById('expenses-tablebody-output');
+            const expenseTableHead = document.getElementById('expenses-tablehead-output');
+
+            const currentPageNumberContainer = document.getElementById('pageNumber');
+            const totalPagesNumberContainer = document.getElementById('numberOfPages');
+
+            const expensesPaginationContainer = document.getElementById('expenses-pagination-container');
+            const nextPage = document.getElementById('nextPage');
+            const previousPage = document.getElementById('previousPage');
+
+
+            $('.page-link').on('click', function (e) {
+                console.log(e.target.getAttribute('data-url'));
+                let url = e.target.getAttribute('data-url');
+                fetchData(url);
+            })
+
+
+            function fetchData(url) {
+                return fetch(url)
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log(data);
+
+
+
+
+                        if (data.lastPage === 1) {
+                            expensesPaginationContainer.style.display = 'none ';
+                        } else {
+                            expensesPaginationContainer.style.display = 'block';
+                        }
+
+                        previousPage.setAttribute('data-url', data.links.previous);
+                        nextPage.setAttribute('data-url', data.links.next);
+
+
+                        currentPageNumberContainer.innerHTML = data.current;
+                        totalPagesNumberContainer.innerHTML = data.lastPage;
+
+
+
+
+                        const table = json2Table(data.results);
+                        expenseTableHead.innerHTML = table.thead;
+                        expenseTableBody.innerHTML = table.trows;
+
+                    });
+
+            }
+
+            fetchData("{% url 'expenses:list-expenses' %}");
+        })
+
+
+
+
+
+
+
+
+
+
+
+    })()
+
+
+</script>
+
+
+<script>
+
+    function json2Table(json) {
+
+        let cols = Object.keys(json[0]);
+
+        let headerRow = cols.map(col => `<th> ${col} </th>`).join("");
+
+
+        let rows = json.map(row => {
+            let tds = cols.map(col => {
+
+                if (col === 'id') {
+                    return `<td>
+                        <a href="{% url 'expenses:edit-expense' 123 %}" class="btn btn-secondary btn-sm">Edit</a>
+                        
+                        </td>`.replace('123', row[col]);
+                } else {
+                    return `<td> ${row[col]} </dt>`;
+                }
+            }).join(" ");
+            return `<tr> ${tds} </tr>`;
+        }).join("");
+
+
+        const head = ` <tr> ${headerRow} </tr>`;
+
+        return { 'thead': head, 'trows': rows }
+
+    }
+
+
+</script>
+{% endblock %}

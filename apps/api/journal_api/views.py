@@ -6,8 +6,8 @@ from rest_framework.renderers import TemplateHTMLRenderer, JSONRenderer
 from rest_framework import status
 # Create your views here.
 
-from apps.journal.models import portfolio, journal
-from .serializers import portfolioSerializer, journalSerializer
+from apps.journal.models import portfolio, journal, journalAction
+from .serializers import portfolioSerializer, journalSerializer, journalActionSerializer
 
 
 class portfolioView(viewsets.ModelViewSet):
@@ -26,6 +26,14 @@ class portfolioView(viewsets.ModelViewSet):
 class journalView(viewsets.ModelViewSet):
     
     serializer_class = journalSerializer
+
+    def get_queryset(self):
+        return journal.objects.filter(user = self.request.user)
+
+
+class journalActionView(viewsets.ModelViewSet):
+    
+    serializer_class = journalActionSerializer
 
     def get_queryset(self):
         return journal.objects.filter(user = self.request.user)
@@ -77,7 +85,6 @@ class journalFormView(views.APIView):
         
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 
 
