@@ -1,10 +1,17 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
-
+from rest_framework.routers import DefaultRouter
 
 
 app_name = 'expenses'
 
+
+
+
+router = DefaultRouter()
+router.register('general', views.userdefiendInputControlView, basename='user-definedinput-control')
+
+print(router.urls)
 
 urlpatterns = [
     path('expenses/', views.home.as_view(), name = "expenses"),
@@ -21,5 +28,12 @@ urlpatterns = [
     path('income/', views.incomeView.as_view(), name = 'income'),
     path('add-income', views.addIncomeView.as_view(), name = 'add-income'),
     path('delete-income/<str:pk>', views.editIncomeView.as_view(), name = 'edit-income'),
-    path('delete-income/<str:pk>', views.deleteIncomeView, name = 'delete-income')
+    path('delete-income/<str:pk>', views.deleteIncomeView, name = 'delete-income'),
+
+
+    path('general/' , views.generalView.as_view(), name = 'general'),
+    path('general/userdefined-input/<str:model>', views.userdefinedInputView.as_view(), name = 'userdefined-input'),
+    path('general/api/', include(router.urls)),
+
 ]
+

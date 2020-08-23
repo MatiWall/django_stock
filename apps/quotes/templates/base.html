@@ -12,11 +12,6 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Web Components-->
-    <script type='text/javascript' src="{% static 'webComponents/modalStandard.js' %}"></script>
-    <script type='text/javascript' src="{% static 'webComponents/modalLayoutStandard.js' %}"></script>
-    <script type='text/javascript' src="{% static 'webComponents/dashboardTypeFieldset.js' %}"></script>
-   
 
 
 
@@ -31,7 +26,18 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/tableStyle.css' %}?version=1">
 
 
+ <!--Highcharts-->
 
+<script src="https://code.highcharts.com/maps/modules/map.js" type="text/javascript" charset="utf-8"></script>
+
+<script src="https://code.highcharts.com/stock/highstock.js" charset="utf-8"></script>
+<script src="https://code.highcharts.com/adapters/standalone-framework.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://code.highcharts.com/highcharts-more.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://code.highcharts.com/highcharts-3d.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://code.highcharts.com/modules/data.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/funnel.js"></script>
+<script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
 
 
 
@@ -56,6 +62,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 -->
+
+    <link rel="stylesheet" type="text/css" href="https://rawgit.com/nobleclem/jQuery-MultiSelect/master/jquery.multiselect.css" />
 
 
     {% load bootstrap4 %} {# import bootstrap4/bootstrap3 #}
@@ -182,7 +190,8 @@
     {% endblock %}
 
 
-
+</br>
+</br>
     <footer class="footer">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark ">
             <ul class="navbar-nav">
@@ -214,11 +223,10 @@
 
 
     </script>
+    
+    <script src="https://rawgit.com/nobleclem/jQuery-MultiSelect/master/jquery.multiselect.js"></script>
+
 </body>
-
-
-
-
 
 
 </html>

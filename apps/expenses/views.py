@@ -1,11 +1,16 @@
 from django.shortcuts import render, redirect, reverse
+from django.urls import reverse_lazy
 from django.http import JsonResponse
 
-from django.views.generic import TemplateView, UpdateView, View
 
-from .models import Category, Expense, Income
-from .forms import ExpenseForm, IncomeForm, AmountFilterForm, CategoryFilterForm, DateFilterForm
-from .serializers import ExpenseSerializer, IncomeSerializer
+
+from django.views.generic import TemplateView, UpdateView, View, ListView
+from django.views.generic.edit import UpdateView, DeleteView, CreateView
+
+
+from .models import Category, Expense, Income, IncomeSource
+from .forms import ExpenseForm, IncomeForm
+from .serializers import ExpenseSerializer, IncomeSerializer, UserInputGeneralSerializer
 
 
 from django.contrib import messages
@@ -15,12 +20,14 @@ from .pagination import customPagination
 
 
 from rest_framework import viewsets
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, UpdateAPIView
 from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.response import Response
 
 import json
 from datetime import datetime, timedelta
 
+from .filters import ExpenseFilter
 
 
 class home(TemplateView):
@@ -28,11 +35,9 @@ class home(TemplateView):
 
     def get(self, request):
 
-        amountForm = AmountFilterForm()
-        categoryForm = CategoryFilterForm(request = request)
-        dateForm = DateFilterForm()
-        
-        return render(request, self.template_name, {'amountForm' : amountForm, 'categoryForm': categoryForm, 'dateForm' : dateForm})
+        categories = Category.objects.filter(user = request.user)
+        expenseFilter = ExpenseFilter(request = request)
+        return render(request, self.template_name, {'categories' : categories, 'filter': expenseFilter})
 
 
 class addExpense(TemplateView):
@@ -101,31 +106,17 @@ def deleteExpense(request, pk):
 
 
 
-def searchExpenses(request):
-
-    if request.method == 'POST':
-        search_str = json.loads(request.body).get('searchText')
-        
-        exp = Expense.objects.filter(
-            amount__istartswith = search_str, user = request.user) | expense.objects.filter(
-            date__icontains = search_str, user = request.user) | expense.objects.filter(
-            description__icontains = search_str, user = request.user) | expense.objects.filter(
-            category__name__icontains = search_str, user = request.user) 
-
-        data = exp.values()
-        return JsonResponse(list(data), safe = False)
 
 
 class searchExpensesListView(ListAPIView):
     serializer_class = ExpenseSerializer
-    filter_backends = (SearchFilter, OrderingFilter)
-    sarch_fields = ['amount', 'date', 'description', 'category_name']
+    filter_class = ExpenseFilter
     pagination_class = customPagination
-
 
     def get_queryset(self):
         queryList = Expense.objects.filter(user = self.request.user)
         return queryList
+
 
 
 
@@ -251,3 +242,122 @@ def deleteIncomeView(request, pk):
     income.delete()
     return redirect(reverse('expenses:income'))
 
+
+
+
+
+
+
+# General views
+
+from .forms import CategoryForm
+from django.forms import modelform_factory
+from django.apps import apps
+
+class generalView(TemplateView):
+    template_name = 'expenses/general.html'
+
+
+    def get(self, request):
+
+        models = ['Category', 'IncomeSource']
+       
+        return render(request, self.template_name, {'models' : models})
+   
+
+
+class userdefinedInputView(CreateView):
+    template_name = 'expenses/userdefinedInput.html'
+    fields = ['name']
+
+    def get(self, request, *args, **kwargs):
+        self.object = None
+        self.model_name = kwargs['model']
+        context = super().get_context_data(**kwargs)
+        context["object_list"] = self.model.objects.filter(user = self.request.user)
+        context["model_name"] = self.model_name
+        form_class = self.get_form_class()
+        context['form'] = self.get_form(self.form_class)
+
+        return self.render_to_response(context)
+
+
+    def form_valid(self, form):
+        f = form.save(commit = False)
+        f.user = self.request.user
+        f.save()
+        return redirect(reverse('expenses:expenses'))
+
+ 
+    def get_form_class(self):
+        self.model = apps.get_model(app_label='expenses', model_name = self.model_name)
+        return modelform_factory(self.model, fields=self.fields)
+
+
+
+
+class userdefiendInputControlView(viewsets.ViewSet):
+    
+
+    def dispatch(self, request, *args, **kwargs):
+        
+        if (request.GET.get('model', None)):
+            model_name = request.GET.get('model', None)
+        elif( json.loads(request.body)['model']):
+            model_name = json.loads(request.body)['model']
+
+
+        
+        self.model = apps.get_model(app_label='expenses', model_name = model_name)
+        UserInputGeneralSerializer.Meta.model = self.model
+        UserInputGeneralSerializer.Meta.exclude = ['user']
+
+        self.serializer =  UserInputGeneralSerializer
+        return super(userdefiendInputControlView, self).dispatch(request, *args, **kwargs)
+
+
+
+    def list(self, request):
+        
+        queryset = self.model.objects.filter(user = request.user)
+        serializer = self.serializer(queryset, many=True)
+        return Response(serializer.data)
+
+        
+
+    def create(self, request):
+
+        pass
+
+    def retrieve(self, request, pk=None):
+        pass
+
+    def update(self, request, pk=None):
+        pass
+
+
+
+    def partial_update(self, request, pk=None, model=None):
+        
+        model_object = self.get_object(pk)
+        serializer = self.serializer(model_object, data=request.data, partial=True) # set partial=True to update a data partially
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+    def destroy(self, request, pk=None):
+        instance = self.model.objects.get(id=pk)
+        instance.delete()
+
+
+        queryset = self.model.objects.filter(user = request.user)
+        serializer = self.serializer(queryset, many=True)
+        return Response(serializer.data) 
+
+
+    def get_object(self, pk):
+        return self.model.objects.get(pk=pk)

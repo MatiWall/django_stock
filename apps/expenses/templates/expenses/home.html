@@ -2,7 +2,19 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% block expenses %}
+<style>
+    /* Chrome, Safari, Edge, Opera */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
 
+    /* Firefox */
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+</style>
 
 <div class="container mt-4">
     <div class="row">
@@ -23,70 +35,43 @@
 
 <div class="container mt-2">
 
-    <section class="card">
-        <div class="card-header">
-            Filters
-        </div>
-        <div class="card-body">
-            <form action="">
-                <ul class="nav">
 
-                    <li class="nav-item">
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dataFilters" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            Filter data
+        </button>
+        <div class="dropdown-menu" style="width: 70%;" aria-labelledby="dataFilters">
+            <form id="filter-form" action="{% url 'expenses:list-expenses' %}" method="GET">
+                <div class="row">
+                    <div class="col-md-2" style="padding: 1%; margin-left: 2%;">
+                        {{filter.form.min_amount |as_crispy_field}}
+                        {{filter.form.max_amount |as_crispy_field}}
+                    </div>
+                    <div class="col-md-3" style="padding: 1%;">
+                        {{filter.form.start_date |as_crispy_field}}
+                        {{filter.form.end_date |as_crispy_field}}
+                    </div>
+                    <div class="col-md-3" style="padding: 1%;">
+                        {{filter.form.ordering|as_crispy_field}}
+                        {{filter.form.description|as_crispy_field}}
+                    </div>
 
-                        <button class="btn dropdown-toggle" type="button" id="expenses-amount-range"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Amount range
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="expenses-amount-range">
-                            <div class="form-group">
-                                {{amountForm|crispy}}
-                            </div>
-                        </div>
-                    </li>
-                    <li class="nav-item">
+                    <div class="col-md-3" style="padding: 1%;">
 
-                        <button class="btn dropdown-toggle" type="button" id="expenses-categories"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Category
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="expenses-categories">
-                            <div class="form-group">
-                                {% for field in categoryForm %}
+                        {{filter.form.category|as_crispy_field}}
+                    </div>
 
-                                {{field}}
+                </div>
+                </br>
 
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </li>
-
-                    <li class="nav-item">
-
-                        <button class="btn dropdown-toggle" type="button" id="expenses-date-range"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Date range
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="expenses-date-range">
-                            <div class="form-group">
-
-                                {% for field in dateForm %}
-                                <div>{{field|as_crispy_field}}</div>
-
-
-                                {% endfor %}
-
-                            </div>
-                        </div>
-                    </li>
-
-                    <li class="nav-item">
-                        <input class="searchfield" id="searchbox" name="q" type="text" value="{{ request.GET.q }}" placeholder="Search..."/>
-                    </li>
-                </ul>
+                <button type="submit" class="btn btn-primary">Search</button>
+                <button class="btn btn-secondary" onclick="document.getElementById('filter-form').reset()">Clear
+                    filter</button>
             </form>
-
         </div>
-    </section>
+    </div>
+
 
 
     <div id="expenses-table-output" class="table-output">
@@ -102,31 +87,56 @@
     </div>
 
     <div id="expenses-pagination-container" class="pagination-container">
-        <div>
-            Showing page <span id="pageNumber"></span> of <span id="numberOfPages"></span>
+        <div class="row">
+            <div class="col-md-6">
+                Showing page <span id="pageNumber"></span> of <span id="numberOfPages"></span>
+            </div>
+            <div class="col-md-6">
+                <ul class="pagination align-right float-right mr-auto ">
+
+                    <li class="page-item active">
+                        <input data-url="" class="page-link" type="button" value="&laquo 1">
+                    </li>
+                    <li class="page-item">
+                        <input id="previousPage" data-url="" class="page-link" type="button" value="Previous">
+                    </li>
+
+                    <li class="page-item">
+                        <input id="nextPage" data-url="" class="page-link" type="button" value="Next">
+                    </li>
+                    <li class="page-item">
+                        <input data-url="" class="page-link" type="button" value="&raquo">
+                    </li>
+
+                </ul>
+            </div>
         </div>
 
-        <ul class="pagination align-right float-right mr-auto ">
 
-            <li class="page-item active">
-                <input data-url="" class="page-link" type="button" value="&laquo 1">
-            </li>
-            <li class="page-item">
-                <input id="previousPage" data-url="" class="page-link" type="button" value="Previous">
-            </li>
 
-            <li class="page-item">
-                <input id="nextPage" data-url="" class="page-link" type="button" value="Next">
-            </li>
-            <li class="page-item">
-                <input data-url="" class="page-link" type="button" value="&raquo">
-            </li>
 
-        </ul>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            Statistics
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div id="categoriesPercentSummary" ></div>
+                </div>
+                <div class="col-md-6">
+                    <div id="categoryAggregatedAmount"></div>
+                </div>
+            </div>
+        </div>
     </div>
 
 </div>
 
+</br>
+</br>
 
 <script>
 
@@ -156,44 +166,55 @@
                     .then(data => {
                         console.log(data);
 
-
-
-
-                        if (data.lastPage === 1) {
-                            expensesPaginationContainer.style.display = 'none ';
+                        if (data.results.length === 0) {
+                            expenseTableBody.innerHTML = 'No results'
                         } else {
-                            expensesPaginationContainer.style.display = 'block';
+
+                            /* Pagination control*/
+                            if (data.lastPage === 1) {
+                                expensesPaginationContainer.style.display = 'none ';
+                            } else {
+                                expensesPaginationContainer.style.display = 'block';
+                            }
+
+                            previousPage.setAttribute('data-url', data.links.previous);
+                            nextPage.setAttribute('data-url', data.links.next);
+
+
+                            currentPageNumberContainer.innerHTML = data.current;
+                            totalPagesNumberContainer.innerHTML = data.lastPage;
+                            /* Pagination control end */
+
+
+
+                            const table = json2Table(data.results);
+                            expenseTableHead.innerHTML = table.thead;
+                            expenseTableBody.innerHTML = table.trows;
                         }
-
-                        previousPage.setAttribute('data-url', data.links.previous);
-                        nextPage.setAttribute('data-url', data.links.next);
-
-
-                        currentPageNumberContainer.innerHTML = data.current;
-                        totalPagesNumberContainer.innerHTML = data.lastPage;
-
-
-
-
-                        const table = json2Table(data.results);
-                        expenseTableHead.innerHTML = table.thead;
-                        expenseTableBody.innerHTML = table.trows;
 
                     });
 
             }
 
             fetchData("{% url 'expenses:list-expenses' %}");
+            fetchStatsData("{% url 'expenses:list-expenses' %}");
+
+            $('#filter-form').submit(function (event) {
+                // Stop the browser from submitting the form.
+                event.preventDefault();
+
+                let formData = new FormData(document.getElementById('filter-form'));
+
+                let search = new URLSearchParams(formData);
+
+                const queryString = search.toString();
+                let url_base = $(this).attr('action');
+                let url = url_base + '?' + queryString;
+                fetchData(url);
+                fetchStatsData(url);
+
+            });
         })
-
-
-
-
-
-
-
-
-
 
 
     })()
@@ -201,9 +222,86 @@
 
 </script>
 
+<script>
+    // Charts 
+
+
+    function fetchStatsData(url, dataAll = []) {
+
+        fetch(url)
+            .then(res => res.json())
+            .then(data => {
+
+                dataAll = dataAll.concat(data.results);
+                if (data.links.next) {
+                    fetchStatsData(data.links.next, dataAll);
+
+                } else {
+                    let summary = summarizeCategories(dataAll);
+                    highchartInitPieChart(summary);
+
+                    
+                    let timeseries = aggregateCategories(dataAll);
+                    let series = createSeries(timeseries)
+                    highchartInitTimeSeries(series);
+
+                }
+
+
+            })
+    }
+
+
+   
+
+
+
+
+    function summarizeCategories(data) {
+        let summary = {};
+
+        data.forEach(item => {
+            if (summary[item.category_name]) {
+                summary[item.category_name] += item.amount;
+            } else {
+                summary[item.category_name] = item.amount;
+            }
+        });
+
+        let series = [];
+        let keys = Object.keys(summary);
+        keys.forEach( key => {
+            series.push({name : key, y : summary[key]});
+        });
+        
+        return series;
+    }
+
+    function aggregateCategories(data) {
+        data = data.sort((a, b) => new Date(a.date) - new Date(b.date));
+        let jsonData = {};
+        let arr;
+
+        data.forEach((item, i) => {
+            arr = jsonData[item.category_name];
+            let date = new Date(item.date);
+            let utcDate = date.getTime();
+            if (arr) {
+                arr.push([utcDate, arr[arr.length - 1][1] + item.amount]);
+            } else {
+                arr = ([[utcDate, item.amount]]);
+            }
+            jsonData[item.category_name] = arr;
+
+        });
+        return jsonData;
+
+    }
+
+
+</script>
 
 <script>
-
     function json2Table(json) {
 
         let cols = Object.keys(json[0]);
@@ -216,9 +314,9 @@
 
                 if (col === 'id') {
                     return `<td>
-                        <a href="{% url 'expenses:edit-expense' 123 %}" class="btn btn-secondary btn-sm">Edit</a>
-                        
-                        </td>`.replace('123', row[col]);
+                    <a href="{% url 'expenses:edit-expense' 123 %}" class="btn btn-secondary btn-sm">Edit</a>
+                    
+                    </td>`.replace('123', row[col]);
                 } else {
                     return `<td> ${row[col]} </dt>`;
                 }
@@ -232,7 +330,9 @@
         return { 'thead': head, 'trows': rows }
 
     }
-
-
 </script>
+
+
+<script src="{% static 'expenses/highchartsStats.js' %}"></script>
+<script src="{% static 'expenses/utils.js' %}"></script>
 {% endblock %}

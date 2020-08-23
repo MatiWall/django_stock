@@ -21,10 +21,10 @@ class Category(models.Model):
 
 class Expense(models.Model):
 
-    amount = models.FloatField()
-    date = models.DateField( default= now)
-    description = models.TextField()
-    category = models.ForeignKey(Category, on_delete = models.CASCADE)
+    amount = models.FloatField(verbose_name = 'Amount')
+    date = models.DateField(verbose_name = 'Date', default= now)
+    description = models.TextField('Description')
+    category = models.ForeignKey( Category, on_delete = models.CASCADE)
     user = models.ForeignKey(User, on_delete = models.CASCADE)
 
     def __str__(self):
@@ -45,6 +45,7 @@ class IncomeSource(models.Model):
 
     def __str__(self):
         return self.name
+
 
 
 class Income(models.Model):

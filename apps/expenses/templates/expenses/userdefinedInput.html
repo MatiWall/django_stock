@@ -1,0 +1,152 @@
+{% extends 'expenses/expensesBase.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load  expensesFilterUtils %}
+
+{% block expenses %}
+
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header">
+            <h5>Create New {{model_name|prettifyString}}</h5>
+        </div>
+        <form action="" method="POST">
+
+
+            <div class="card-body">
+                <div class="row">
+                    {% csrf_token %}
+                    {% for field in form %}
+                    {{field}}
+                    {% endfor %}
+                    <input type="submit" value="Create">
+                </div>
+            </div>
+
+
+
+        </form>
+    </div>
+
+
+    <div class="card mt-4">
+        <div class="card-header">
+            <h5>{{model_name|prettifyString}}</h5>
+        </div>
+        <div class="card-body">
+            <table class="table">
+                <tbody id="input-categories">
+
+                </tbody>
+
+
+            </table>
+        </div>
+    </div>
+
+</div>
+
+
+<script>
+
+    $(document).ready(function () {
+
+        fetch("{% url 'expenses:user-definedinput-control-list' %}?model={{model_name}}")
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('input-categories').innerHTML = json2Table(data);
+                console.log(data);
+            });
+
+
+    });
+
+
+
+    function delay(callback, ms) {
+        /*
+       delays userinput by chosen number of ms.
+       
+
+        */
+        var timer = 0;
+        return function () {
+            var context = this, args = arguments;
+            clearTimeout(timer);
+            timer = setTimeout(function () {
+                callback.apply(context, args);
+            }, ms || 0);
+        };
+    }
+
+    $('table .content').keyup(delay(
+        function () {
+
+            let data = {
+                model: this.dataset.model,
+                name: this.innerText
+
+            };
+            fetch("{% url 'expenses:user-definedinput-control-detail' pk='123'%}".replace('123', this.dataset.id), {
+                method: 'PATCH',
+                headers: {
+                    "X-CSRFToken": Cookies.get("csrftoken"),
+                    "Accept": "application/json",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                })
+        }, 500));
+
+
+
+
+
+    function deleteInputRow(e) {
+        console.log(e);
+        fetch("{% url 'expenses:user-definedinput-control-detail' pk='123' %}?model={{model_name}}".replace('123', e.dataset.id), {
+            method: 'DELETE',
+            headers: {
+                "X-CSRFToken": Cookies.get("csrftoken"),
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
+        })
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('input-categories').innerHTML = json2Table(data);
+                console.log(data);
+            })
+    }
+
+
+    function json2Table(json) {
+
+
+        let rows = json.map(row => {
+
+            return `<tr> 
+                <td contenteditable="True">
+                    ${row.name}
+                </td>
+                <td>
+                    <button class="btn btn-secondary" data-id="123" data-model="{{model_name}}" onclick="deleteInputRow(this)">Delete</button>
+                </td> 
+                </tr>
+                `.replace('123', row.id)
+        }).join("");
+
+        return rows;
+
+    }
+</script>
+
+
+
+
+{% endblock %}

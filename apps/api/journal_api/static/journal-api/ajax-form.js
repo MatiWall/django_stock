@@ -48,3 +48,5 @@ function ajaxRequest (url, method = 'get',  data = null){
     
     return fetch(url, input);
 }
+
+

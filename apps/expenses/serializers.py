@@ -21,3 +21,7 @@ class IncomeSerializer(serializers.ModelSerializer):
         fields = ['id', 'amount', 'date', 'description','source_name']
 
 
+
+class UserInputGeneralSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = None

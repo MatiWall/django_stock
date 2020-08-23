@@ -55,29 +55,10 @@ class IncomeForm(forms.ModelForm):
 
 
     
-class AmountFilterForm(forms.Form):
-    minimum = forms.FloatField()
-    maximum = forms.FloatField()
-
-
-    def __init__(self, *args, **kwargs):
-        super(AmountFilterForm, self).__init__(*args, **kwargs)
-        for visible in self.visible_fields():
-            visible.field.widget.attrs['class'] = 'form-control'
 
 
 
-class CategoryFilterForm(forms.Form):
-    category = forms.ModelMultipleChoiceField(queryset=Category.objects.all(), widget=forms.CheckboxSelectMultiple())
-    
-    def __init__(self, *args, **kwargs):
-        self.request = kwargs.pop('request', None)
-        super(CategoryFilterForm, self).__init__(*args, **kwargs)
-        self.fields['category'].queryset = Category.objects.filter(user=self.request.user)
-   
-
-
-class DateFilterForm(forms.Form):
-
-    start_date = forms.DateField(initial=datetime.date.today()-datetime.timedelta(days = 6*30), widget = forms.TextInput(attrs={'type': 'date'}) )
-    end_date = forms.DateField(initial=datetime.date.today(), widget = forms.TextInput(attrs={'type': 'date'}) )
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        exclude = ['user']
