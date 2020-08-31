@@ -3,7 +3,7 @@ from django.views.generic import TemplateView
 
 from django.http import JsonResponse, HttpResponse
 
-from .models import journal
+from .models import Journal
 
 
 # Create your views here.
@@ -22,7 +22,6 @@ class tradesView(TemplateView):
 
 
 
-
 class dashboardView(TemplateView):
     template_name = "journal/dashboardPage.html"
 
@@ -31,8 +30,12 @@ class dashboardView(TemplateView):
 class journalDetailView(TemplateView):
     template_name = "journal/journalDetailPage.html"
 
-    def get(self, request):
+    def get(self, request, pk):
 
-        query = journal.objects.get(pk = 2 )    
+        query = Journal.objects.get(pk = pk )    
 
         return render(request, self.template_name, {'journal' : query})
+        
+
+
+

@@ -19,7 +19,7 @@ from django.core.paginator import Paginator
 from .pagination import customPagination
 
 
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.generics import ListAPIView, UpdateAPIView
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.response import Response
@@ -281,13 +281,6 @@ class userdefinedInputView(CreateView):
 
         return self.render_to_response(context)
 
-
-    def form_valid(self, form):
-        f = form.save(commit = False)
-        f.user = self.request.user
-        f.save()
-        return redirect(reverse('expenses:expenses'))
-
  
     def get_form_class(self):
         self.model = apps.get_model(app_label='expenses', model_name = self.model_name)
@@ -326,8 +319,16 @@ class userdefiendInputControlView(viewsets.ViewSet):
         
 
     def create(self, request):
+        serializer = self.serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user = request.user)
 
-        pass
+            queryset = self.model.objects.filter(user = request.user)
+            serializer = self.serializer(queryset, many=True)
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
 
     def retrieve(self, request, pk=None):
         pass

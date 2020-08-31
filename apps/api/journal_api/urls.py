@@ -7,12 +7,12 @@ router.register('portfolios', views.portfolioView, basename = 'portfolio')
 
 router.register('journals', views.journalView, basename = 'journal')
 
-router.register('journalActions', views.journalView, basename = 'journalAction')
-
+router.register('journalActions', views.journalActionView, basename = 'journal-action')
+router.register('journalTargets', views.journalTargetView, basename = 'journal-target')
 
 
 app_name = 'journal-api'
-
+print(router.urls)
 
 urlpatterns = [
     path('', include(router.urls)),

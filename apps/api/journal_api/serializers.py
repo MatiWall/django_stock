@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.fields import CurrentUserDefault
 
-from apps.journal.models import portfolio, journal
+from apps.journal.models import portfolio, Journal, JournalAction, JournalTargets
 
 class portfolioSerializer(serializers.ModelSerializer):
     
@@ -17,8 +17,8 @@ class portfolioSerializer(serializers.ModelSerializer):
 class journalSerializer(serializers.ModelSerializer):
     
     class Meta:
-        model = journal
-        fields = ['id', 'portfolio', 'market', 'ticker', 'name', 'currency', 'strategy', 'found_via', 'notes']
+        model = Journal
+        fields = ['id', 'portfolio', 'market', 'ticker', 'name', 'currency', 'strategy', 'found_via', 'notes', 'created']
 
     def get_fields(self):
         # get the original field names to field instances mapping
@@ -35,9 +35,11 @@ class journalSerializer(serializers.ModelSerializer):
 class journalActionSerializer(serializers.ModelSerializer):
     
     class Meta:
-        model = journal
-        fields = ['id', 'action', 'action_reason', 'price', 'notes', 'commision', 'fees']
-
-
+        model = JournalAction
+        fields = ['id', 'action', 'action_reason', 'price', 'commision', 'fees', 'created', 'updated']
 
   
+class journalTargetsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = JournalTargets
+        fields = ['id', 'shares', 'target_price', 'stop_loss', 'created', 'updated']

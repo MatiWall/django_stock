@@ -11,7 +11,8 @@
         <div class="card-header">
             <h5>Create New {{model_name|prettifyString}}</h5>
         </div>
-        <form action="" method="POST">
+        <form id="add-user-input-form" action="{% url 'expenses:user-definedinput-control-list' %}?model={{model_name}}"
+            method="POST">
 
 
             <div class="card-body">
@@ -35,13 +36,15 @@
             <h5>{{model_name|prettifyString}}</h5>
         </div>
         <div class="card-body">
-            <table class="table">
-                <tbody id="input-categories">
+            <div id="table-container" class="container">
+                <table id="user-input-table" class="table">
+                    <tbody id="input-categories">
 
-                </tbody>
+                    </tbody>
 
 
-            </table>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -52,12 +55,59 @@
 
     $(document).ready(function () {
 
+
+
+
+
+
+
         fetch("{% url 'expenses:user-definedinput-control-list' %}?model={{model_name}}")
             .then(res => res.json())
             .then(data => {
-                document.getElementById('input-categories').innerHTML = json2Table(data);
+                let table = document.getElementById('user-input-table');
+                document.getElementById('input-categories').innerHTML = json2Table(data, table);
+               
                 console.log(data);
             });
+
+
+
+        document.getElementById('add-user-input-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            let formData = new FormData(this);
+            let parsedData = {};
+            for (let name of formData) {
+                if (typeof (parsedData[name[0]]) == "undefined") {
+                    let tempdata = formData.getAll(name[0]);
+                    if (tempdata.length > 1) {
+                        parsedData[name[0]] = tempdata;
+                    } else {
+                        parsedData[name[0]] = tempdata[0];
+                    }
+                }
+            }
+
+            let options = {};
+            switch (this.method.toLowerCase()) {
+                case 'post':
+                    options.body = JSON.stringify(parsedData);
+                case 'get':
+                    options.method = this.method;
+                    options.headers = {
+                        "X-CSRFToken": Cookies.get("csrftoken"),
+                        "Accept": "application/json",
+                        "Content-Type": "application/json"
+                    };
+                    break;
+            }
+
+            fetch(this.action, options).then(r => r.json()).then(data => {
+                let table = document.getElementById('user-input-table');
+                document.getElementById('input-categories').innerHTML = json2Table(data, table);
+            });
+
+            this.reset();
+        });
 
 
     });
@@ -80,35 +130,10 @@
         };
     }
 
-    $('table .content').keyup(delay(
-        function () {
-
-            let data = {
-                model: this.dataset.model,
-                name: this.innerText
-
-            };
-            fetch("{% url 'expenses:user-definedinput-control-detail' pk='123'%}".replace('123', this.dataset.id), {
-                method: 'PATCH',
-                headers: {
-                    "X-CSRFToken": Cookies.get("csrftoken"),
-                    "Accept": "application/json",
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(data)
-            })
-                .then(res => res.json())
-                .then(data => {
-                    console.log(data);
-                })
-        }, 500));
-
-
-
 
 
     function deleteInputRow(e) {
-        console.log(e);
+
         fetch("{% url 'expenses:user-definedinput-control-detail' pk='123' %}?model={{model_name}}".replace('123', e.dataset.id), {
             method: 'DELETE',
             headers: {
@@ -119,32 +144,63 @@
         })
             .then(res => res.json())
             .then(data => {
-                document.getElementById('input-categories').innerHTML = json2Table(data);
-                console.log(data);
+                let table = document.getElementById('user-input-table');
+                console.log(table)
+                document.getElementById('input-categories').innerHTML = json2Table(data, table);
             })
     }
 
 
-    function json2Table(json) {
+    function json2Table(json, table) {
+        table.innerHTML = '';
+
+        json.forEach(item => {
+            let row = table.insertRow(0);
 
 
-        let rows = json.map(row => {
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
 
-            return `<tr> 
-                <td contenteditable="True">
-                    ${row.name}
-                </td>
-                <td>
-                    <button class="btn btn-secondary" data-id="123" data-model="{{model_name}}" onclick="deleteInputRow(this)">Delete</button>
-                </td> 
-                </tr>
-                `.replace('123', row.id)
-        }).join("");
+            cell1.contentEditable = "true";
+            cell1.addEventListener('keyup', delay(
+                function () {
 
-        return rows;
+                    let data = {
+                        model: "{{model_name}}",
+                        name: this.innerText
+
+                    };
+                    fetch("{% url 'expenses:user-definedinput-control-detail' pk='123'%}".replace('123', this.dataset.id), {
+                        method: 'PATCH',
+                        headers: {
+                            "X-CSRFToken": Cookies.get("csrftoken"),
+                            "Accept": "application/json",
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(data)
+                    })
+                        .then(res => res.json())
+                        .then(data => {
+                            console.log(data);
+                        })
+                }, 500));
+            cell1.innerHTML = item.name;
+            cell1.dataset.id = item.id;
+            cell2.innerHTML = `<button class="btn btn-secondary" data-id="123" data-model="{{model_name}}" onclick="deleteInputRow(this)">Delete</button>`.replace('123', item.id);
+        });
+
 
     }
+
+
+
+    
+
+
 </script>
+
+
+
 
 
 

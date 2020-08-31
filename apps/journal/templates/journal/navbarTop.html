@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg " style=" background-color: rgb(17, 21, 30);">
+<nav class="navbar navbar-expand-lg" style="background-color: rgb(192, 192, 192); border-radius: 10px;">
     <div class="navbar-collapse collapse">
     <ul class="nav navbar-nav">
         <li class="nav-item">
@@ -12,19 +12,7 @@
             <ul class="dropdown-menu">      
                 <li class="dropdown-item">
                     <a id="newPortfolioForm" class="nav-link" type="button">Add</a>
-                </li>
-                <li class="dropdown-submenu">
-                    <a id="portfolioViewAll" class="dropdown-toggle nav-link" data-toggle="dropdown" role="button">View all</a>
-                    <ul id="portfolio-wrapper" class="dropdown-menu scrollable-menu">
-                        <form id="portfolio-filter-form">
-                            
-                        </form>
-                      
-                                       
-                    </ul>
-                </li>
-                   
-              
+                </li>  
             </ul>
         </li>
     </ul>
@@ -39,9 +27,7 @@
 
 <div id="createDialogForm" title="Enter new journal entry">
 
-    <div class="alert alert-success" role="alert">
-        sadfasfaf
-      </div>
+
 </div>
 
 
@@ -79,8 +65,9 @@
                     
                     let url = $(this).data('url');
                     let formId = $(this).data('formId')
+                    let method = $(this).data('method') || 'post';
 
-                    let res = await postForm(url, formId);
+                    let res = await postForm(url, formId, method);
                    
 
                     if (res.status == 201){

@@ -2,8 +2,81 @@
 {% load static %}
 
 {% block journal %}
-<p>journal trades table here</p>
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.css">
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css">
+
+<div class="container-fluid">
 
 
+  <div id="table-container">
+    <table id="table" class="table table-striped table-bordered" style="width:100%">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Ticker</th>
+          <th>Market</th>
+          <th>Currency</th>
+          <th>Strategy</th>
+          <th>Found via</th>
+          <th>Notes</th>
+          <th>Portfolio</th>
+          <th>Created</th>
+          <th></th>
+        </tr>
+      </thead>
+    </table>
+  </div>
+
+</div>
+
+<script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script src="//cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+<script>
+
+  $(document).ready(function () {
+
+
+    var table = $('#table').DataTable({
+      'serverSide': true,
+      'ajax': "{% url 'journal-api:journal-list' %}?format=datatables",
+      'columns': [
+        { 'data': 'name' },
+        
+        { 'data': 'ticker' },
+        { 'data': 'market' },
+        { 'data': 'currency' },
+        { 'data': 'strategy'},
+        { 'data': 'found_via'},
+        { 'data': 'notes'},
+        { 'data': 'portfolio'},
+        { 'data': 'created'},
+        {
+          'data': 'id',
+          "searchable": false,
+          "render": function (data, type, full, meta) {
+            let id = data;
+            return "<a href={% url 'journal:tradeDetail' 123%} >Detail</a>".replace('123', id);
+          }
+        }
+      ],
+
+    });
+
+/*
+    {
+          defaultContent: "<input type='button' class='name' value='Name'/>"
+
+        },
+    $('#table tbody').on('click', '.name', function () {
+      var row = $(this).closest('tr');
+
+      var data = table.row(row).data();
+      console.log(data);
+    });
+*/
+
+  });
+
+</script>
 
 {% endblock %}

@@ -59,7 +59,7 @@ class currenciesChoices(models.Model):
 
 
 
-class journal(models.Model):
+class Journal(models.Model):
 
     type_choices = (
         ('share', 'Share'),
@@ -88,8 +88,11 @@ class journal(models.Model):
 
     user = models.ForeignKey(User, on_delete = models.CASCADE)
 
+ 
 
-class journalAction(models.Model):
+
+
+class JournalAction(models.Model):
 
     action_choices = (
         ('buy', 'Buy'),
@@ -108,7 +111,7 @@ class journalAction(models.Model):
     commision = models.DecimalField(max_digits = 7, decimal_places = 2, blank= True, null = True)
     fees = models.DecimalField(max_digits = 7, decimal_places = 2, blank= True, null = True)
 
-    journal = models.ForeignKey(journal, on_delete = models.CASCADE) 
+    journal = models.ForeignKey(Journal, on_delete = models.CASCADE) 
 
 
     created = models.DateTimeField(auto_now_add = True)
@@ -117,20 +120,12 @@ class journalAction(models.Model):
 
     
 
-class journalTargets(models.Model):
-
+class JournalTargets(models.Model):
+    shares = models.IntegerField(default = 0)
     target_price = models.DecimalField(max_digits = 7, decimal_places = 2, blank= True, null = True)
-    journal = models.ForeignKey(journal, on_delete = models.CASCADE) 
-
-    created = models.DateTimeField(auto_now_add = True)
-    updated = models.DateTimeField(auto_now = True)
-    user = models.ForeignKey(User, on_delete = models.CASCADE)
-
-
-class journalStopLosses(models.Model):
 
     stop_loss = models.DecimalField(max_digits = 7, decimal_places = 2, blank= True, null = True)
-    journal = models.ForeignKey(journal, on_delete = models.CASCADE)
+    journal = models.ForeignKey(Journal, on_delete = models.CASCADE)
 
     created = models.DateTimeField(auto_now_add = True)
     updated = models.DateTimeField(auto_now = True)
@@ -141,7 +136,7 @@ class journalScreenShots(models.Model):
 
     title = models.CharField(max_length = 200)
     image = models.ImageField(upload_to='images')
-    journal = models.ForeignKey(journal, on_delete = models.CASCADE)
+    journal = models.ForeignKey(Journal, on_delete = models.CASCADE)
 
     created = models.DateTimeField(auto_now_add = True)
     updated = models.DateTimeField(auto_now = True)

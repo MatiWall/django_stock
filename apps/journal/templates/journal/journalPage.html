@@ -15,47 +15,20 @@ Journal
 
 
 
-<style>
-    :root {
-        --sidebarWidth: 3%;
-        --bodyWidth: 97%;
-    }
-
-    .ui-dialog-titlebar {
-        background-color: rgb(17, 21, 30);
-        ;
-        background-image: none;
-        color: white;
-        text-align: center;
-    }
-
-
-    .text-style-dark {
-        color: rgb(158, 158, 158);
-    }
-
-    .side-bar {
-        width: var(--sidebarWidth);
-    }
-    .body {
-        width: var(--bodyWidth);
-    }
-</style>
-
-
-
-
-<div class="text-style-dark" style="background-color: rgb(18, 23, 37); width: 100%; height: 100%; ">
-
-
-    {% include 'journal/navbarTop.html' %}
-    
+</br>
+<div class="container-fluid" >
 
     <div class="row">
-        <div class="side-bar">
+    <div class="col-md-12">
+    {% include 'journal/navbarTop.html' %}
+</div>
+</div>
+
+    <div class="row">
+        <div class="col-md-1 side-bar">
             {% include 'journal/navbarSide.html' %}
         </div>
-        <div class="body">
+        <div class="body col-md-11">
 
             {% block journal %}
 
@@ -72,6 +45,5 @@ Journal
 
 <script type='text/javascript' src="{% static 'journal-api/filters.js' %}"></script>
 
-<script type='text/javascript' src="{% static 'journal/js/navbar-controller.js' %}"></script>
 
 {% endblock %}

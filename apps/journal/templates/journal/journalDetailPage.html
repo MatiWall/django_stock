@@ -3,62 +3,424 @@
 
 {% block journal %}
 
+
+
+
 <div class="container-fluid">
-  <div id="main-detail"></div>
 
-</div>
-
+  <div class="row">
 
 
-<template id="data-table" >
-  
 
-  <div id="card-main-detail" class="card text-white bg-secondary" style="max-width: 70%;" data-primary-key = "2">
-  <div id="card-header" class="card-header">
-    Detail
-  </div>
-  <div class="card-body card-body-main-detail">
-    <div class="row">
-      <div class="col">
+    <div id="card-main-detail" class="card" style="max-width: 70%;">
+      <div id="card-header" class="card-header">
+        Detail
+      </div>
+      <div class="card-body card-body-main-detail">
         <div class="row">
-          <div id="journal-ticker">
-            {{journal.ticker}}
+          <div class="col">
+            <div class="row">
+              <div id="journal-ticker">
+                <h2>{{journal.ticker}}</h2>
+              </div>
+            </div>
+            <div class="row">
+              <div id="journal-name">
+                {{journal.name}}
+              </div>
+            </div>
           </div>
+          <div class="col">Other stuff here</div>
+
+
+
         </div>
+
         <div class="row">
-          <div id="journal-name">
-            {{journal.name}}
-          </div>
+          <h5 class="card-title">Secondary card title</h5>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
+            content.
+          </p>
         </div>
       </div>
-      <div class="col">Other stuff here</div>
+    </div>
+
+  </div>
+  <div class="row mt-4">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <div class="row">
+            <div class="col-md-3">
+              <h3>Actions</h3>
+            </div>
+            <div class="col-md-8"></div>
+            <div class="col-md-1"><button id="add-action" class="btn btn-secondary btn-sm">Add</button></div>
+
+          </div>
 
 
+        </div>
+        <div class="card-body">
+          <table id="action-table">
+            <thead>
+              <th></th>
+              <th>Action</th>
+              <th>Price</th>
+              <th>Reason</th>
+              <th>Commision</th>
+              <th>Fees</th>
+              <th></th>
+            </thead>
+
+          </table>
+
+        </div>
+      </div>
 
     </div>
 
-    <div class="row">
-      <h5 class="card-title">Secondary card title</h5>
-      <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
-        content.
-      </p>
+    <div class="col-md-6">
+      <div class="card">
+
+        <div class="card-header">
+
+          <div class="row">
+            <div class="col-md-3">
+              <h3>Targets</h3>
+            </div>
+            <div class="col-md-8"></div>
+            <div class="col-md-1">
+              <button id="add-target" class="btn btn-secondary btn-sm">Add</button>
+            </div>
+          </div>
+        </div>
+        <table id="target-table">
+          <thead>
+            <th></th>
+            <th>Shares </th>
+            <th>Target price</th>
+            <th>Stop loss</th>
+            <th></th>
+          </thead>
+
+        </table>
+      </div>
     </div>
   </div>
 </div>
 
-</template>
 
-
+<!--journal action-->
 <script>
 
-  var container = document.getElementById('main-detail');
-  var template = document.getElementById("data-table");
+  $(document).ready(function () {
 
-  const firstClone = template.content.cloneNode(true);
-  container.appendChild(firstClone);
+    var table = $('#action-table').DataTable({
+      processing: true,
+      'ajax': "{% url 'journal-api:journal-action-list' %}?format=datatables&journal={{journal.id}}",
+      'columns': [
+        {
+          "className": 'details-control',
+          "orderable": false,
+          "data": null,
+          "defaultContent": `
+                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-eye" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.134 13.134 0 0 0 1.66 2.043C4.12 11.332 5.88 12.5 8 12.5c2.12 0 3.879-1.168 5.168-2.457A13.134 13.134 0 0 0 14.828 8a13.133 13.133 0 0 0-1.66-2.043C11.879 4.668 10.119 3.5 8 3.5c-2.12 0-3.879 1.168-5.168 2.457A13.133 13.133 0 0 0 1.172 8z"/>
+                <path fill-rule="evenodd" d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+              `
+        },
+        { 'data': 'action' },
+        { 'data': 'price' },
+        { 'data': 'action_reason' },
+        { 'data': 'commision' },
+        { 'data': 'fees' },
+        { 'data': 'id' }
+      ],
+      columnDefs: [
+        {
+          targets: 6,
+          render: function (data, type, full, meta) {
+            if (type === 'display') {
+              console.log(data)
+              data =
+                `<button class="btn btn-outline-primary btn-sm" type="button" onclick="update_action(${data})" >Edit</button>` +
+                `<button class="btn btn-outline-danger btn-sm" type="button" onclick="delete_action(${data})" >Delete</button>`
+            }
+
+            return data;
+          }
+        }
+      ],
+
+    });
+
+
+
+
+
+    $('#add-action').on('click', function () {
+
+
+      let url = "{% url 'journal-api:journal-action-list' %}?journal={{journal.id}}";
+
+      $("#createDialogForm")
+        .data('url', url)
+        .data('formId', 'general-form')
+        .dialog("open")
+        .on('dialogclose', function (event) {
+          $('#action-table').DataTable().ajax.reload();
+        });
+
+
+      fetch(url, {
+        method: 'POST',
+        credentials: "same-origin",
+        headers: {
+          "X-CSRFToken": Cookies.get("csrftoken"),
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        }
+      })
+        .then(res => res.text())
+        .then(html => {
+          $('#createDialogForm').html(html);
+        });
+    });
+
+
+    // Add event listener for opening and closing details
+    $('#action-table tbody').on('click', 'td.details-control', function () {
+      var tr = $(this).closest('tr');
+      var row = table.row(tr);
+
+      if (row.child.isShown()) {
+        // This row is already open - close it
+        row.child.hide();
+      }
+      else {
+        // Open this row
+        row.child(format(row.data())).show();
+      }
+    });
+
+
+  });
+
+
+
+
+  function update_action(id) {
+    let url = "{% url 'journal-api:journal-action-detail' '123' %}".replace('123', id);
+
+    $("#createDialogForm")
+      .data('url', url)
+      .data('formId', 'general-form')
+      .data('method', 'put')
+      .dialog("open")
+      .on('dialogclose', function (event) {
+        $('#action-table').DataTable().ajax.reload();
+      });
+
+    fetch(url, {
+      method: 'put',
+      credentials: "same-origin",
+      headers: {
+        "X-CSRFToken": Cookies.get("csrftoken"),
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      }
+    })
+      .then(res => res.text())
+      .then(html => {
+        $('#createDialogForm').html(html);
+      });
+
+
+  }
+
+  function delete_action(id) {
+    let url = "{% url 'journal-api:journal-action-detail' '123' %}".replace('123', id);
+    fetch(url, {
+      method: 'delete',
+      credentials: "same-origin",
+      headers: {
+        "X-CSRFToken": Cookies.get("csrftoken"),
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      }
+    })
+      .then(res => res.text())
+      .then(data => {
+        $('#action-table').DataTable().ajax.reload();
+      });
+  }
+</script>
+
+
+<!--Journal targets -->
+<script>
+
+  $(document).ready(function () {
+
+    var table = $('#target-table').DataTable({
+      processing: true,
+      'ajax': "{% url 'journal-api:journal-target-list' %}?format=datatables&journal={{journal.id}}",
+      'columns': [
+        {
+          "className": 'details-control',
+          "orderable": false,
+          "data": null,
+          "defaultContent": `
+              <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-eye" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.134 13.134 0 0 0 1.66 2.043C4.12 11.332 5.88 12.5 8 12.5c2.12 0 3.879-1.168 5.168-2.457A13.134 13.134 0 0 0 14.828 8a13.133 13.133 0 0 0-1.66-2.043C11.879 4.668 10.119 3.5 8 3.5c-2.12 0-3.879 1.168-5.168 2.457A13.133 13.133 0 0 0 1.172 8z"/>
+              <path fill-rule="evenodd" d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+            `
+        },
+        { 'data': 'shares' },
+        { 'data': 'target_price'},
+        { 'data': 'stop_loss'},
+        { 'data': 'id' }
+      ],
+      columnDefs: [
+        {
+          targets: 4,
+          render: function (data, type, full, meta) {
+            if (type === 'display') {
+              console.log(data)
+              data =
+                `<button class="btn btn-outline-primary btn-sm" type="button" onclick="update_target(${data})" >Edit</button>` +
+                `<button class="btn btn-outline-danger btn-sm" type="button" onclick="delete_target(${data})" >Delete</button>`
+            }
+
+            return data;
+          }
+        }
+      ],
+
+    });
+
+
+
+    $('#add-target').on('click', function () {
+
+      console.log('test');
+      let url = "{% url 'journal-api:journal-target-list' %}?journal={{journal.id}}";
+
+      $("#createDialogForm")
+        .data('url', url)
+        .data('formId', 'general-form')
+        .dialog("open")
+        .on('dialogclose', function (event) {
+          $('#target-table').DataTable().ajax.reload();
+        });
+
+
+      fetch(url, {
+        method: 'POST',
+        credentials: "same-origin",
+        headers: {
+          "X-CSRFToken": Cookies.get("csrftoken"),
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        }
+      })
+        .then(res => res.text())
+        .then(html => {
+          $('#createDialogForm').html(html);
+        });
+    });
+
+ // Add event listener for opening and closing details
+ $('#target-table tbody').on('click', 'td.details-control', function () {
+      var tr = $(this).closest('tr');
+      var row = table.row(tr);
+
+      if (row.child.isShown()) {
+        // This row is already open - close it
+        row.child.hide();
+      }
+      else {
+        // Open this row
+        row.child(format(row.data())).show();
+      }
+    });
+
+  });
+  function update_target(id) {
+    let url = "{% url 'journal-api:journal-target-detail' '123' %}".replace('123', id);
+
+    $("#createDialogForm")
+      .data('url', url)
+      .data('formId', 'general-form')
+      .data('method', 'put')
+      .dialog("open")
+      .on('dialogclose', function (event) {
+        $('#target-table').DataTable().ajax.reload();
+      });
+
+    fetch(url, {
+      method: 'put',
+      credentials: "same-origin",
+      headers: {
+        "X-CSRFToken": Cookies.get("csrftoken"),
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      }
+    })
+      .then(res => res.text())
+      .then(html => {
+        $('#createDialogForm').html(html);
+      });
+
+
+  }
+
+  function delete_target(id) {
+    let url = "{% url 'journal-api:journal-target-detail' '123' %}".replace('123', id);
+    fetch(url, {
+      method: 'delete',
+      credentials: "same-origin",
+      headers: {
+        "X-CSRFToken": Cookies.get("csrftoken"),
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      }
+    })
+      .then(res => res.text())
+      .then(data => {
+        $('#target-table').DataTable().ajax.reload();
+      });
+  }
+
+  
+
 
 </script>
 
+
+<!--
+  utils
+-->
+<script>
+
+
+function format(d) {
+    // `d` is the original data object for the row
+    return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
+      '<tr>' +
+      '<td>Created:</td>' +
+      '<td>' + new Date(d.created) + '</td>' +
+      '</tr>' +
+      '<tr>' +
+      '<td>Last updated:</td>' +
+      '<td>' + new Date(d.updated) + '</td>' +
+      '</tr>'
+
+    '</table>';
+  }
+
+</script>
 
 
 

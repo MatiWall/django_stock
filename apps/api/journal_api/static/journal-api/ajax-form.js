@@ -1,13 +1,14 @@
-async function postForm(url, formId) {
+async function postForm(url, formId, method = 'post') {
     
     let formData = getFormData(formId);
     
 
-    let res = await ajaxRequest (url, method = 'post',  data = formData)
+    let res = await ajaxRequest (url, method =  method,  data = formData)
    
     return res;
 
 }
+
 
 
 function getFormData(formId) {
