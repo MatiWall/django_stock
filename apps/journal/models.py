@@ -135,7 +135,8 @@ class JournalTargets(models.Model):
 class journalScreenShots(models.Model):
 
     title = models.CharField(max_length = 200)
-    image = models.ImageField(upload_to='images')
+    image = models.ImageField(upload_to='images', null = True, blank = True)
+    notes = models.TextField(null=True, blank = True)
     journal = models.ForeignKey(Journal, on_delete = models.CASCADE)
 
     created = models.DateTimeField(auto_now_add = True)

@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'apps.journal',
     'apps.expenses',
     'apps.api.journal_api',
+    'apps.price_analytics',
 ]
 
 BOOTSTRAP4 = {
@@ -161,6 +162,9 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 
+MEDIA_URL = '/images/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
 
 LOGIN_EXEMPT_URLS = ( 
     'accounts/logout/',

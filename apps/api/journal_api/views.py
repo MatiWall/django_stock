@@ -8,9 +8,9 @@ from rest_framework import status
 from django.apps import apps
 # Create your views here.
 
-from apps.journal.models import portfolio, Journal, JournalAction, JournalTargets
-from .serializers import portfolioSerializer, journalSerializer, journalActionSerializer, journalTargetsSerializer
-from .forms import JournalActionForm, JournalTargetForm
+from apps.journal.models import portfolio, Journal, JournalAction, JournalTargets, journalScreenShots
+from .serializers import portfolioSerializer, journalSerializer, journalActionSerializer, journalTargetsSerializer, journalScreenShotsSerializer
+from .forms import JournalActionForm, JournalTargetForm, JournalScreenShotsForm
 
 class portfolioView(viewsets.ModelViewSet):
     
@@ -54,6 +54,7 @@ class journalActionView(viewsets.ModelViewSet):
 
     def create(self, request):
         data = request.data
+        print(data)
         if data:
             
             serializer = journalActionSerializer(data = data)
@@ -142,6 +143,38 @@ class journalTargetView(viewsets.ModelViewSet):
         instance = JournalTargets.objects.get(id = pk )
         instance.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+
+
+class journalScreenShotView(viewsets.ModelViewSet):
+    
+    template_name = 'journal-api/generalForm.html'
+    serializer_class = journalScreenShotsSerializer
+    model = journalScreenShots
+    form = JournalScreenShotsForm
+
+    def get_queryset(self):
+        
+        journal = self.request.query_params.get('journal', None)
+        return self.model.objects.filter(user = self.request.user, journal = journal)
+
+    
+
+    def create(self, request):
+        data = request.data
+        if data:
+            print(request.FILES)
+            serializer = self.serializer_class(data = data)
+            if serializer.is_valid():
+                
+                serializer.save(user = request.user, journal_id = request.query_params.get('journal'))
+                return Response(serializer.data, status = status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            form = self.form()
+            return render(request, self.template_name, {'form': form})
+
 
 
 

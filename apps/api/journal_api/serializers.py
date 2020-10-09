@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.fields import CurrentUserDefault
 
-from apps.journal.models import portfolio, Journal, JournalAction, JournalTargets
+from apps.journal.models import portfolio, Journal, JournalAction, JournalTargets, journalScreenShots
 
 class portfolioSerializer(serializers.ModelSerializer):
     
@@ -43,3 +43,9 @@ class journalTargetsSerializer(serializers.ModelSerializer):
     class Meta:
         model = JournalTargets
         fields = ['id', 'shares', 'target_price', 'stop_loss', 'created', 'updated']
+
+
+class journalScreenShotsSerializer(serializers.ModelSerializer):
+    class Meta: 
+        model = journalScreenShots
+        fields = ['id', 'title', 'image', 'notes']

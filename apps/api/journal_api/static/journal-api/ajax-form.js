@@ -14,11 +14,14 @@ async function postForm(url, formId, method = 'post') {
 function getFormData(formId) {
     const form = document.getElementById(formId);
 
+ 
 
     let formData = {};
     for(var i=0; i<form.length; i++) {
+    
         formData[form[i].name] = form[i].value;
     }
+  
     
     return formData;
 
