@@ -10,7 +10,7 @@ import pandas as pd
 from event import FillEvent, OrderEvent
 from performance import create_sharpe_ratio, create_drawdowns
 
-class portfolio(object):
+class Portfolio(object):
     """
     The Portfolio class handles the positions and market
     value of all instruments at a resolution of a "bar",
@@ -23,7 +23,7 @@ class portfolio(object):
     portfolio total across bars.
     """
 
-    def __init__(self):
+    def __init__(self, bars, events, start_date, initial_capital):
         """
         Initialises the portfolio with bars and an event queue.
         Also includes a starting datetime index and initial capital
@@ -54,7 +54,7 @@ class portfolio(object):
         """
 
         d = dict( (k,v) for k, v in [(s, 0) for s in self.symbol_list] )
-        d[’datetime’] = self.start_date
+        d['datetime'] = self.start_date
         return [d]
 
     def construct_all_holdings(self):
@@ -63,10 +63,10 @@ class portfolio(object):
         to determine when the time index will begin.
         """
         d = dict( (k,v) for k, v in [(s, 0.0) for s in self.symbol_list] )
-        d[’datetime’] = self.start_date
-        d[’cash’] = self.initial_capital
-        d[’commission’] = 0.0
-        d[’total’] = self.initial_capital
+        d['datetime'] = self.start_date
+        d['cash'] = self.initial_capital
+        d['commission'] = 0.0
+        d['total'] = self.initial_capital
         return [d]
 
 
@@ -76,9 +76,9 @@ class portfolio(object):
         value of the portfolio across all symbols.
         """
         d = dict( (k,v) for k, v in [(s, 0.0) for s in self.symbol_list] )
-        d[’cash’] = self.initial_capital
-        d[’commission’] = 0.0
-        d[’total’] = self.initial_capital
+        d['cash'] = self.initial_capital
+        d['commission'] = 0.0
+        d['total'] = self.initial_capital
         return d
     
 
@@ -131,9 +131,9 @@ class portfolio(object):
 
         # Check whether the fill is a buy or sell
         fill_dir = 0
-        if fill.direction == ’BUY’:
+        if fill.direction == 'BUY':
             fill_dir = 1
-        if fill.direction == ’SELL’:
+        if fill.direction == 'SELL':
             fill_dir = -1
         
         # Update positions list with new quantities
@@ -151,18 +151,19 @@ class portfolio(object):
 
         # Check whether the fill is a buy or sell
         fill_dir = 0
-        if fill.direction == ’BUY’:
+        if fill.direction == 'BUY':
             fill_dir = 1
-        if fill.direction == ’SELL’:
+        if fill.direction == 'SELL':
             fill_dir = -1
 
         # Update holdings list with new quantities
-        fill_cost = self.bars.get_latest_bar_value(fill.symbol, "adj_close")
+        fill_cost = self.bars.get_latest_bar_value(fill.symbol, 'adj_close')
         cost = fill_dir * fill_cost * fill.quantity
+        
         self.current_holdings[fill.symbol] += cost
-        self.current_holdings[’commission’] += fill.commission
-        self.current_holdings[’cash’] -= (cost + fill.commission)
-        self.current_holdings[’total’] -= (cost + fill.commission)
+        self.current_holdings['commission'] += fill.commission
+        self.current_holdings['cash'] -= (cost + fill.commission)
+        self.current_holdings['total'] -= (cost + fill.commission)
 
     
 
@@ -172,7 +173,7 @@ class portfolio(object):
         from a FillEvent.
         """
         
-        if event.type == ’FILL’:
+        if event.type == 'FILL':
             self.update_positions_from_fill(event)
             self.update_holdings_from_fill(event)
 
@@ -195,15 +196,15 @@ class portfolio(object):
 
         mkt_quantity = 100
         cur_quantity = self.current_positions[symbol]
-        order_type = ’MKT’
-        if direction == ’LONG’ and cur_quantity == 0:
-            order = OrderEvent(symbol, order_type, mkt_quantity, ’BUY’)
-        if direction == ’SHORT’ and cur_quantity == 0:
-            order = OrderEvent(symbol, order_type, mkt_quantity, ’SELL’)
-        if direction == ’EXIT’ and cur_quantity > 0:
-            order = OrderEvent(symbol, order_type, abs(cur_quantity), ’SELL’)
-        if direction == ’EXIT’ and cur_quantity < 0:
-            order = OrderEvent(symbol, order_type, abs(cur_quantity), ’BUY’)
+        order_type = 'MKT'
+        if direction == 'LONG' and cur_quantity == 0:
+            order = OrderEvent(symbol, order_type, mkt_quantity, 'BUY')
+        if direction == 'SHORT' and cur_quantity == 0:
+            order = OrderEvent(symbol, order_type, mkt_quantity, 'SELL')
+        if direction == 'EXIT' and cur_quantity > 0:
+            order = OrderEvent(symbol, order_type, abs(cur_quantity), 'SELL')
+        if direction == 'EXIT' and cur_quantity < 0:
+            order = OrderEvent(symbol, order_type, abs(cur_quantity), 'BUY')
 
         return order
 
@@ -214,9 +215,9 @@ class portfolio(object):
         based on the portfolio logic.
         """
 
-    if event.type == ’SIGNAL’:
-        order_event = self.generate_naive_order(event)
-        self.events.put(order_event)
+        if event.type == 'SIGNAL':
+            order_event = self.generate_naive_order(event)
+            self.events.put(order_event)
 
     
 
@@ -225,11 +226,11 @@ class portfolio(object):
         Creates a pandas DataFrame from the all_holdings
         list of dictionaries.
         """
-
+        
         curve = pd.DataFrame(self.all_holdings)
-        curve.set_index(’datetime’, inplace=True)
-        curve[’returns’] = curve[’total’].pct_change()
-        curve[’equity_curve’] = (1.0+curve[’returns’]).cumprod()
+        curve.set_index('datetime', inplace=True)
+        curve['returns'] = curve['total'].pct_change()
+        curve['equity_curve'] = (1.0+curve['returns']).cumprod()
         self.equity_curve = curve
 
     
@@ -238,16 +239,16 @@ class portfolio(object):
         Creates a list of summary statistics for the portfolio.
         """
 
-        total_return = self.equity_curve[’equity_curve’][-1]
-        returns = self.equity_curve[’returns’]
-        pnl = self.equity_curve[’equity_curve’]
+        total_return = self.equity_curve['equity_curve'][-1]
+        returns = self.equity_curve['returns']
+        pnl = self.equity_curve['equity_curve']
         sharpe_ratio = create_sharpe_ratio(returns, periods=252*60*6.5)
         drawdown, max_dd, dd_duration = create_drawdowns(pnl)
-        self.equity_curve[’drawdown’] = drawdown
+        self.equity_curve['drawdown'] = drawdown
         stats = [("Total Return", "%0.2f%%" % ((total_return - 1.0) * 100.0)),
         ("Sharpe Ratio", "%0.2f" % sharpe_ratio),
         ("Max Drawdown", "%0.2f%%" % (max_dd * 100.0)),
         ("Drawdown Duration", "%d" % dd_duration)]
         
-        self.equity_curve.to_csv(’equity.csv’)
+        self.equity_curve.to_csv('equity.csv')
         return stats
